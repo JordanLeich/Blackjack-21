@@ -9,10 +9,10 @@ dealer_cards = []
 # Player cards
 player_cards = []
 
-
 while len(dealer_cards) != 2:
-    dealer_cards.append(random.randint(1, 11))
+    dealer_cards.append(random.randint(3, 11))
     if len(dealer_cards) == 2:
+        print()
         print("Dealer has ??? &", dealer_cards[1])
         print()
 
@@ -20,7 +20,7 @@ while len(dealer_cards) != 2:
 while len(player_cards) != 2:
     player_cards.append(random.randint(1, 11))
     if len(player_cards) == 2:
-        print("You have", player_cards)
+        print("You have a total of", str(sum(player_cards)), 'from these cards', player_cards)
         print()
 
 # Total of Dealer cards
@@ -57,6 +57,13 @@ while sum(player_cards) < 21:
             print()
             time.sleep(3)
             quit()
+
+        elif sum(dealer_cards) == sum(player_cards):
+            print('PUSH! This is a tie!')
+            print()
+            time.sleep(2)
+            quit()
+
         else:
             print("You win!")
             print()
@@ -68,6 +75,17 @@ while sum(player_cards) < 21:
 if sum(player_cards) > 21:
     print("BUSTED! The dealer wins.")
     print()
+    time.sleep(2)
+    quit()
+
 elif sum(player_cards) == 21:
     print("BLACKJACK! You hit 21!")
     print()
+    time.sleep(2)
+    quit()
+
+elif sum(player_cards == dealer_cards):
+    print('PUSH! This is a tie!')
+    print()
+    time.sleep(2)
+    quit()
