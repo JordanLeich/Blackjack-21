@@ -7,4 +7,4 @@ This is a game where you play against the dealer and try to get the higher value
 # IMPORTANT
 You can now visit the website - http://jordanleich.github.io/Python-Blackjack-21-Game/ for additional information!
 
-![](images/blackjack.jpg)
+![BlackJack](images/blackjack.jpg "BlackJack 21")
