@@ -1,0 +1,8 @@
+title: Python-blackjack-21-game
+description: This is a game where you play against the dealer and try to get the higher values of cards without exceeding over the number 21. If your cards ever equal a total of 21, you automatically get blackjack (win) unless both you and the dealer get 21 then you push (tie).
+google_analytics: 
+show_downloads: true
+theme: jekyll-theme-slate
+
+gems:
+  - jekyll-mentions
