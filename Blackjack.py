@@ -1,6 +1,6 @@
-# Made by Jordan Leich on 6/6/2020, Last updated on 8/10/2020
+# Made by Jordan Leich on 6/6/2020, Last updated on 8/14/2020
 
-# Imports10
+# Imports
 import random
 import time
 from colored import fg, attr
@@ -95,8 +95,16 @@ def game():
     time.sleep(1)
     print(red + "The dealers balance is $" + str(dealer_balance), "\n", reset)
     time.sleep(1)
-    user_bet = int(input("How much would you like to bet? "))
-    time.sleep(1)
+
+    user_all = str(input('Would you like to go all in (yes or no) '))
+
+    if user_all.lower() == 'y' or user_all.lower() == 'yes':
+        user_bet = user_balance
+
+    else:
+        print()
+        user_bet = int(input("How much would you like to bet? "))
+        time.sleep(1)
 
     if user_bet > user_balance:
         print()
@@ -107,7 +115,7 @@ def game():
         )
         time.sleep(2)
         game()
-    if user_bet < 0:
+    if user_bet <= 0:
         print()
         print(
             red + "You cannot make a negative bet! Please place a higher bet than 0!\n",
@@ -115,12 +123,14 @@ def game():
         )
         time.sleep(2)
         game()
+
     while len(dealer_cards) != 2:
-        dealer_cards.append(random.randint(4, 11))
+        dealer_cards.append(random.randint(1, 11))
         if len(dealer_cards) == 2:
             print()
             print(red + "The Dealer has ? &", dealer_cards[1], reset, "\n")
             time.sleep(1)
+
     # Player Cards
     while len(player_cards) != 2:
         player_cards.append(random.randint(1, 11))
@@ -153,11 +163,21 @@ def game():
     while sum(player_cards) < 21:
         action_taken = str(
             input(
-                "Do you want to hit, stay, call help, or quit the game (hit | stay | help | quit): "
+                "Do you want to hit, stay, call help, change song, or quit the game (hit | stay | help | song | quit): "
             )
         )
         print()
         time.sleep(1)
+
+        if len(player_cards) >= 5 and sum(player_cards) < 21:
+            time.sleep(.500)
+            print(red + 'You have automatically won since you have pulled a total of 5 cards without '
+                        'busting!\n', reset)
+            time.sleep(.500)
+            user_score += 1
+            user_balance = user_balance + user_bet
+            dealer_balance -= user_bet
+            another_game()
 
         if action_taken.lower() == "hit" or action_taken.lower() == "h":
             player_cards.append(random.randint(1, 11))
@@ -171,6 +191,7 @@ def game():
                 "\n",
             )
             time.sleep(1)
+
         elif action_taken.lower() == "help" or action_taken.lower() == "Help":
             if sum(player_cards) <= 14:
                 print(
@@ -183,8 +204,8 @@ def game():
                 print(
                     blue
                     + "Your odds are looking high enough to win, if your card total is closer to 15, "
-                    "we recommend only "
-                    "making 1 hit move and then staying!\n",
+                      "we recommend only "
+                      "making 1 hit move and then staying!\n",
                     reset,
                 )
                 time.sleep(3)
@@ -198,10 +219,16 @@ def game():
                 print(red + "Helping Error...\n")
                 time.sleep(1)
                 quit()
+
+        elif action_taken.lower() == 'song' or action_taken.lower() == 'change song':
+            print('Loading track change...\n')
+            time.sleep(1)
+            songs()
+
         elif (
-            action_taken.lower() == "q"
-            or action_taken.lower() == "quit"
-            or action_taken.lower() == "end"
+                action_taken.lower() == "q"
+                or action_taken.lower() == "quit"
+                or action_taken.lower() == "end"
         ):
             print(green + "Ending game... Thanks for playing!\n", reset)
             time.sleep(1)
@@ -210,6 +237,25 @@ def game():
             dealer_cards.append(random.randint(1, 11))
             print(red + "The Dealer has pulled a card...\n", reset)
             time.sleep(1)
+
+            if len(dealer_cards) >= 5 and sum(dealer_cards) < 21:
+                print(
+                    red + "The Dealer has a new total of",
+                    str(sum(dealer_cards)),
+                    "from these cards",
+                    dealer_cards,
+                    reset,
+                    "\n",
+                )
+                time.sleep(.500)
+                print(red + 'You have automatically lost since the dealer has pulled a total of 5 cards without '
+                            'busting!\n', reset)
+                time.sleep(.500)
+                user_score -= 1
+                user_balance = user_balance - user_bet
+                dealer_balance += user_bet
+                another_game()
+
         else:
             print(
                 red + "The Dealer has a new total of",
@@ -321,9 +367,54 @@ def game():
         another_game()
 
 
+def songs():
+    song_input = str(input('Would you like to play songs from our track list while playing (yes or no) '))
+    print()
+
+    if song_input.lower() == 'y' or song_input.lower() == 'yes':
+        song_list = int(input('''1. Relax Instrumental
+2. Anile - Wish List
+3. Exit song selection
+Which song would you like to play: '''))
+        print()
+
+        if song_list == 1:
+            import playsound
+            playsound.playsound('songs\\Relax.mp3', False)
+            print('Now proceeding to BlackJack 21!\n')
+            time.sleep(1)
+            game()
+
+        elif song_list == 2:
+            import playsound
+            playsound.playsound('songs\\Anile - Wish List.mp3', False)
+            print('Now proceding to BlackJack 21!\n')
+            time.sleep(1)
+            game()
+
+        elif song_list == 3:
+            print('Exiting song list and proceeding to BlackJack 21!\n')
+            time.sleep(1)
+            game()
+
+        else:
+            print(red + 'Song input from track list error found!\n', reset)
+            songs()
+
+    elif song_input.lower() == 'n' or song_input.lower() == 'no':
+        print('No song has been selected! Proceeding to BlackJack 21!\n')
+        time.sleep(1)
+        game()
+
+    else:
+        print(red + 'Song input error found!\n', reset)
+        time.sleep(1)
+        songs()
+
+
 print(
     "The goal of this game is to make the dealer go broke! Achieve this by placing your bets and dealing your cards "
     "wisely, but carefully...\n"
 )
 time.sleep(1)
-game()
+songs()
