@@ -7,6 +7,6 @@
 
 # Additional :clubs:
 - You can download all of the files via zip from the latest release [here](https://github.com/JordanLeich/Python-Blackjack-21-Game/releases/tag/v7.0)
-- You can now visit the website - http://jordanleich.github.io/Python-Blackjack-21-Game/ for additional information!
+- You can now visit this [website](http://jordanleich.github.io/Python-Blackjack-21-Game/) for additional information!
 
 ![BlackJack](images/blackjack.jpg "BlackJack 21")
