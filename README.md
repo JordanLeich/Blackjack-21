@@ -1,4 +1,4 @@
-# Requirements :zap:
+# [Requirements](https://github.com/JordanLeich/Python-Blackjack-21-Game/blob/master/requirements.txt) :zap:
 1. You do not need python installed to play this game! You can download and install the [Blackjack 21 Game Installer.exe](https://github.com/JordanLeich/Python-Blackjack-21-Game/blob/master/Blackjack%2021%20Game%20Installer.exe)!
 1. colored (pip install colored) (only if you are using python!)
 1. playsound (pip install playsound) (only if you are using python!)
