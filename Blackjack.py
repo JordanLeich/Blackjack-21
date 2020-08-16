@@ -1,9 +1,10 @@
-# Made by Jordan Leich on 6/6/2020, Last updated on 8/14/2020
+# Made by Jordan Leich on 6/6/2020, Last updated on 8/15/2020
 
 # Imports
 import random
 import time
 from colored import fg, attr
+from playsound import playsound
 
 # Global Variables
 user_score = 0
@@ -18,6 +19,9 @@ reset = attr("reset")
 
 
 def another_game():
+    """
+    Used when 1 single round of blackjack has ended. Allows the user to play another game of blackjack or quit playing
+    """
     global user_score, user_balance, dealer_balance
     print(
         green + "Your win count is",
@@ -78,6 +82,9 @@ def another_game():
 
 
 def restart():
+    """
+    This restarts the program no matter what if executed
+    """
     global user_score, user_restart
     print("Restarting Blackjack Game...\n")
     time.sleep(1)
@@ -85,6 +92,9 @@ def restart():
 
 
 def game():
+    """
+    This is the main code used for the game entirely
+    """
     global user_score, user_balance, user_bet, dealer_balance
     # Dealer cards
     dealer_cards = []
@@ -96,16 +106,14 @@ def game():
     print(red + "The dealers balance is $" + str(dealer_balance), "\n", reset)
     time.sleep(1)
 
-    user_all = str(input('Would you like to go all in (yes or no) '))
+    user_all = str(input("Would you like to go all in (yes or no) "))
 
-    if user_all.lower() == 'y' or user_all.lower() == 'yes':
+    if user_all.lower() == "y" or user_all.lower() == "yes":
         user_bet = user_balance
-
     else:
         print()
         user_bet = int(input("How much would you like to bet? "))
         time.sleep(1)
-
     if user_bet > user_balance:
         print()
         print(
@@ -123,14 +131,12 @@ def game():
         )
         time.sleep(2)
         game()
-
     while len(dealer_cards) != 2:
         dealer_cards.append(random.randint(1, 11))
         if len(dealer_cards) == 2:
             print()
             print(red + "The Dealer has ? &", dealer_cards[1], reset, "\n")
             time.sleep(1)
-
     # Player Cards
     while len(player_cards) != 2:
         player_cards.append(random.randint(1, 11))
@@ -170,15 +176,18 @@ def game():
         time.sleep(1)
 
         if len(player_cards) >= 5 and sum(player_cards) < 21:
-            time.sleep(.500)
-            print(red + 'You have automatically won since you have pulled a total of 5 cards without '
-                        'busting!\n', reset)
-            time.sleep(.500)
+            time.sleep(0.500)
+            print(
+                red
+                + "You have automatically won since you have pulled a total of 5 cards without "
+                "busting!\n",
+                reset,
+            )
+            time.sleep(0.500)
             user_score += 1
             user_balance = user_balance + user_bet
             dealer_balance -= user_bet
             another_game()
-
         if action_taken.lower() == "hit" or action_taken.lower() == "h":
             player_cards.append(random.randint(1, 11))
             print(
@@ -191,7 +200,6 @@ def game():
                 "\n",
             )
             time.sleep(1)
-
         elif action_taken.lower() == "help" or action_taken.lower() == "Help":
             if sum(player_cards) <= 14:
                 print(
@@ -204,8 +212,8 @@ def game():
                 print(
                     blue
                     + "Your odds are looking high enough to win, if your card total is closer to 15, "
-                      "we recommend only "
-                      "making 1 hit move and then staying!\n",
+                    "we recommend only "
+                    "making 1 hit move and then staying!\n",
                     reset,
                 )
                 time.sleep(3)
@@ -219,16 +227,14 @@ def game():
                 print(red + "Helping Error...\n")
                 time.sleep(1)
                 quit()
-
-        elif action_taken.lower() == 'song' or action_taken.lower() == 'change song':
-            print('Loading track change...\n')
+        elif action_taken.lower() == "song" or action_taken.lower() == "change song":
+            print("Loading track change...\n")
             time.sleep(1)
             songs()
-
         elif (
-                action_taken.lower() == "q"
-                or action_taken.lower() == "quit"
-                or action_taken.lower() == "end"
+            action_taken.lower() == "q"
+            or action_taken.lower() == "quit"
+            or action_taken.lower() == "end"
         ):
             print(green + "Ending game... Thanks for playing!\n", reset)
             time.sleep(1)
@@ -247,15 +253,18 @@ def game():
                     reset,
                     "\n",
                 )
-                time.sleep(.500)
-                print(red + 'You have automatically lost since the dealer has pulled a total of 5 cards without '
-                            'busting!\n', reset)
-                time.sleep(.500)
+                time.sleep(0.500)
+                print(
+                    red
+                    + "You have automatically lost since the dealer has pulled a total of 5 cards without "
+                    "busting!\n",
+                    reset,
+                )
+                time.sleep(0.500)
                 user_score -= 1
                 user_balance = user_balance - user_bet
                 dealer_balance += user_bet
                 another_game()
-
         else:
             print(
                 red + "The Dealer has a new total of",
@@ -368,46 +377,50 @@ def game():
 
 
 def songs():
-    song_input = str(input('Would you like to play songs from our track list while playing (yes or no) '))
+    """
+    Used for the user to able to play songs while playing blackjack
+    """
+    song_input = str(
+        input(
+            "Would you like to play songs from our track list while playing (yes or no) "
+        )
+    )
     print()
 
-    if song_input.lower() == 'y' or song_input.lower() == 'yes':
-        song_list = int(input('''1. Relax Instrumental
+    if song_input.lower() == "y" or song_input.lower() == "yes":
+        song_list = int(
+            input(
+                """1. Relax Instrumental
 2. Anile - Wish List
 3. Exit song selection
-Which song would you like to play: '''))
+Which song would you like to play: """
+            )
+        )
         print()
 
         if song_list == 1:
-            import playsound
-            playsound.playsound('songs\\Relax.mp3', False)
-            print('Now proceeding to BlackJack 21!\n')
+            playsound("songs\\Relax.mp3", False)
+            print("Now proceeding to BlackJack 21!\n")
             time.sleep(1)
             game()
-
         elif song_list == 2:
-            import playsound
-            playsound.playsound('songs\\Anile - Wish List.mp3', False)
-            print('Now proceding to BlackJack 21!\n')
+            playsound("songs\\Anile - Wish List.mp3", False)
+            print("Now proceding to BlackJack 21!\n")
             time.sleep(1)
             game()
-
         elif song_list == 3:
-            print('Exiting song list and proceeding to BlackJack 21!\n')
+            print("Exiting song list and proceeding to BlackJack 21!\n")
             time.sleep(1)
             game()
-
         else:
-            print(red + 'Song input from track list error found!\n', reset)
+            print(red + "Song input from track list error found!\n", reset)
             songs()
-
-    elif song_input.lower() == 'n' or song_input.lower() == 'no':
-        print('No song has been selected! Proceeding to BlackJack 21!\n')
+    elif song_input.lower() == "n" or song_input.lower() == "no":
+        print("No song has been selected! Proceeding to BlackJack 21!\n")
         time.sleep(1)
         game()
-
     else:
-        print(red + 'Song input error found!\n', reset)
+        print(red + "Song input error found!\n", reset)
         time.sleep(1)
         songs()
 
