@@ -13,4 +13,7 @@
 2. Go to the releases page on GitHub and download the latest zip file
 3. unzip the zip file wherever you like and simply run Blackjack.py and enjoy!
 
+# TODO List :heavy_exclamation_mark:
+1. Check out the issues page for this project [here](https://github.com/JordanLeich/Blackjack-21/issues/3)
+
 ![BlackJack](images/blackjack.jpg "BlackJack 21")
