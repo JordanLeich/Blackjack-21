@@ -1,18 +1,23 @@
 #!/usr/bin/python3
 
-# Made by Jordan Leich on 6/6/2020, Last updated on 5/6/2021
+# Made by Jordan Leich on 6/6/2020, Last updated on 5/6/2021, Version 8.3
+
+# TODO List
 
 # Imports
 import random
 import time
-import colors
 from playsound import playsound
+import colors
+import webbrowser
 
 # Global Variables
 user_score = 0
 user_balance = 1000
 dealer_balance = 5000
 user_bet = 0
+player_cards = []
+dealer_cards = []
 
 
 def another_game():
@@ -40,15 +45,14 @@ def another_game():
             print(colors.green + "The dealers balance is looking small enough for you to win! Your doing well...\n",
                   colors.reset)
             time.sleep(2)
-        restart_action = input(
-            "Do you want to play again or cash out your earning (yes | no): ")
+        restart_action = input("Do you want to play again or cash out your earning (yes / no): ")
         print()
         time.sleep(1)
         if restart_action.lower() == "yes" or restart_action.lower() == "y":
             restart()
         elif restart_action.lower() == "no" or restart_action.lower() == "n":
-            print(colors.green + "You earned a total of $" + str(user_balance) + str(". Thanks for playing!\n"),
-                  colors.reset)
+            print(colors.green + "You won a total of", user_score, 'games and you walked away with a total of $' +
+                  str(user_balance) + str(". Thanks for playing!\n"), colors.reset)
             time.sleep(1)
             quit()
         else:
@@ -75,24 +79,23 @@ def game():
     """
     This is the main code used for the game entirely
     """
-    global user_score, user_balance, user_bet, dealer_balance
-    # Dealer cards
-    dealer_cards = []
-    # Player cards
+    global user_score, user_balance, user_bet, dealer_balance, player_cards, dealer_cards
+
     player_cards = []
+    dealer_cards = []
 
     print(colors.green + "Your balance is $" + str(user_balance), "\n", colors.reset)
     time.sleep(1)
     print(colors.red + "The dealers balance is $" + str(dealer_balance), "\n", colors.reset)
     time.sleep(1)
 
-    user_all = str(input("Would you like to go all in (yes / no): "))
+    user_all_in = str(input("Would you like to go all in (yes / no): "))
+    print()
 
-    if user_all.lower() == "y" or user_all.lower() == "yes":
+    if user_all_in.lower() == "y" or user_all_in.lower() == "yes":
         user_bet = user_balance
     else:
-        print()
-        user_bet = int(input("How much would you like to bet? "))
+        user_bet = int(input("How much would you like to bet in dollar amount? "))
         time.sleep(1)
     if user_bet > user_balance:
         print()
@@ -121,43 +124,45 @@ def game():
             time.sleep(1)
     # Total of Dealer cards
     if sum(dealer_cards) == 21:
-        print(colors.red + "Dealer has 21 and wins!\n", colors.reset)
-        time.sleep(1)
-        user_score -= 1
-        user_balance = user_balance - user_bet
-        dealer_balance = dealer_balance + user_bet
-        another_game()
+        game_scoring()
     elif sum(dealer_cards) > 21:
-        print(colors.green + "Dealer has busted!\n", colors.reset)
-        time.sleep(1)
-        user_score += 1
-        user_balance += user_bet
-        dealer_balance -= user_bet
-        another_game()
+        game_scoring()
     # Total of Player cards
-    while sum(player_cards) < 21:
+    if len(player_cards) == 5 and sum(player_cards) < 21:
+        game_scoring()
+
+    while sum(player_cards) < 21 and len(player_cards) < 5:
         action_taken = str(
             input("Do you want to hit, stay, call help, change song, or quit the game (hit | stay | help | song | quit)"
                   ": "))
         print()
         time.sleep(1)
 
-        if len(player_cards) >= 5 and sum(player_cards) < 21:
-            time.sleep(0.500)
-            print(colors.green + "You have automatically won since you have pulled a total of 5 cards without busting!"
-                                 "\n", colors.reset)
-            time.sleep(0.500)
-            user_score += 1
-            user_balance = user_balance + user_bet
-            dealer_balance -= user_bet
-            another_game()
-        if action_taken.lower() == "hit" or action_taken.lower() == "h":
+        if len(player_cards) == 5 and sum(player_cards) < 21:
+            game_scoring()
+        elif action_taken.lower() == "hit" or action_taken.lower() == "h":
             player_cards.append(random.randint(1, 11))
             print(colors.green + "You now have a total of " + str(sum(player_cards)) + " from these cards",
-                  player_cards,
-                  colors.reset, "\n")
+                  player_cards, colors.reset, "\n")
             time.sleep(1)
-        elif action_taken.lower() == "help" or action_taken.lower() == "Help":
+        elif action_taken.lower() == 's' or action_taken.lower() == 'stay':
+            print(colors.red + 'The Dealer says No More Bets...\n', colors.reset)
+            time.sleep(1)
+            while sum(dealer_cards) <= 15:
+                dealer_cards.append(random.randint(1, 11))
+                print(colors.red + "The Dealer has pulled a card...\n", colors.reset)
+                time.sleep(1)
+                print(colors.red + "The Dealer now has a total of " + str(sum(dealer_cards)) + " from these cards",
+                      dealer_cards, colors.reset, "\n")
+                time.sleep(1)
+
+                if len(dealer_cards) == 5 and sum(dealer_cards) < 21:
+                    game_scoring()
+
+            else:
+                game_scoring()
+
+        elif action_taken.lower() == "help" or action_taken.lower() == "help" or action_taken.lower() == 'call help':
             if sum(player_cards) <= 14:
                 print(colors.blue + "Since your total is under or equal to a total of 14, we recommend that you hit!\n",
                       colors.reset, )
@@ -181,99 +186,12 @@ def game():
             print(colors.green + "Ending game... Thanks for playing!\n", colors.reset)
             time.sleep(1)
             quit()
-        elif sum(dealer_cards) <= 15:
-            dealer_cards.append(random.randint(1, 11))
-            print(colors.red + "The Dealer has pulled a card...\n", colors.reset)
-            time.sleep(1)
 
-            if len(dealer_cards) >= 5 and sum(dealer_cards) < 21:
-                print(colors.red + "The Dealer has a new total of", str(sum(dealer_cards)), "from these cards",
-                      dealer_cards, colors.reset, "\n")
-                time.sleep(0.500)
-                print(colors.red + "You have automatically lost since the dealer has pulled a total of 5 cards without "
-                                   "busting!\n", colors.reset)
-                time.sleep(0.500)
-                user_score -= 1
-                user_balance = user_balance - user_bet
-                dealer_balance += user_bet
-                another_game()
         else:
-            print(colors.red + "The Dealer has a new total of", str(sum(dealer_cards)), "from these cards",
-                  dealer_cards, colors.reset, "\n")
-            time.sleep(1)
-            print(colors.green + "You have a grand total of " + str(sum(player_cards)) + " with", player_cards,
-                  colors.reset, "\n")
-            time.sleep(1)
+            game_scoring()
 
-            if sum(dealer_cards) > 21:
-                print(colors.green + "The Dealer BUSTED! You win! You won $" + str(user_bet) + "!\n", colors.reset)
-                time.sleep(1)
-                user_score += 1
-                user_balance = user_balance + user_bet
-                dealer_balance -= user_bet
-                another_game()
-            elif sum(dealer_cards) > sum(player_cards):
-                print(colors.red + "The dealer wins! You lost $" + str(user_bet) + "!\n", colors.reset)
-                time.sleep(1)
-                user_score -= 1
-                user_balance = user_balance - user_bet
-                dealer_balance += user_bet
-                another_game()
-            elif sum(dealer_cards) == 21:
-                print(colors.red + "BLACKJACK! The Dealer hit 21! You lost $" + str(user_bet) + "!\n", colors.reset)
-                time.sleep(1)
-                user_score -= 1
-                user_balance = user_balance - user_bet
-                dealer_balance += user_bet
-                another_game()
-            elif sum(dealer_cards) == sum(player_cards):
-                print(colors.yellow + "PUSH! This is a tie!", colors.reset, "\n")
-                time.sleep(1)
-                another_game()
-            elif sum(player_cards) > sum(dealer_cards):
-                print(colors.green + "You Win! You won $" + str(user_bet) + "!\n", colors.reset)
-                time.sleep(1)
-                user_score += 1
-                user_balance = user_balance + user_bet
-                dealer_balance -= user_bet
-                another_game()
-            else:
-                print(colors.red + "Scoring Error Found...", colors.reset, "\n")
-                time.sleep(1)
-                another_game()
     # Endgame results
-    if sum(player_cards) > 21:
-        print(colors.red + "BUSTED! The Dealer Wins! You lost $" + str(user_bet) + "!\n", colors.reset)
-        time.sleep(1)
-        user_score -= 1
-        user_balance = user_balance - user_bet
-        dealer_balance += user_bet
-        another_game()
-    elif sum(dealer_cards) > 21:
-        print(colors.green + "The Dealer BUSTED! You win! You won $" + str(user_bet) + "!\n", colors.reset)
-        time.sleep(1)
-        user_score += 1
-        user_balance = user_balance + user_bet
-        dealer_balance -= user_bet
-        another_game()
-    elif sum(player_cards) == 21:
-        print(colors.green + "BLACKJACK! You hit 21! You won $" + str(user_bet) + "!\n", colors.reset)
-        time.sleep(1)
-        user_score += 1
-        user_balance = user_balance + user_bet
-        dealer_balance -= user_bet
-        another_game()
-    elif sum(dealer_cards) == 21:
-        print(colors.red + "BLACKJACK! The Dealer hit 21! You lost $" + str(user_bet) + "!\n", colors.reset)
-        time.sleep(1)
-        user_score -= 1
-        user_balance = user_balance - user_bet
-        dealer_balance += user_bet
-        another_game()
-    elif sum(player_cards) == sum(dealer_cards):
-        print(colors.yellow + "PUSH! This is a tie!", colors.reset, "\n")
-        time.sleep(1)
-        another_game()
+    game_scoring()
 
 
 def songs():
@@ -286,8 +204,12 @@ def songs():
     if song_input.lower() == "y" or song_input.lower() == "yes":
         song_list = int(
             input("""1. Relax Instrumental
-2. Anile - Wish List
-3. Exit song selection
+2. Cartoon - On & On
+3. Alan Walker - Spectre
+4. DEAF KEV - Invincible
+5. Different Heaven & EH!DE - My Heart
+6. Electro-Light - Symbolism
+7. Exit song selection
 Which song would you like to play: """))
         print()
 
@@ -297,11 +219,31 @@ Which song would you like to play: """))
             time.sleep(1)
             game()
         elif song_list == 2:
-            playsound("songs\\Anile - Wish List.mp3", False)
+            playsound("songs\\Cartoon - On & On.mp3", False)
             print("Now proceeding to BlackJack 21!\n")
             time.sleep(1)
             game()
         elif song_list == 3:
+            playsound("songs\\Alan Walker - Spectre.mp3", False)
+            print("Now proceeding to BlackJack 21!\n")
+            time.sleep(1)
+            game()
+        elif song_list == 4:
+            playsound("songs\\DEAF KEV - Invincible.mp3", False)
+            print("Now proceeding to BlackJack 21!\n")
+            time.sleep(1)
+            game()
+        elif song_list == 5:
+            playsound("songs\\Different Heaven & EH!DE - My Heart.mp3", False)
+            print("Now proceeding to BlackJack 21!\n")
+            time.sleep(1)
+            game()
+        elif song_list == 6:
+            playsound("songs\\Electro-Light - Symbolism.mp3", False)
+            print("Now proceeding to BlackJack 21!\n")
+            time.sleep(1)
+            game()
+        elif song_list == 7:
             print("Exiting song list and proceeding to BlackJack 21!\n")
             time.sleep(1)
             game()
@@ -313,7 +255,7 @@ Which song would you like to play: """))
         time.sleep(1)
         game()
     else:
-        print(colors.red + "Song input error found!\n", colors.reset)
+        print(colors.red + "Song input error found...\n", colors.reset)
         time.sleep(1)
         songs()
 
@@ -324,7 +266,109 @@ def intro():
     print(colors.yellow + "The goal of this game is to make the dealer go broke! Achieve this by placing your bets and "
                           "dealing your cards wisely, but carefully...\n", colors.reset)
     time.sleep(2)
-    songs()
+
+    user_knowledge = input('Do you know how to play Blackjack 21 or would you like to watch a tutorial via youtube'
+                           ' (yes / tutorial): ')
+    print()
+    time.sleep(1)
+
+    if user_knowledge.lower() == 'y' or user_knowledge.lower() == 'yes':
+        songs()
+    elif user_knowledge.lower() == 'no' or user_knowledge.lower() == 'n' or user_knowledge.lower() == 't' or \
+            user_knowledge.lower() == 'tutorial':
+        print(colors.green + 'A youtube video should now be playing... This game will auto resume once the video has '
+                             'been fully played...\n', colors.reset)
+        url = "https://www.youtube.com/watch?v=eyoh-Ku9TCI"
+        webbrowser.open(url, new=1)
+        time.sleep(140)
+        songs()
+    else:
+        print(colors.red + 'User knowledge input error found...', colors.reset)
+        time.sleep(1)
+        intro()
+
+
+def game_scoring():
+    global player_cards, user_score, user_balance, dealer_balance, dealer_cards
+
+    print(colors.red + "The Dealer has a grand total of", str(sum(dealer_cards)), "from these cards",
+          dealer_cards, colors.reset, "\n")
+    time.sleep(1)
+    print(colors.green + "You have a grand total of " + str(sum(player_cards)) + " with", player_cards,
+          colors.reset, "\n")
+    time.sleep(1)
+
+    if len(player_cards) == 5 and sum(player_cards) < 21:
+        time.sleep(0.500)
+        print(colors.green + "You have automatically won since you have pulled a total of 5 cards without busting!"
+                             "\n", colors.reset)
+        time.sleep(0.500)
+        user_score += 1
+        user_balance += user_bet
+        dealer_balance -= user_bet
+        another_game()
+
+    elif len(dealer_cards) == 5 and sum(dealer_cards) < 21:
+        print(colors.red + "You have automatically lost since the dealer has pulled a total of 5 cards "
+                           "without busting!\n", colors.reset)
+        time.sleep(0.500)
+        user_score -= 1
+        user_balance -= user_bet
+        dealer_balance += user_bet
+        another_game()
+
+    elif sum(player_cards) > 21:
+        print(colors.red + "BUSTED! The Dealer Wins! You lost $" + str(user_bet) + "!\n", colors.reset)
+        time.sleep(1)
+        user_score -= 1
+        user_balance -= user_bet
+        dealer_balance += user_bet
+        another_game()
+    elif sum(dealer_cards) > 21:
+        print(colors.green + "The Dealer BUSTED! You win! You won $" + str(user_bet) + "!\n", colors.reset)
+        time.sleep(1)
+        user_score += 1
+        user_balance += user_bet
+        dealer_balance -= user_bet
+        another_game()
+    elif sum(player_cards) == 21:
+        print(colors.green + "BLACKJACK! You hit 21! You won $" + str(user_bet) + "!\n", colors.reset)
+        time.sleep(1)
+        user_score += 1
+        user_balance += user_bet
+        dealer_balance -= user_bet
+        another_game()
+    elif sum(dealer_cards) == 21:
+        print(colors.red + "BLACKJACK! The Dealer hit 21! You lost $" + str(user_bet) + "!\n", colors.reset)
+        time.sleep(1)
+        user_score -= 1
+        user_balance -= user_bet
+        dealer_balance += user_bet
+        another_game()
+    elif sum(player_cards) > sum(dealer_cards):
+        print(colors.green + "You Win! Your cards were greater than the dealers deck, You won $" + str(user_bet) +
+              "!\n", colors.reset)
+        time.sleep(1)
+        user_score += 1
+        user_balance += user_bet
+        dealer_balance -= user_bet
+        another_game()
+    elif sum(dealer_cards) > sum(player_cards):
+        print(colors.red + "The dealer wins! Your cards were less than the dealers deck,You lost $" + str(user_bet) +
+              "!\n", colors.reset)
+        time.sleep(1)
+        user_score -= 1
+        user_balance -= user_bet
+        dealer_balance += user_bet
+        another_game()
+    elif sum(player_cards) == sum(dealer_cards):
+        print(colors.yellow + "PUSH! This is a tie! All bet money is refunded!", colors.reset, "\n")
+        time.sleep(1)
+        another_game()
+    else:
+        print(colors.red + 'Scoring error found...\n', colors.reset)
+        time.sleep(1)
+        restart()
 
 
 intro()
