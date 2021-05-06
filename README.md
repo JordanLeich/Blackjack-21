@@ -13,7 +13,4 @@
 2. Go to the releases page on GitHub and download the latest zip file
 3. unzip the zip file wherever you like and simply run Blackjack.py and enjoy!
 
-# Additional :clubs:
-- You can now visit this [website](http://jordanleich.github.io/Python-Blackjack-21-Game/) for additional information!
-
 ![BlackJack](images/blackjack.jpg "BlackJack 21")
