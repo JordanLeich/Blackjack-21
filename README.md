@@ -1,6 +1,7 @@
 # [Requirements](https://github.com/JordanLeich/Python-Blackjack-21-Game/blob/master/requirements.txt) :zap:
-1. colored (pip install colored)
-1. playsound (pip install playsound)
+1. Colored (pip install colored)
+1. Playsound (pip install playsound)
+2. It is always a great idea to keep your pip updated but it is not required. If you pip is too outdated, you may run into some issues with installing other python modules and packages.
 
 # Description :black_joker:
 - This is a game where you play against the dealer and try to get the higher values of cards without exceeding over the number 21. If your cards ever equal a total of 21, you automatically get blackjack (win) unless both you and the dealer get 21 then you push (tie). The user also has a cash balance that is wagered based on winning or losing, the user must keep their cash balance positive and not negative to keep playing. 
