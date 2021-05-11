@@ -52,8 +52,10 @@ def another_game():
         time.sleep(.500)
 
         if user_game_over_choice.lower() == 'y' or user_game_over_choice.lower() == 'yes':
-            print('A new game will begin...\n')
+            print('A brand new game will begin...\n')
             time.sleep(1)
+            user_balance = 1000
+            dealer_balance = 5000
             custom_game()
         elif user_game_over_choice.lower() == 'n' or user_game_over_choice.lower() == 'no':
             print(colors.green + 'Thanks for playing! Exiting game now...\n', colors.reset)
@@ -87,8 +89,10 @@ def another_game():
             time.sleep(1)
             quit()
         elif restart_action.lower() == "new" or restart_action.lower() == 'new game':
-            print('A new game will begin...\n')
+            print('A brand new game will begin...\n')
             time.sleep(1)
+            user_balance = 1000
+            dealer_balance = 5000
             intro()
         else:
             print(colors.red + "Invalid input... Restarting choice...\n", colors.reset)
