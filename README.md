@@ -2,7 +2,7 @@
 
 1. Colored (pip install colored)
 1. Playsound (pip install playsound)
-2. It is always a great idea to keep your pip updated but it is not required. If you pip is too outdated, you may run into some issues with installing other python modules and packages.
+1. It is always a great idea to keep your pip updated but it is not required. If you pip is too outdated, you may run into some issues with installing other python modules and packages.
 
 # Description 🃏
 
