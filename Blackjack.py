@@ -74,13 +74,13 @@ def another_game():
             print(colors.green + "The dealers balance is looking small enough for you to win! You're doing well...\n",
                   colors.reset)
             time.sleep(2)
-        restart_action = input("Do you want to play again or cash out your earning or play a brand new game (yes / no /"
+        restart_action = input("Do you want to play again or cash out your earning or play a brand new game (play again / cash out /"
                                " new): ")
         print()
         time.sleep(1)
-        if restart_action.lower() == "yes" or restart_action.lower() == "y":
+        if restart_action.lower() == "play again" or restart_action.lower() == "y":
             restart()
-        elif restart_action.lower() == "no" or restart_action.lower() == "n":
+        elif restart_action.lower() == "cash out" or restart_action.lower() == "n":
             print(colors.green + "You won a total of", user_score, 'games and you walked away with a total of $' +
                   str(user_balance) + str(". Thanks for playing!\n"), colors.reset)
             time.sleep(1)
@@ -306,11 +306,11 @@ Achieve this by placing your bets and dealing your cards wisely, but carefully..
     time.sleep(2)
 
     user_knowledge = input('Do you know how to play Blackjack 21 or would you like to watch a tutorial via youtube or '
-                           'skip all setup options to play Blackjack 21 quickly (yes / tutorial / express): ')
+                           'skip all setup options to play Blackjack 21 quickly (start / tutorial / express): ')
     print()
     time.sleep(1)
 
-    if user_knowledge.lower() == 'y' or user_knowledge.lower() == 'yes':
+    if user_knowledge.lower() == 'start' or user_knowledge.lower() == 'yes':
         songs()
     elif user_knowledge.lower() == 'no' or user_knowledge.lower() == 'n' or user_knowledge.lower() == 't' or \
             user_knowledge.lower() == 'tutorial':
