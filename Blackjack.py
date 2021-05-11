@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 
-# Made by Jordan Leich on 6/6/2020, Last updated on 5/10/2021, Version 8.6
+# Made by Jordan Leich on 6/6/2020, Last updated on 5/11/2021, Version 9.0
 
-# TODO List add a save feature, add multiple players or a.i. to the game
+# TODO List add multiple players or a.i. to the game
 
 # Imports
 import random
@@ -13,7 +13,7 @@ import webbrowser
 import json
 
 try:
-    with open('data.json','r') as user_data_file:
+    with open('data.json', 'r') as user_data_file:
         user_data = json.load(user_data_file)
     user_balance = user_data['ubalance']
     dealer_balance = user_data['deal_balance']
@@ -36,14 +36,14 @@ def another_game():
     """
     Used when 1 single round of blackjack has ended. Allows the user to play another game of blackjack or quit playing
     """
-    global user_score, user_balance, dealer_balance, user_dealer_money_choice, user_money_choice
+    global user_score, user_balance, dealer_balance, user_dealer_money_choice, user_money_choice, user_data_file
     print(colors.green + "Your win count is", user_score, "and your total balance is $" + str(user_balance), "\n",
           colors.reset)
     time.sleep(1)
     print(colors.red + "The dealers total balance is $" + str(dealer_balance), "\n", colors.reset)
     time.sleep(2)
-    with open('data.json','w') as user_data_file:
-            user_data_file.write(json.dumps({'ubalance':user_balance,'deal_balance':dealer_balance}))
+    with open('data.json', 'w') as user_data_file:
+        user_data_file.write(json.dumps({'ubalance': user_balance, 'deal_balance': dealer_balance}))
     if user_balance <= 0:
         print(colors.red + "You don't have any more money to bet... Game Over!\n", colors.reset)
         time.sleep(2)
@@ -74,18 +74,19 @@ def another_game():
             print(colors.green + "The dealers balance is looking small enough for you to win! You're doing well...\n",
                   colors.reset)
             time.sleep(2)
-        restart_action = input("Do you want to play again or cash out your earning or play a brand new game (play again / cash out /"
-                               " new): ")
+        restart_action = input("Do you want to play again or cash out your earning or play a brand new game (play "
+                               "again / cash out / new game): ")
         print()
         time.sleep(1)
-        if restart_action.lower() == "play again" or restart_action.lower() == "y":
+        if restart_action.lower() == "play again" or restart_action.lower() == "y" or restart_action.lower() == 'p' or \
+                restart_action.lower() == 'yes':
             restart()
-        elif restart_action.lower() == "cash out" or restart_action.lower() == "n":
+        elif restart_action.lower() == "cash out" or restart_action.lower() == "n" or restart_action.lower() == 'no':
             print(colors.green + "You won a total of", user_score, 'games and you walked away with a total of $' +
                   str(user_balance) + str(". Thanks for playing!\n"), colors.reset)
             time.sleep(1)
             quit()
-        elif restart_action.lower() == "new":
+        elif restart_action.lower() == "new" or restart_action.lower() == 'new game':
             print('A new game will begin...\n')
             time.sleep(1)
             intro()
@@ -310,7 +311,7 @@ Achieve this by placing your bets and dealing your cards wisely, but carefully..
     print()
     time.sleep(1)
 
-    if user_knowledge.lower() == 'start' or user_knowledge.lower() == 'yes':
+    if user_knowledge.lower() == 'start' or user_knowledge.lower() == 'yes' or user_knowledge.lower() == 's':
         songs()
     elif user_knowledge.lower() == 'no' or user_knowledge.lower() == 'n' or user_knowledge.lower() == 't' or \
             user_knowledge.lower() == 'tutorial':
