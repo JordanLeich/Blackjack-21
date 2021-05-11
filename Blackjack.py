@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-# Made by Jordan Leich on 6/6/2020, Last updated on 5/11/2021, Version 9.0
+# Made by Jordan Leich on 6/6/2020, Last updated on 5/11/2021, Version 9.2
 
 # TODO List add multiple players or a.i. to the game
 
@@ -16,13 +16,15 @@ try:
     with open('data.json', 'r') as user_data_file:
         user_data = json.load(user_data_file)
     user_balance = user_data['ubalance']
+    user_score = user_data['uscore']
     dealer_balance = user_data['deal_balance']
 except:
     user_balance = 1000
+    user_score = 0
     dealer_balance = 5000
 
 # Global Variables
-user_score = 0
+# user_score = 0
 # user_balance = 1000
 # dealer_balance = 5000
 user_bet = 0
@@ -43,7 +45,8 @@ def another_game():
     print(colors.red + "The dealers total balance is $" + str(dealer_balance), "\n", colors.reset)
     time.sleep(2)
     with open('data.json', 'w') as user_data_file:
-        user_data_file.write(json.dumps({'ubalance': user_balance, 'deal_balance': dealer_balance}))
+        user_data_file.write(json.dumps({'ubalance': user_balance, 'uscore': user_score,
+                                         'deal_balance': dealer_balance}))
     if user_balance <= 0:
         print(colors.red + "You don't have any more money to bet... Game Over!\n", colors.reset)
         time.sleep(2)
@@ -55,11 +58,21 @@ def another_game():
             print('A brand new game will begin...\n')
             time.sleep(1)
             user_balance = 1000
+            user_score = 0
             dealer_balance = 5000
+            with open('data.json', 'w') as user_data_file:
+                user_data_file.write(json.dumps({'ubalance': user_balance, 'uscore': user_score,
+                                                 'deal_balance': dealer_balance}))
             custom_game()
         elif user_game_over_choice.lower() == 'n' or user_game_over_choice.lower() == 'no':
             print(colors.green + 'Thanks for playing! Exiting game now...\n', colors.reset)
             time.sleep(1)
+            user_balance = 1000
+            user_score = 0
+            dealer_balance = 5000
+            with open('data.json', 'w') as user_data_file:
+                user_data_file.write(json.dumps({'ubalance': user_balance, 'uscore': user_score,
+                                                 'deal_balance': dealer_balance}))
             quit()
         else:
             print(colors.red + 'User game over choice selection error found... Restarting game...\n', colors.reset)
@@ -83,7 +96,8 @@ def another_game():
         if restart_action.lower() == "play again" or restart_action.lower() == "y" or restart_action.lower() == 'p' or \
                 restart_action.lower() == 'yes':
             restart()
-        elif restart_action.lower() == "cash out" or restart_action.lower() == "n" or restart_action.lower() == 'no':
+        elif restart_action.lower() == "cash out" or restart_action.lower() == "n" or restart_action.lower() == 'no' or\
+                restart_action.lower() == 'c' or restart_action.lower() == 'cash':
             print(colors.green + "You won a total of", user_score, 'games and you walked away with a total of $' +
                   str(user_balance) + str(". Thanks for playing!\n"), colors.reset)
             time.sleep(1)
@@ -93,15 +107,16 @@ def another_game():
             time.sleep(1)
             user_balance = 1000
             dealer_balance = 5000
+            user_score = 0
             intro()
         else:
             print(colors.red + "Invalid input... Restarting choice...\n", colors.reset)
             time.sleep(1)
             another_game()
     else:
-        print("User Balance Error...\n")
+        print(colors.red + "User Balance Error found...\n", colors.reset)
         time.sleep(1)
-        quit()
+        restart()
 
 
 def restart():
@@ -401,7 +416,7 @@ def game_scoring():
         dealer_balance -= user_bet
         another_game()
     elif sum(dealer_cards) > sum(player_cards):
-        print(colors.red + "The dealer wins! Your cards were less than the dealers deck,You lost $" + str(user_bet) +
+        print(colors.red + "The dealer wins! Your cards were less than the dealers deck, You lost $" + str(user_bet) +
               "!\n", colors.reset)
         time.sleep(1)
         user_score -= 1
