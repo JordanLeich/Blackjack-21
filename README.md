@@ -1,4 +1,4 @@
-# [Requirements](https://github.com/JordanLeich/Python-Blackjack-21-Game/blob/master/requirements.txt) :zap
+# [Requirements](https://github.com/JordanLeich/Python-Blackjack-21-Game/blob/master/requirements.txt) ⚡
 
 1. Colored (pip install colored)
 1. Playsound (pip install playsound)
