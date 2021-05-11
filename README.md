@@ -13,6 +13,10 @@
 2. Go to the releases page on GitHub and download the latest zip file
 3. unzip the zip file wherever you like and simply run Blackjack.py and enjoy!
 
+# Additional 📓
+1. [Latest](https://github.com/JordanLeich/Blackjack-21/releases) version of Blackjack 21, this release is the most recommended for players and developers.
+2. [Oldest](https://github.com/JordanLeich/Blackjack-21/releases/tag/v5.0) version of Blackjack 21, this release is super outdated and lackes hundreds of improvements and features.
+
 # TODO List :heavy_exclamation_mark:
 1. Check out the issues page for this project [here](https://github.com/JordanLeich/Blackjack-21/issues/3)
 
