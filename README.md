@@ -11,7 +11,6 @@
 ![BlackJack](demos/demo.gif "BlackJack 21")
 
 # Instructions 🎲
-
 1. Make sure you installed all the python modules found in the requirements tab
 2. Go to the releases page on GitHub and download the latest zip file
 3. unzip the zip file wherever you like and simply run Blackjack.py and enjoy!
