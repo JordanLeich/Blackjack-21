@@ -1,2 +1,0 @@
-colored~=1.4.2
-playsound~=1.2.2
