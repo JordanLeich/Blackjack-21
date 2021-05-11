@@ -10,11 +10,21 @@ import time
 from playsound import playsound
 import colors
 import webbrowser
+import json
+
+try:
+    with open('data.json','r') as user_data_file:
+        user_data = json.load(user_data_file)
+    user_balance = user_data['ubalance']
+    dealer_balance = user_data['deal_balance']
+except:
+    user_balance = 1000
+    dealer_balance = 5000
 
 # Global Variables
 user_score = 0
-user_balance = 1000
-dealer_balance = 5000
+# user_balance = 1000
+# dealer_balance = 5000
 user_bet = 0
 user_dealer_money_choice = 0
 user_money_choice = 0
@@ -32,7 +42,8 @@ def another_game():
     time.sleep(1)
     print(colors.red + "The dealers total balance is $" + str(dealer_balance), "\n", colors.reset)
     time.sleep(2)
-
+    with open('data.json','w') as user_data_file:
+            user_data_file.write(json.dumps({'ubalance':user_balance,'deal_balance':dealer_balance}))
     if user_balance <= 0:
         print(colors.red + "You don't have any more money to bet... Game Over!\n", colors.reset)
         time.sleep(2)
@@ -60,7 +71,7 @@ def another_game():
                                  "balance!\n", colors.reset)
             time.sleep(2)
         elif dealer_balance <= 2500:
-            print(colors.green + "The dealers balance is looking small enough for you to win! Your doing well...\n",
+            print(colors.green + "The dealers balance is looking small enough for you to win! You're doing well...\n",
                   colors.reset)
             time.sleep(2)
         restart_action = input("Do you want to play again or cash out your earning or play a brand new game (yes / no /"
