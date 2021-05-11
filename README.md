@@ -1,4 +1,4 @@
-# [Requirements](https://github.com/JordanLeich/Python-Blackjack-21-Game/blob/master/requirements.txt) ⚡
+# [Requirements](https://github.com/JordanLeich/Blackjack-21/blob/master/Requirements.txt) ⚡
 1. Colored (pip install colored)
 1. Playsound (pip install playsound)
 1. It is always a great idea to keep your pip updated but it is not required. If you pip is too outdated, you may run into some issues with installing other python modules and packages.
