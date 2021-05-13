@@ -8,13 +8,13 @@
     <img src="https://img.shields.io/github/stars/JordanLeich/Blackjack-21.svg?style=flat-square" alt="Stars" />
   </a>
 
+# Description 🃏
+- This is a game where you play against the dealer and try to get the higher values of cards without exceeding over the number 21. If your cards ever equal a total of 21, you automatically get blackjack (win) unless both you and the dealer get 21 then you push (tie). The user also has a cash balance that is wagered based on winning or losing, the user must keep their cash balance positive and not negative to keep playing. All of the basic rules that are applied to the traditional game of Blackjack 21 are also applied to this card game project along with many great features and additions. If you are unfamiliar or do not know how to play Blackjack 21 and would like to learn it, [visit](https://youtu.be/eyoh-Ku9TCI).
+
 # [Requirements](https://github.com/JordanLeich/Blackjack-21/blob/master/Requirements.txt) ⚡
 1. Colored (pip install colored)
 1. Playsound (pip install playsound)
 1. It is always a great idea to keep your pip updated but it is not required. If you pip is too outdated, you may run into some issues with installing other python modules and packages.
-
-# Description 🃏
-- This is a game where you play against the dealer and try to get the higher values of cards without exceeding over the number 21. If your cards ever equal a total of 21, you automatically get blackjack (win) unless both you and the dealer get 21 then you push (tie). The user also has a cash balance that is wagered based on winning or losing, the user must keep their cash balance positive and not negative to keep playing. All of the basic rules that are applied to the traditional game of Blackjack 21 are also applied to this card game project along with many great features and additions. If you are unfamiliar or do not know how to play Blackjack 21 and would like to learn it, [visit](https://youtu.be/eyoh-Ku9TCI).
 
 # Demonstration 📹
 ![BlackJack](demos/demo.gif "BlackJack 21")
