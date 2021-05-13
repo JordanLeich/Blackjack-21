@@ -1,3 +1,13 @@
+<a style="text-decoration:none" href="https://github.com/JordanLeich/Blackjack-21/releases">
+    <img src="https://img.shields.io/github/release/JordanLeich/Blackjack-21.svg?style=flat-square" alt="Releases" />
+  </a>
+<a style="text-decoration:none" href="https://github.com/JordanLeich/Blackjack-21/contributors/">
+    <img src="https://img.shields.io/github/contributors/JordanLeich/Blackjack-21?style=flat-square" alt="Contributors" />
+  </a>
+  <a style="text-decoration:none" href="https://github.com/JordanLeich/Blackjack-21/stargazers">
+    <img src="https://img.shields.io/github/stars/JordanLeich/Blackjack-21.svg?style=flat-square" alt="Stars" />
+  </a>
+
 # [Requirements](https://github.com/JordanLeich/Blackjack-21/blob/master/Requirements.txt) ⚡
 1. Colored (pip install colored)
 1. Playsound (pip install playsound)
