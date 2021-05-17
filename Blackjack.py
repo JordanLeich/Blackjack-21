@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-# Made by Jordan Leich on 6/6/2020, Last updated on 5/11/2021, Version 9.2
+# Made by Jordan Leich on 6/6/2020, Last updated on 5/17/2021, Version 9.5
 
 # TODO List add multiple players or a.i. to the game
 
@@ -96,8 +96,8 @@ def another_game():
         if restart_action.lower() == "play again" or restart_action.lower() == "y" or restart_action.lower() == 'p' or \
                 restart_action.lower() == 'yes':
             restart()
-        elif restart_action.lower() == "cash out" or restart_action.lower() == "n" or restart_action.lower() == 'no' or\
-                restart_action.lower() == 'c' or restart_action.lower() == 'cash':
+        elif restart_action.lower() == "cash out" or restart_action.lower() == "n" or restart_action.lower() == 'no' \
+                or restart_action.lower() == 'c' or restart_action.lower() == 'cash':
             print(colors.green + "You won a total of", user_score, 'games and you walked away with a total of $' +
                   str(user_balance) + str(". Thanks for playing!\n"), colors.reset)
             time.sleep(1)
@@ -150,22 +150,27 @@ def game():
     if user_all_in.lower() == "y" or user_all_in.lower() == "yes":
         user_bet = user_balance
         time.sleep(.500)
-    else:
+    elif user_all_in.lower() == "n" or user_all_in.lower() == "no":
         print()
         user_bet = int(input("How much would you like to bet in dollar amount? "))
         time.sleep(.500)
-    if user_bet > user_balance:
+        if user_bet > user_balance:
+            print()
+            print(colors.red + "Your total balance cannot make this bet! Your bet is too high for your balance!\n",
+                  colors.reset)
+            time.sleep(2)
+            game()
+        elif user_bet <= 0:
+            print()
+            print(colors.red + "You cannot make a negative bet! Please place a higher bet than 0!\n",
+                  colors.reset)
+            time.sleep(2)
+            game()
+    else:
         print()
-        print(colors.red + "Your total balance cannot make this bet! Your bet is too high for your balance!\n",
-              colors.reset)
-        time.sleep(2)
-        game()
-    if user_bet <= 0:
-        print()
-        print(colors.red + "You cannot make a negative bet! Please place a higher bet than 0!\n",
-              colors.reset)
-        time.sleep(2)
-        game()
+        print(colors.red + 'User input for all in feature found an error!\n', colors.reset)
+        time.sleep(1)
+
     while len(dealer_cards) != 2:
         dealer_cards.append(random.randint(1, 11))
         if len(dealer_cards) == 2:
@@ -190,8 +195,8 @@ def game():
 
     while sum(player_cards) < 21 and len(player_cards) < 5:
         action_taken = str(
-            input("Do you want to hit, stay, call help, change song, or quit the game (hit | stay | help | song | quit)"
-                  ": "))
+            input("Do you want to hit, stay, double down, call for help, change song, or quit the game (hit | stay | "
+                  "double | help | song | quit): "))
         print()
         time.sleep(1)
 
@@ -203,21 +208,28 @@ def game():
                   player_cards, colors.reset, "\n")
             time.sleep(1)
         elif action_taken.lower() == 's' or action_taken.lower() == 'stay':
-            print(colors.red + 'The Dealer says No More Bets...\n', colors.reset)
-            time.sleep(1)
-            while sum(dealer_cards) <= 15:
-                dealer_cards.append(random.randint(1, 11))
-                print(colors.red + "The Dealer has pulled a card...\n", colors.reset)
-                time.sleep(1)
-                print(colors.red + "The Dealer now has a total of " + str(sum(dealer_cards)) + " from these cards",
-                      dealer_cards, colors.reset, "\n")
-                time.sleep(1)
+            dealers_turn()
 
-                if len(dealer_cards) == 5 and sum(dealer_cards) < 21:
-                    game_scoring()
+        elif action_taken.lower() == "d" or action_taken.lower() == "double" or action_taken.lower() == 'double down':
+            if sum(player_cards) <= 11:
+                print('You will now double down on your bets and pull only 1 more card and then you will stand for '
+                      'this round!\n')
+                user_bet *= 2
+                time.sleep(1)
+                player_cards.append(random.randint(1, 11))
+                print(colors.green + "You now have a total of " + str(sum(player_cards)) + " from these cards",
+                      player_cards, colors.reset, "\n")
+                time.sleep(1)
+                dealers_turn()
+
+            elif sum(player_cards) > 11:
+                print(colors.red + 'You cannot double down here since the sum of your cards is over 11!\n',
+                      colors.reset)
+                time.sleep(1)
 
             else:
-                game_scoring()
+                print(colors.red + "Double down user error found...\n", colors.reset)
+                time.sleep(1)
 
         elif action_taken.lower() == "help" or action_taken.lower() == "help" or action_taken.lower() == 'call help':
             if sum(player_cards) <= 14:
@@ -252,6 +264,8 @@ def game():
 
 
 def songs():
+    global user_score, user_balance, user_bet, dealer_balance, player_cards, dealer_cards, user_money_choice, \
+        user_dealer_money_choice
     """
     Used for the user to able to play songs while playing blackjack
     """
@@ -274,36 +288,29 @@ Which song would you like to play: """))
             playsound("songs\\Relax.mp3", False)
             print("Now proceeding to BlackJack 21!\n")
             time.sleep(1)
-            custom_game()
         elif song_list == 2:
             playsound("songs\\Cartoon - On & On.mp3", False)
             print("Now proceeding to BlackJack 21!\n")
             time.sleep(1)
-            custom_game()
         elif song_list == 3:
             playsound("songs\\Alan Walker - Spectre.mp3", False)
             print("Now proceeding to BlackJack 21!\n")
             time.sleep(1)
-            custom_game()
         elif song_list == 4:
             playsound("songs\\DEAF KEV - Invincible.mp3", False)
             print("Now proceeding to BlackJack 21!\n")
             time.sleep(1)
-            custom_game()
         elif song_list == 5:
             playsound("songs\\Different Heaven & EH!DE - My Heart.mp3", False)
             print("Now proceeding to BlackJack 21!\n")
             time.sleep(1)
-            custom_game()
         elif song_list == 6:
             playsound("songs\\Electro-Light - Symbolism.mp3", False)
             print("Now proceeding to BlackJack 21!\n")
             time.sleep(1)
-            custom_game()
         elif song_list == 7:
             print("Exiting song list and proceeding to BlackJack 21!\n")
             time.sleep(1)
-            custom_game()
         else:
             print(colors.red + "Song input from track list error found!\n", colors.reset)
             time.sleep(1)
@@ -477,6 +484,39 @@ def custom_game():
         print(colors.red + 'User game selection choice error found... Restarting choice selection...\n', colors.reset)
         time.sleep(2)
         custom_game()
+
+
+def dealers_turn():
+    global user_score, user_balance, user_bet, dealer_balance, player_cards, dealer_cards, user_money_choice, \
+        user_dealer_money_choice
+    print(colors.red + 'The Dealer says No More Bets...\n', colors.reset)
+    time.sleep(1)
+
+    if len(dealer_cards) == 5 and sum(dealer_cards) <= 21:
+        game_scoring()
+
+    elif sum(dealer_cards) > 15:
+        game_scoring()
+
+    elif sum(dealer_cards) >= 21:
+        game_scoring()
+
+    while sum(dealer_cards) <= 15:
+        dealer_cards.append(random.randint(1, 11))
+        print(colors.red + "The Dealer has pulled a card...\n", colors.reset)
+        time.sleep(1)
+        print(colors.red + "The Dealer now has a total of " + str(sum(dealer_cards)) + " from these cards",
+              dealer_cards, colors.reset, "\n")
+        time.sleep(1)
+
+        if len(dealer_cards) == 5 and sum(dealer_cards) <= 21:
+            game_scoring()
+
+        elif sum(dealer_cards) > 15:
+            game_scoring()
+
+        elif sum(dealer_cards) >= 21:
+            game_scoring()
 
 
 intro()
