@@ -10,7 +10,8 @@ import colors
 import webbrowser
 import json
 
-try:
+try:  # This try and except block runs first in the code to be able to load a users saved stats, if no stats are
+    # found, the default stats are automatically set to the end-user
     with open('data.json', 'r') as user_data_file:
         user_data = json.load(user_data_file)
     user_balance = user_data['ubalance']
@@ -22,9 +23,6 @@ except:
     dealer_balance = 5000
 
 # Global Variables
-# user_score = 0
-# user_balance = 1000
-# dealer_balance = 5000
 user_bet = 0
 user_dealer_money_choice = 0
 user_money_choice = 0
@@ -34,7 +32,7 @@ dealer_cards = []
 
 def another_game():
     """
-    Used when 1 single round of blackjack has ended. Allows the user to play another game of blackjack or quit playing
+Used when 1 single round of blackjack has ended. Allows the user to play another game of blackjack or quit playing
     """
     global user_score, user_balance, dealer_balance, user_dealer_money_choice, user_money_choice, user_data_file
     print(colors.green + "Your win count is", user_score, "and your total balance is $" + str(user_balance), "\n",
@@ -119,7 +117,7 @@ def another_game():
 
 def restart():
     """
-    This restarts the program no matter what if executed
+This restarts the program no matter what if executed
     """
     global user_score
     print("Restarting Blackjack Game...\n")
@@ -129,7 +127,7 @@ def restart():
 
 def game():
     """
-    This is the main code used for the game entirely
+This is the main code used for the game entirely
     """
     global user_score, user_balance, user_bet, dealer_balance, player_cards, dealer_cards, user_money_choice, \
         user_dealer_money_choice
@@ -262,11 +260,11 @@ def game():
 
 
 def songs():
+    """
+Used for the user to able to play songs while playing blackjack
+    """
     global user_score, user_balance, user_bet, dealer_balance, player_cards, dealer_cards, user_money_choice, \
         user_dealer_money_choice
-    """
-    Used for the user to able to play songs while playing blackjack
-    """
     song_input = str(input("Would you like to play songs from our track list while playing (yes / no): "))
     print()
 
@@ -324,6 +322,10 @@ Which song would you like to play: """))
 
 
 def intro():
+    """
+Used as the first piece of the program introduced to the end-user. This section allows the user to skip around in the
+game by using the game mode selection choices
+    """
     print(colors.green + 'Hello there! Welcome to Blackjack 21, made by Jordan Leich!\n', colors.reset)
     time.sleep(.500)
     print(colors.yellow + '''The goal of this game is to make the dealer go broke and score the most amount of money! 
@@ -356,8 +358,10 @@ Achieve this by placing your bets and dealing your cards wisely, but carefully..
 
 
 def game_scoring():
+    """
+Handles of the end game scoring based upon card results between the dealer and end-user
+    """
     global player_cards, user_score, user_balance, dealer_balance, dealer_cards
-
     print(colors.red + "The Dealer has a grand total of", str(sum(dealer_cards)), "from these cards",
           dealer_cards, colors.reset, "\n")
     time.sleep(1)
@@ -439,6 +443,9 @@ def game_scoring():
 
 
 def custom_game():
+    """
+Allows the end-user to be able to play the game but with custom money, win counts, and more
+    """
     global user_balance, dealer_balance, user_score, user_dealer_money_choice, user_money_choice
     user_game_picker = input('Would you like to play normal Blackjack 21 or a Custom Game with custom user game '
                              'settings (blackjack / custom): ')
@@ -485,6 +492,9 @@ def custom_game():
 
 
 def dealers_turn():
+    """
+Handles all of the card pulling actions for the dealer
+    """
     global user_score, user_balance, user_bet, dealer_balance, player_cards, dealer_cards, user_money_choice, \
         user_dealer_money_choice
     print(colors.red + 'The Dealer says No More Bets...\n', colors.reset)
@@ -517,4 +527,5 @@ def dealers_turn():
             game_scoring()
 
 
-intro()
+if __name__ == '__main__':
+    intro()
