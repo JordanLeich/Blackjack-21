@@ -3,7 +3,6 @@
 # Made by Jordan Leich on 6/6/2020
 
 # Imports
-import os
 import random
 import time
 from other import colors
@@ -17,30 +16,30 @@ try:  # This try and except block runs first in the code to be able to load a us
     user_balance = user_data['ubalance']
     user_score = user_data['uscore']
     dealer_balance = user_data['deal_balance']
-except os.error:
+except FileNotFoundError:
     user_balance = 1000
     user_score = 0
     dealer_balance = 5000
 
 
 def highlight(color, string):
-    return print(color + string + colors.reset + '\n')
+    print(color + string + colors.reset + '\n')
 
 
 def red(string):
-    return highlight(colors.red, string)
+    highlight(colors.red, string)
 
 
 def green(string):
-    return highlight(colors.green, string)
+    highlight(colors.green, string)
 
 
 def yellow(string):
-    return highlight(colors.yellow, string)
+    highlight(colors.yellow, string)
 
 
 def blue(string):
-    return highlight(colors.blue, string)
+    highlight(colors.blue, string)
 
 
 # Global Variables
