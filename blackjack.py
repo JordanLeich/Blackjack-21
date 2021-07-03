@@ -6,7 +6,7 @@
 import random
 import time
 from playsound import playsound
-import colors
+from other import colors
 import webbrowser
 import json
 
