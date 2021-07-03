@@ -3,9 +3,9 @@
 # Made by Jordan Leich on 6/6/2020
 
 # Imports
+import os
 import random
 import time
-from playsound import playsound
 from other import colors
 import webbrowser
 import json
@@ -17,10 +17,31 @@ try:  # This try and except block runs first in the code to be able to load a us
     user_balance = user_data['ubalance']
     user_score = user_data['uscore']
     dealer_balance = user_data['deal_balance']
-except:
+except os.error:
     user_balance = 1000
     user_score = 0
     dealer_balance = 5000
+
+
+def highlight(color, string):
+    return print(color + string + colors.reset + '\n')
+
+
+def red(string):
+    return highlight(colors.red, string)
+
+
+def green(string):
+    return highlight(colors.green, string)
+
+
+def yellow(string):
+    return highlight(colors.yellow, string)
+
+
+def blue(string):
+    return highlight(colors.blue, string)
+
 
 # Global Variables
 user_bet = 0
@@ -44,13 +65,13 @@ Used when 1 single round of blackjack has ended. Allows the user to play another
         user_data_file.write(json.dumps({'ubalance': user_balance, 'uscore': user_score,
                                          'deal_balance': dealer_balance}))
     if user_balance <= 0:
-        print(colors.red + "You don't have any more money to bet... Game Over!\n", colors.reset)
+        red("You don't have any more money to bet... Game Over!")
         time.sleep(2)
         user_game_over_choice = input('Would you like to play all over again (yes / no): ')
         print()
         time.sleep(.500)
 
-        if user_game_over_choice.lower() == 'y' or user_game_over_choice.lower() == 'yes':
+        if user_game_over_choice.lower() in ['y', 'yes']:
             print('A brand new game will begin...\n')
             time.sleep(1)
             user_balance = 1000
@@ -60,8 +81,8 @@ Used when 1 single round of blackjack has ended. Allows the user to play another
                 user_data_file.write(json.dumps({'ubalance': user_balance, 'uscore': user_score,
                                                  'deal_balance': dealer_balance}))
             custom_game()
-        elif user_game_over_choice.lower() == 'n' or user_game_over_choice.lower() == 'no':
-            print(colors.green + 'Thanks for playing! Exiting game now...\n', colors.reset)
+        elif user_game_over_choice.lower() in ['n', 'no']:
+            green('Thanks for playing! Exiting game now...')
             time.sleep(1)
             user_balance = 1000
             user_score = 0
@@ -71,46 +92,42 @@ Used when 1 single round of blackjack has ended. Allows the user to play another
                                                  'deal_balance': dealer_balance}))
             quit()
         else:
-            print(colors.red + 'User game over choice selection error found... Restarting game...\n', colors.reset)
+            red('User game over choice selection error found... Restarting game...\n')
             time.sleep(2)
-            intro()
+            main()
 
     elif user_balance >= 1:
 
         if dealer_balance <= 0:
-            print(colors.green + "Congratulations! You have beat the BlackJack 21 game by defeating the dealers "
-                                 "balance!\n", colors.reset)
+            green("Congratulations! You have beat the BlackJack 21 game by defeating the dealers balance!")
             time.sleep(2)
         elif dealer_balance <= 2500:
-            print(colors.green + "The dealers balance is looking small enough for you to win! You're doing well...\n",
-                  colors.reset)
+            green("The dealers balance is looking small enough for you to win! You're doing well...")
             time.sleep(2)
         restart_action = input("Do you want to play again or cash out your earning or play a brand new game (play "
                                "again / cash out / new game): ")
         print()
         time.sleep(1)
-        if restart_action.lower() == "play again" or restart_action.lower() == "y" or restart_action.lower() == 'p' or \
-                restart_action.lower() == 'yes':
+        if restart_action.lower() in ["play again", "y", 'p', 'yes']:
             restart()
-        elif restart_action.lower() == "cash out" or restart_action.lower() == "n" or restart_action.lower() == 'no' \
-                or restart_action.lower() == 'c' or restart_action.lower() == 'cash':
+        elif restart_action.lower() in ["cash out", "n", "no", "c", "cash"]:
             print(colors.green + "You won a total of", user_score, 'games and you walked away with a total of $' +
                   str(user_balance) + str(". Thanks for playing!\n"), colors.reset)
             time.sleep(1)
             quit()
-        elif restart_action.lower() == "new" or restart_action.lower() == 'new game':
+        elif restart_action.lower() in ["new", "new game"]:
             print('A brand new game will begin...\n')
             time.sleep(1)
             user_balance = 1000
             dealer_balance = 5000
             user_score = 0
-            intro()
+            main()
         else:
-            print(colors.red + "Invalid input... Restarting choice...\n", colors.reset)
+            red("Invalid input... Restarting choice...")
             time.sleep(1)
             another_game()
     else:
-        print(colors.red + "User Balance Error found...\n", colors.reset)
+        red("User Balance Error found...\n")
         time.sleep(1)
         restart()
 
@@ -141,31 +158,28 @@ This is the main code used for the game entirely
     time.sleep(1)
 
     user_all_in = str(input("Would you like to go all in (yes / no): "))
+    print()
     time.sleep(.500)
 
-    if user_all_in.lower() == "y" or user_all_in.lower() == "yes":
+    if user_all_in.lower() in ["y", "yes"]:
         user_bet = user_balance
         time.sleep(.500)
-    elif user_all_in.lower() == "n" or user_all_in.lower() == "no":
-        print()
+    elif user_all_in.lower() in ["n", "no"]:
         user_bet = int(input("How much would you like to bet in dollar amount? "))
         time.sleep(.500)
         if user_bet > user_balance:
-            print()
-            print(colors.red + "Your total balance cannot make this bet! Your bet is too high for your balance!\n",
-                  colors.reset)
+            red("Your total balance cannot make this bet! Your bet is too high for your balance!")
             time.sleep(2)
             game()
         elif user_bet <= 0:
-            print()
-            print(colors.red + "You cannot make a negative bet! Please place a higher bet than 0!\n",
-                  colors.reset)
+            red("You cannot make a negative bet! Please place a higher bet than 0!")
             time.sleep(2)
             game()
     else:
         print()
-        print(colors.red + 'User input for all in feature found an error!\n', colors.reset)
+        red('User input for all in feature found an error!\n')
         time.sleep(1)
+        restart()
 
     while len(dealer_cards) != 2:
         dealer_cards.append(random.randint(1, 11))
@@ -181,32 +195,29 @@ This is the main code used for the game entirely
                   colors.reset, "\n")
             time.sleep(1)
     # Total of Dealer cards
-    if sum(dealer_cards) == 21:
-        game_scoring()
-    elif sum(dealer_cards) > 21:
+    if sum(dealer_cards) >= 21:
         game_scoring()
     # Total of Player cards
-    if len(player_cards) == 5 and sum(player_cards) < 21:
+    elif len(player_cards) == 5 and sum(player_cards) < 21:
         game_scoring()
 
     while sum(player_cards) < 21 and len(player_cards) < 5:
-        action_taken = str(
-            input("Do you want to hit, stay, double down, call for help, change song, or quit the game (hit | stay | "
-                  "double | help | song | quit): "))
+        choice = str(
+            input("Do you want to hit, stay, double down, call for help, or quit the game (hit | stay | "
+                  "double | help | quit): "))
         print()
         time.sleep(1)
 
         if len(player_cards) == 5 and sum(player_cards) < 21:
             game_scoring()
-        elif action_taken.lower() == "hit" or action_taken.lower() == "h":
+        elif choice.lower() in ["hit", "h"]:
             player_cards.append(random.randint(1, 11))
             print(colors.green + "You now have a total of " + str(sum(player_cards)) + " from these cards",
                   player_cards, colors.reset, "\n")
             time.sleep(1)
-        elif action_taken.lower() == 's' or action_taken.lower() == 'stay':
+        elif choice.lower() in ['s', 'stay']:
             dealers_turn()
-
-        elif action_taken.lower() == "d" or action_taken.lower() == "double" or action_taken.lower() == 'double down':
+        elif choice.lower() in ["d", "double", 'double down']:
             if sum(player_cards) <= 11:
                 print('You will now double down on your bets and pull only 1 more card and then you will stand for '
                       'this round!\n')
@@ -217,38 +228,21 @@ This is the main code used for the game entirely
                       player_cards, colors.reset, "\n")
                 time.sleep(1)
                 dealers_turn()
-
             elif sum(player_cards) > 11:
-                print(colors.red + 'You cannot double down here since the sum of your cards is over 11!\n',
-                      colors.reset)
+                red('You cannot double down here since the sum of your cards is over 11!')
                 time.sleep(1)
-
-            else:
-                print(colors.red + "Double down user error found...\n", colors.reset)
-                time.sleep(1)
-
-        elif action_taken.lower() == "help" or action_taken.lower() == "help" or action_taken.lower() == 'call help':
+        elif choice.lower() in ["help", "help", 'call help']:
             if sum(player_cards) <= 14:
-                print(colors.blue + "Since your total is under or equal to a total of 14, we recommend that you hit!\n",
-                      colors.reset, )
-                time.sleep(1)
+                blue("Since your total is under or equal to a total of 14, we recommend that you hit!")
+                time.sleep(2)
             elif sum(player_cards) >= 15:
-                print(colors.blue + "Your odds are looking high enough to win, if your card total is closer to 15, "
-                                    "we recommend only making 1 hit move and then staying!\n", colors.reset)
+                blue("Your odds are looking high enough to win, if your card total is closer to 15, we recommend only "
+                     "making 1 hit move and then staying!")
                 time.sleep(3)
-                print(colors.blue + "If your card total is closer to 21, don't risk it! make a stay move!\n",
-                      colors.reset)
+                blue("If your card total is closer to 21, don't risk it! make a stay move!")
                 time.sleep(3)
-            else:
-                print(colors.red + "Helping Error Found...\n", colors.reset)
-                time.sleep(1)
-                quit()
-        elif action_taken.lower() == "song" or action_taken.lower() == "change song":
-            print("Loading track change...\n")
-            time.sleep(1)
-            songs()
-        elif action_taken.lower() == "q" or action_taken.lower() == "quit" or action_taken.lower() == "end":
-            print(colors.green + "Ending game... Thanks for playing!\n", colors.reset)
+        elif choice.lower() in ["q", "quit", "end"]:
+            green("Ending game... Thanks for playing!\n")
             time.sleep(1)
             quit()
 
@@ -259,77 +253,15 @@ This is the main code used for the game entirely
     game_scoring()
 
 
-def songs():
-    """
-Used for the user to able to play songs while playing blackjack
-    """
-    global user_score, user_balance, user_bet, dealer_balance, player_cards, dealer_cards, user_money_choice, \
-        user_dealer_money_choice
-    song_input = str(input("Would you like to play songs from our track list while playing (yes / no): "))
-    print()
-
-    if song_input.lower() == "y" or song_input.lower() == "yes":
-        song_list = int(
-            input("""1. Relax Instrumental
-2. Cartoon - On & On
-3. Alan Walker - Spectre
-4. DEAF KEV - Invincible
-5. Different Heaven & EH!DE - My Heart
-6. Electro-Light - Symbolism
-7. Exit song selection
-Which song would you like to play: """))
-        print()
-
-        if song_list == 1:
-            playsound("songs\\Relax.mp3", False)
-            print("Now proceeding to BlackJack 21!\n")
-            time.sleep(1)
-        elif song_list == 2:
-            playsound("songs\\Cartoon - On & On.mp3", False)
-            print("Now proceeding to BlackJack 21!\n")
-            time.sleep(1)
-        elif song_list == 3:
-            playsound("songs\\Alan Walker - Spectre.mp3", False)
-            print("Now proceeding to BlackJack 21!\n")
-            time.sleep(1)
-        elif song_list == 4:
-            playsound("songs\\DEAF KEV - Invincible.mp3", False)
-            print("Now proceeding to BlackJack 21!\n")
-            time.sleep(1)
-        elif song_list == 5:
-            playsound("songs\\Different Heaven & EH!DE - My Heart.mp3", False)
-            print("Now proceeding to BlackJack 21!\n")
-            time.sleep(1)
-        elif song_list == 6:
-            playsound("songs\\Electro-Light - Symbolism.mp3", False)
-            print("Now proceeding to BlackJack 21!\n")
-            time.sleep(1)
-        elif song_list == 7:
-            print("Exiting song list and proceeding to BlackJack 21!\n")
-            time.sleep(1)
-        else:
-            print(colors.red + "Song input from track list error found!\n", colors.reset)
-            time.sleep(1)
-            songs()
-    elif song_input.lower() == "n" or song_input.lower() == "no":
-        print("No song has been selected! Now proceeding to game selection...\n")
-        time.sleep(1)
-        custom_game()
-    else:
-        print(colors.red + "Song input error found...\n", colors.reset)
-        time.sleep(1)
-        songs()
-
-
-def intro():
+def main():
     """
 Used as the first piece of the program introduced to the end-user. This section allows the user to skip around in the
 game by using the game mode selection choices
     """
-    print(colors.green + 'Hello there! Welcome to Blackjack 21, made by Jordan Leich!\n', colors.reset)
-    time.sleep(.500)
-    print(colors.yellow + '''The goal of this game is to make the dealer go broke and score the most amount of money! 
-Achieve this by placing your bets and dealing your cards wisely, but carefully...\n''', colors.reset)
+    green('Hello there! Welcome to Blackjack 21, made by Jordan Leich!')
+    time.sleep(1)
+    yellow('''The goal of this game is to make the dealer go broke and score the most amount of money! 
+Achieve this by placing your bets and dealing your cards wisely, but carefully...''')
     time.sleep(2)
 
     user_knowledge = input('Do you know how to play Blackjack 21 or would you like to watch a tutorial via youtube or '
@@ -337,24 +269,23 @@ Achieve this by placing your bets and dealing your cards wisely, but carefully..
     print()
     time.sleep(1)
 
-    if user_knowledge.lower() == 'start' or user_knowledge.lower() == 'yes' or user_knowledge.lower() == 's':
-        songs()
-    elif user_knowledge.lower() == 'no' or user_knowledge.lower() == 'n' or user_knowledge.lower() == 't' or \
-            user_knowledge.lower() == 'tutorial':
-        print(colors.green + 'A youtube video should now be playing... This game will auto resume once the video has '
-                             'been fully played...\n', colors.reset)
+    if user_knowledge.lower() in ['start', 'yes', 's']:
+        custom_game()
+    elif user_knowledge.lower() in ['no', 'n', 't', 'tutorial']:
+        green('A youtube video should now be playing... This game will auto resume once the video has been fully '
+              'played...')
         url = "https://www.youtube.com/watch?v=eyoh-Ku9TCI"
         webbrowser.open(url, new=1)
         time.sleep(140)
-        songs()
-    elif user_knowledge.lower() == 'e' or user_knowledge.lower() == 'express':
+        game()
+    elif user_knowledge.lower() in ['e', 'express']:
         print('Express option has been selected, proceeding to Blackjack 21...\n')
         time.sleep(.500)
         game()
     else:
-        print(colors.red + 'User knowledge input error found...', colors.reset)
+        red('User knowledge input error found...')
         time.sleep(1)
-        intro()
+        main()
 
 
 def game_scoring():
@@ -370,24 +301,20 @@ Handles of the end game scoring based upon card results between the dealer and e
     time.sleep(1)
 
     if len(player_cards) == 5 and sum(player_cards) < 21:
-        time.sleep(0.500)
-        print(colors.green + "You have automatically won since you have pulled a total of 5 cards without busting!"
-                             "\n", colors.reset)
-        time.sleep(0.500)
+        time.sleep(1)
+        green("You have automatically won since you have pulled a total of 5 cards without busting!")
+        time.sleep(1)
         user_score += 1
         user_balance += user_bet
         dealer_balance -= user_bet
         another_game()
-
     elif len(dealer_cards) == 5 and sum(dealer_cards) < 21:
-        print(colors.red + "You have automatically lost since the dealer has pulled a total of 5 cards "
-                           "without busting!\n", colors.reset)
-        time.sleep(0.500)
+        red("You have automatically lost since the dealer has pulled a total of 5 cards without busting!")
+        time.sleep(1)
         user_score -= 1
         user_balance -= user_bet
         dealer_balance += user_bet
         another_game()
-
     elif sum(player_cards) > 21:
         print(colors.red + "BUSTED! The Dealer Wins! You lost $" + str(user_bet) + "!\n", colors.reset)
         time.sleep(1)
@@ -433,11 +360,12 @@ Handles of the end game scoring based upon card results between the dealer and e
         dealer_balance += user_bet
         another_game()
     elif sum(player_cards) == sum(dealer_cards):
-        print(colors.yellow + "PUSH! This is a tie! All bet money is refunded!", colors.reset, "\n")
+        yellow("PUSH! This is a tie! All bet money is refunded!")
         time.sleep(1)
         another_game()
-    else:
-        print(colors.red + 'Scoring error found...\n', colors.reset)
+    else:  # This else statement is most likely unreachable but still used as a safety net in case anything with
+        # scoring goes wrong.
+        red('Scoring error found...')
         time.sleep(1)
         restart()
 
@@ -452,26 +380,20 @@ Allows the end-user to be able to play the game but with custom money, win count
     print()
     time.sleep(1)
 
-    if user_game_picker.lower() == 'b' or user_game_picker.lower() == 'blackjack' or user_game_picker.lower() == \
-            'blackjack 21':
+    if user_game_picker.lower() in ['b', 'blackjack', 'blackjack 21']:
         print('Normal Blackjack 21 has been selected...\n')
         time.sleep(.500)
         game()
-
-    elif user_game_picker.lower() == 'c' or user_game_picker.lower() == 'custom' or user_game_picker.lower() == \
-            'custom game':
+    elif user_game_picker.lower() in ['c', 'custom', 'custom game']:
         print('Custom Blackjack 21 has been selected...\n')
         time.sleep(.500)
         user_money_choice = int(input('How much would you like your starting balance to be? '))
         print()
         time.sleep(.500)
-
         if user_money_choice <= 0:
-            print(colors.yellow + 'Invalid starting balance... Please choose a balance greater than 0 dollars!\n',
-                  colors.reset)
+            red('Invalid starting balance... Please choose a balance greater than 0 dollars!')
             time.sleep(2)
             custom_game()
-
         user_balance = user_money_choice
         user_dealer_money_choice = int(input('How much would you to set the dealers starting balance to? '))
         print()
@@ -484,9 +406,8 @@ Allows the end-user to be able to play the game but with custom money, win count
         print('Now proceeding to Blackjack 21 game with your custom settings...\n')
         time.sleep(1)
         game()
-
     else:
-        print(colors.red + 'User game selection choice error found... Restarting choice selection...\n', colors.reset)
+        red('User game selection choice error found... Restarting choice selection...')
         time.sleep(2)
         custom_game()
 
@@ -497,7 +418,7 @@ Handles all of the card pulling actions for the dealer
     """
     global user_score, user_balance, user_bet, dealer_balance, player_cards, dealer_cards, user_money_choice, \
         user_dealer_money_choice
-    print(colors.red + 'The Dealer says No More Bets...\n', colors.reset)
+    red('The Dealer says No More Bets...')
     time.sleep(1)
 
     if len(dealer_cards) == 5 and sum(dealer_cards) <= 21:
@@ -511,7 +432,7 @@ Handles all of the card pulling actions for the dealer
 
     while sum(dealer_cards) <= 15:
         dealer_cards.append(random.randint(1, 11))
-        print(colors.red + "The Dealer has pulled a card...\n", colors.reset)
+        red("The Dealer has pulled a card...")
         time.sleep(1)
         print(colors.red + "The Dealer now has a total of " + str(sum(dealer_cards)) + " from these cards",
               dealer_cards, colors.reset, "\n")
@@ -528,4 +449,4 @@ Handles all of the card pulling actions for the dealer
 
 
 if __name__ == '__main__':
-    intro()
+    main()
