@@ -1,8 +1,6 @@
 #!/usr/bin/python3
 
-# Made by Jordan Leich on 6/6/2020, Last updated on 5/17/2021, Version 9.5
-
-# TODO List add multiple players or a.i. to the game
+# Made by Jordan Leich on 6/6/2020
 
 # Imports
 import random
