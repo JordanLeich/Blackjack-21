@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-# Made by Jordan Leich on 6/6/2020
+# Created by Jordan Leich on 6/6/2020
 
 # Imports
 import random
@@ -10,7 +10,7 @@ import webbrowser
 import json
 
 try:  # This try and except block runs first in the code to be able to load a users saved stats, if no stats are
-    # found, the default stats are automatically set to the end-user
+    # found, the default stats are automatically set to the end-users stats
     with open('data.json', 'r') as user_data_file:
         user_data = json.load(user_data_file)
     user_balance = user_data['ubalance']
@@ -66,12 +66,10 @@ Used when 1 single round of blackjack has ended. Allows the user to play another
     if user_balance <= 0:
         red("You don't have any more money to bet... Game Over!")
         time.sleep(2)
-        user_game_over_choice = _extracted_from_another_game_15(
-            'Would you like to play all over again (yes / no): ', 0.500
-        )
+        user_game_over_choice = getting_input('Would you like to play all over again (yes / no): ', 0.500)
 
         if user_game_over_choice.lower() in ['y', 'yes']:
-            new_game_starting_custom_game()
+            new_game_starting()
         elif user_game_over_choice.lower() in ['n', 'no']:
             exiting_game()
         else:
@@ -87,13 +85,11 @@ Used when 1 single round of blackjack has ended. Allows the user to play another
         elif dealer_balance <= 2500:
             green("The dealers balance is looking small enough for you to win! You're doing well...")
             time.sleep(2)
-        restart_action = _extracted_from_another_game_15(
+        restart_action = getting_input(
             "Do you want to play again or cash out your earning or play a brand new game (play "
-            "again / cash out / new game): ",
-            1,
-        )
+            "again / cash out / new game): ", 1)
 
-        if restart_action.lower() in ["play again", "y", 'p', 'yes']:
+        if restart_action.lower() in ["play again", "y", 'p', 'yes', 'play']:
             restart()
         elif restart_action.lower() in ["cash out", "n", "no", "c", "cash"]:
             print(colors.green + "You won a total of", user_score, 'games and you walked away with a total of $' +
@@ -148,7 +144,7 @@ def new_game_starting_custom_game():
     custom_game_main()
 
 
-def _extracted_from_another_game_15(arg0, arg1):
+def getting_input(arg0, arg1):
     result = input(arg0)
     print()
     time.sleep(arg1)
