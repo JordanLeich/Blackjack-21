@@ -1,3 +1,1 @@
 colored==1.4.2
-playsound==1.2.2
-setuptools==56.2.0
