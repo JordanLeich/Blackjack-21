@@ -9,18 +9,6 @@ from other import colors
 import webbrowser
 import json
 
-try:  # This try and except block runs first in the code to be able to load a users saved stats, if no stats are
-    # found, the default stats are automatically set to the end-users stats
-    with open('data.json', 'r') as user_data_file:
-        user_data = json.load(user_data_file)
-    user_balance = user_data['ubalance']
-    user_score = user_data['uscore']
-    dealer_balance = user_data['deal_balance']
-except FileNotFoundError:
-    user_balance = 1000
-    user_score = 0
-    dealer_balance = 5000
-
 
 def highlight(color, string):
     print(color + string + colors.reset + '\n')
@@ -41,6 +29,20 @@ def yellow(string):
 def blue(string):
     highlight(colors.blue, string)
 
+
+try:  # This try and except block runs first in the code to be able to load a users saved stats, if no stats are
+    # found, the default stats are automatically set to the end-users stats
+    with open('data.json', 'r') as user_data_file:
+        user_data = json.load(user_data_file)
+    user_balance = user_data['ubalance']
+    user_score = user_data['uscore']
+    dealer_balance = user_data['deal_balance']
+    green('Save file found and loaded!')
+except FileNotFoundError:
+    user_balance = 1000
+    user_score = 0
+    dealer_balance = 5000
+    yellow('Save file not found, A new save file has been created!')
 
 # Global Variables
 user_bet = 0
@@ -93,7 +95,7 @@ Used when 1 single round of blackjack has ended. Allows the user to play another
             restart()
         elif restart_action.lower() in ["cash out", "n", "no", "c", "cash"]:
             print(colors.green + "You won a total of", user_score, 'games and you walked away with a total of $' +
-                  str(user_balance) + str(". Thanks for playing!\n"), colors.reset)
+                  str(user_balance) + str(" dollars. Thanks for playing!\n"), colors.reset)
             time.sleep(1)
             quit()
         elif restart_action.lower() in ["new", "new game"]:
@@ -183,17 +185,25 @@ This is the main code used for the game entirely
         user_bet = user_balance
         time.sleep(.500)
     elif user_all_in.lower() in ["n", "no"]:
-        user_bet = int(input("How much would you like to bet in dollar amount? "))
-        print()
-        time.sleep(.500)
+        while True:
+            try:
+                user_bet = int(input("How much would you like to bet in dollar amount? "))
+                print()
+                time.sleep(.500)
+            except ValueError:
+                print()
+                red('Please enter a valid dollar amount!')
+                continue
+            else:
+                break
+
         if user_bet > user_balance:
             user_bet_error_handling("Your total balance cannot make this bet! Your bet is too high for your balance!")
 
         elif user_bet <= 0:
-            user_bet_error_handling("You cannot make a negative bet! Please place a higher bet than 0!")
+            user_bet_error_handling("You cannot make a negative bet! Please place a higher bet than 0 dollars!")
 
     else:
-        print()
         red('User input for all in feature found an error!\n')
         time.sleep(1)
         restart()
@@ -201,7 +211,6 @@ This is the main code used for the game entirely
     while len(dealer_cards) != 2:
         dealer_cards.append(random.randint(1, 11))
         if len(dealer_cards) == 2:
-            print()
             print(colors.red + "The Dealer has ? &", dealer_cards[1], colors.reset, "\n")
             time.sleep(1)
     # Player Cards
