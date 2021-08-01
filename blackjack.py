@@ -48,7 +48,7 @@ except FileNotFoundError:
 user_bet = 0
 user_dealer_money_choice = 0
 user_money_choice = 0
-insurance = bool
+insurance_bought = False
 player_cards = []
 dealer_cards = []
 
@@ -94,12 +94,12 @@ Used when 1 single round of blackjack has ended. Allows the user to play another
 
         if restart_action.lower() in ["play again", "y", 'p', 'yes', 'play']:
             restart()
-        elif restart_action.lower() in ["cash out", "n", "no", "c", "cash"]:
+        elif restart_action.lower() in ["cash out", "n", "no", "c", "cash", "exit", "leave"]:
             print(colors.green + "You won a total of", user_score, 'games and you walked away with a total of $' +
                   str(user_balance) + str(" dollars. Thanks for playing!\n"), colors.reset)
             time.sleep(1)
             quit()
-        elif restart_action.lower() in ["new", "new game"]:
+        elif restart_action.lower() in ["new", "new game", "restart"]:
             new_game_starting()
         else:
             red("Invalid input... Restarting choice...")
@@ -311,7 +311,7 @@ Achieve this by placing your bets and dealing your cards wisely, but carefully..
     time.sleep(1)
 
     if user_knowledge.lower() in ['start', 'yes', 's']:
-        custom_game_main()
+        game_options()
     elif user_knowledge.lower() in ['no', 'n', 't', 'tutorial']:
         green('A youtube video should now be playing... This game will auto resume once the video has been fully '
               'played...')
@@ -320,8 +320,6 @@ Achieve this by placing your bets and dealing your cards wisely, but carefully..
         time.sleep(140)
         game()
     elif user_knowledge.lower() in ['e', 'express']:
-        print('Express option has been selected, proceeding to Blackjack 21...\n')
-        time.sleep(.500)
         game()
     else:
         red('User knowledge input error found...')
@@ -333,24 +331,17 @@ def game_scoring():
     """
 Handles of the end game scoring based upon card results between the dealer and end-user
     """
-    global player_cards, user_score, user_balance, dealer_balance, dealer_cards, insurance
+    global player_cards, user_score, user_balance, dealer_balance, dealer_cards, insurance_bought
     print(colors.red + "The Dealer has a grand total of", str(sum(dealer_cards)), "from these cards",
           dealer_cards, colors.reset, "\n")
     time.sleep(1)
     print(colors.green + "You have a grand total of " + str(sum(player_cards)) + " with", player_cards,
           colors.reset, "\n")
     time.sleep(1)
-    if insurance and sum(dealer_cards) == 21:
-        insurance_game_results("BLACKJACK! Since you purchased insurance, you do not lose any money!")
 
-    elif not insurance and sum(dealer_cards) == 21:
-        insurance_game_results(
-            "BLACKJACK! Since you did not purchased insurance, you will lose your original plus half the original "
-            "amount bet!")
-
-    elif len(dealer_cards) == 5 and sum(player_cards >= sum(dealer_cards)):
+    if len(dealer_cards) == 5 and sum(player_cards) >= sum(dealer_cards):
         Push_tie_game_result()
-    elif len(player_cards) == 5 and sum(dealer_cards >= sum(player_cards)):
+    elif len(player_cards) == 5 and sum(dealer_cards) >= sum(player_cards):
         Push_tie_game_result()
     elif sum(player_cards) == sum(dealer_cards):
         Push_tie_game_result()
@@ -370,6 +361,12 @@ Handles of the end game scoring based upon card results between the dealer and e
     elif sum(player_cards) == 21:
         print(colors.green + "BLACKJACK! You hit 21! You won $" + str(user_bet) + "!\n", colors.reset)
         user_win_stats()
+    elif insurance_bought and sum(dealer_cards) == 21:
+        insurance_game_results("BLACKJACK! Since you purchased insurance_bought, you do not lose any money!")
+    elif not insurance_bought and sum(dealer_cards) == 21:
+        insurance_game_results(
+            "BLACKJACK! Since you did not purchased insurance_bought, you will lose your original plus half the "
+            "original amount bet!")
     elif sum(player_cards) > sum(dealer_cards):
         print(colors.green + "You Win! Your cards were greater than the dealers deck, You won $" + str(user_bet) +
               "!\n", colors.reset)
@@ -415,18 +412,33 @@ def user_win_stats():
     another_game()
 
 
-def custom_game():
+def game_options():
     """
 Allows the end-user to be able to play the game but with custom money, win counts, and more
     """
     global user_balance, dealer_balance, user_score, user_dealer_money_choice, user_money_choice
-    user_game_picker = input('Would you like to play normal Blackjack 21 or a Custom Game with custom user game '
-                             'settings (blackjack / custom): ')
+    music_choice = str(input('Would you like to play music while playing (yes / no): '))
     print()
-    time.sleep(1)
+
+    if music_choice.lower() in ['y', 'yes', 'sure']:
+        choice = str(input('YouTube Music or Spotify Music? '))
+        print()
+        if choice.lower() in ['youtube', 'y', 'youtube music']:
+            webbrowser.open('https://music.youtube.com/')
+        elif choice.lower() in ['spotify', 's', 'spotify music']:
+            webbrowser.open('https://open.spotify.com/')
+    elif music_choice.lower() not in ['n', 'no', 'nope']:
+        print(colors.red + 'Music choice input error found...\n', colors.reset)
+        time.sleep(1)
+        game_options()
+
+    user_game_picker = str(input('Would you like to play normal Blackjack 21 or a Custom Game with custom user game '
+                                 'settings (blackjack / custom): '))
+    print()
+    time.sleep(.5)
 
     if user_game_picker.lower() in ['b', 'blackjack', 'blackjack 21', 'black jack']:
-        game_selection_choice('Normal Blackjack 21 has been selected...\n', 0.500)
+        game()
 
     elif user_game_picker.lower() in ['c', 'custom', 'custom game']:
         custom_game_main()
@@ -436,8 +448,6 @@ Allows the end-user to be able to play the game but with custom money, win count
 
 def custom_game_main():
     global user_money_choice, user_balance, dealer_balance, user_score, user_dealer_money_choice
-    print('Custom Blackjack 21 has been selected...\n')
-    time.sleep(.500)
     user_money_choice = custom_game_stat_changer('How much would you like your starting balance to be? ')
 
     if user_money_choice <= 0:
@@ -450,19 +460,13 @@ def custom_game_main():
     user_score_choice = custom_game_stat_changer('How much would you like to set your scoring counter to? ')
 
     user_score = user_score_choice
-    game_selection_choice('Now proceeding to Blackjack 21 game with your custom settings...\n', 1)
+    game()
 
 
 def invalid_starting_balance_error(arg0):
     red(arg0)
     time.sleep(2)
     custom_game_main()
-
-
-def game_selection_choice(arg0, arg1):
-    print(arg0)
-    time.sleep(arg1)
-    game()
 
 
 def custom_game_stat_changer(arg0):
@@ -476,7 +480,8 @@ def dealers_turn():
     """
 Handles all of the card pulling actions for the dealer
     """
-    global user_score, user_balance, user_bet, dealer_balance, player_cards, dealer_cards, user_money_choice, insurance
+    global user_score, user_balance, user_bet, dealer_balance, player_cards, dealer_cards, user_money_choice, \
+        insurance_bought
     red('The Dealer says No More Bets...')
     time.sleep(1)
 
@@ -492,17 +497,17 @@ Handles all of the card pulling actions for the dealer
     while sum(dealer_cards) <= 15:
         if 11 in dealer_cards:
             insurance_choice = str(input('The dealer has pulled an ace and asks you if you would like to buy '
-                                         'insurance (yes / no): '))
+                                         'insurance_bought (yes / no): '))
             if insurance_choice.lower() in {'y', 'yes'}:
-                insurance = True
+                insurance_bought = True
                 insurance_amount = user_bet / 2
                 user_bet += insurance_amount
             elif insurance_choice.lower() in {'n', 'no'}:
-                insurance = False
-                print('Buying insurance has been skipped for you...\n')
+                insurance_bought = False
+                print('Buying insurance_bought has been skipped for you...\n')
                 time.sleep(1)
             else:
-                print(colors.red + 'Buying insurance user input error found!\n', colors.reset)
+                print(colors.red + 'Buying insurance_bought user input error found!\n', colors.reset)
                 time.sleep(1)
                 restart()
 
@@ -510,7 +515,7 @@ Handles all of the card pulling actions for the dealer
 
 
 def dealer_draws_card():
-    global user_bet, dealer_cards, insurance
+    global user_bet, dealer_cards, insurance_bought
     dealer_cards.append(random.randint(1, 11))
     red("The Dealer has pulled a card...")
     time.sleep(1)
