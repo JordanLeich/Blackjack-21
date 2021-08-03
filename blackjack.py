@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 # Created by Jordan Leich on 6/6/2020
+# TODO 1. Fix class and global variables issue
 
 # Imports
 import random
@@ -44,7 +45,7 @@ except FileNotFoundError:
     dealer_balance = 5000
     yellow('Save file not found, A new save file has been created!')
 
-# Global Variables
+# Global Variables, if these global variables get removed, it will cause a ton of errors that im not sure how to fix.
 user_bet = 0
 user_dealer_money_choice = 0
 user_money_choice = 0
