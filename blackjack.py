@@ -64,8 +64,8 @@ Used when 1 single round of blackjack has ended. Allows the user to play another
     print(colors.red + "The dealers total balance is $" + str(dealer_balance), "\n", colors.reset)
     time.sleep(2)
     with open('data.json', 'w') as user_data_file:
-        user_data_file.write(json.dumps({'ubalance': user_balance, 'uscore': user_score,
-                                         'deal_balance': dealer_balance}))
+        json.dump({'ubalance': user_balance, 'uscore': user_score,
+                   'deal_balance': dealer_balance}, user_data_file)
     if user_balance <= 0:
         red("You don't have any more money to bet... Game Over!")
         time.sleep(2)
@@ -129,8 +129,8 @@ def exiting_game():
     user_score = 0
     dealer_balance = 5000
     with open('data.json', 'w') as user_data_file:
-        user_data_file.write(json.dumps({'ubalance': user_balance, 'uscore': user_score,
-                                         'deal_balance': dealer_balance}))
+        json.dump({'ubalance': user_balance, 'uscore': user_score,
+                   'deal_balance': dealer_balance}, user_data_file)
     quit()
 
 
@@ -142,8 +142,8 @@ def new_game_starting_custom_game():
     user_score = 0
     dealer_balance = 5000
     with open('data.json', 'w') as user_data_file:
-        user_data_file.write(json.dumps({'ubalance': user_balance, 'uscore': user_score,
-                                         'deal_balance': dealer_balance}))
+        json.dump({'ubalance': user_balance, 'uscore': user_score,
+                   'deal_balance': dealer_balance}, user_data_file)
     custom_game_main()
 
 
@@ -483,16 +483,7 @@ Handles all of the card pulling actions for the dealer
     global user_score, user_balance, user_bet, dealer_balance, player_cards, dealer_cards, user_money_choice, \
         insurance_bought
     red('The Dealer says No More Bets...')
-    time.sleep(1)
-
-    if len(dealer_cards) == 5 and sum(dealer_cards) <= 21:
-        game_scoring()
-
-    elif sum(dealer_cards) > 15:
-        game_scoring()
-
-    elif sum(dealer_cards) >= 21:
-        game_scoring()
+    time.sleep(.500)
 
     while sum(dealer_cards) <= 15:
         if 11 in dealer_cards:
