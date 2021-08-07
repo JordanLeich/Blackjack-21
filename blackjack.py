@@ -37,19 +37,34 @@ try:  # This try and except block runs first in the code to be able to load a us
     user_balance = user_data['ubalance']
     user_score = user_data['uscore']
     dealer_balance = user_data['deal_balance']
+    player1_balance = user_data['player1_balance']
+    player2_balance = user_data['player2_balance']
+    player3_balance = user_data['player3_balance']
     green('Save file found and loaded!')
 except FileNotFoundError:
     user_balance = 1000
+    player1_balance = 1000
+    player2_balance = 1000
+    player3_balance = 1000
     user_score = 0
     dealer_balance = 5000
     yellow('Save file not found, A new save file will be created shortly!')
 
 # Global Variables
 user_bet = 0
+player1_bet = 0
+player2_bet = 0
+player3_bet = 0
 user_dealer_money_choice = 0
 user_money_choice = 0
+player1_money_choice = 0
+player2_money_choice = 0
+player3_money_choice = 0
 insurance_bought = False
 player_cards = []
+player1_cards = []
+player2_cards = []
+player3_cards = []
 dealer_cards = []
 
 
@@ -65,7 +80,8 @@ Used when 1 single round of blackjack has ended. Allows the user to play another
     time.sleep(2)
     with open('data.json', 'w') as user_data_file:
         json.dump({'ubalance': user_balance, 'uscore': user_score,
-                   'deal_balance': dealer_balance}, user_data_file)
+                   'deal_balance': dealer_balance, 'player1_balance': player1_balance,
+                   'player2_balance': player2_balance, 'player3_balance': player3_balance}, user_data_file)
     if user_balance <= 0:
         red("You don't have any more money to bet... Game Over!")
         time.sleep(2)
@@ -112,38 +128,49 @@ Used when 1 single round of blackjack has ended. Allows the user to play another
 
 
 def new_game_starting():
-    global user_balance, dealer_balance, user_score
+    global user_balance, dealer_balance, user_score, player1_balance, player2_balance, player3_balance
     print('A brand new game will begin...\n')
     time.sleep(1)
     user_balance = 1000
+    player1_balance = 1000
+    player2_balance = 1000
+    player3_balance = 1000
     dealer_balance = 5000
     user_score = 0
     main()
 
 
 def exiting_game():
-    global user_balance, dealer_balance, user_score, user_data_file
+    global user_balance, dealer_balance, user_score, user_data_file, player1_balance, player2_balance, player3_balance
     green('Thanks for playing! Exiting game now...')
     time.sleep(1)
     user_balance = 1000
+    player1_balance = 1000
+    player2_balance = 1000
+    player3_balance = 1000
     user_score = 0
     dealer_balance = 5000
     with open('data.json', 'w') as user_data_file:
         json.dump({'ubalance': user_balance, 'uscore': user_score,
-                   'deal_balance': dealer_balance}, user_data_file)
+                   'deal_balance': dealer_balance, 'player1_balance': player1_balance,
+                   'player2_balance': player2_balance, 'player3_balance': player3_balance}, user_data_file)
     quit()
 
 
 def new_game_starting_custom_game():
-    global user_balance, dealer_balance, user_score, user_data_file
+    global user_balance, dealer_balance, user_score, user_data_file, player1_balance, player2_balance, player3_balance
     print('A brand new game will begin...\n')
     time.sleep(1)
     user_balance = 1000
+    player1_balance = 1000
+    player2_balance = 1000
+    player3_balance = 1000
     user_score = 0
     dealer_balance = 5000
     with open('data.json', 'w') as user_data_file:
         json.dump({'ubalance': user_balance, 'uscore': user_score,
-                   'deal_balance': dealer_balance}, user_data_file)
+                   'deal_balance': dealer_balance, 'player1_balance': player1_balance,
+                   'player2_balance': player2_balance, 'player3_balance': player3_balance}, user_data_file)
     custom_game_main()
 
 
@@ -415,6 +442,19 @@ def user_win_stats():
     another_game()
 
 
+def bot_game():
+    number_of_players = int(input('How many bots would you like to play with (1, 2, 3): '))
+    print()
+    if number_of_players == 1:
+        print('1 bot will be added into the game!')
+    elif number_of_players == 2:
+        print('2 bots will be added into the game!')
+    elif number_of_players == 3:
+        print('3 bots will be added into the game!')
+    else:
+        red('Number of players input error found...\n')
+
+
 def game_options():
     """
 Allows the end-user to be able to play the game but with custom money, win counts, and more
@@ -436,13 +476,14 @@ Allows the end-user to be able to play the game but with custom money, win count
         game_options()
 
     user_game_picker = str(input('Would you like to play normal Blackjack 21 or a Custom Game with custom user game '
-                                 'settings (blackjack / custom): '))
+                                 'settings (blackjack / blackjack with bots / custom): '))
     print()
     time.sleep(.5)
 
     if user_game_picker.lower() in ['b', 'blackjack', 'blackjack 21', 'black jack', 'n', 'normal']:
         game()
-
+    elif user_game_picker.lower() in ['blackjack with bots', 'blackjack 21 with bots', 'bots', 'bot']:
+        bot_game()
     elif user_game_picker.lower() in ['c', 'custom', 'custom game', 'custom blackjack', 'custom blackjack game']:
         custom_game_main()
     else:
