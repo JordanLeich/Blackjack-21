@@ -61,11 +61,12 @@ player1_money_choice = 0
 player2_money_choice = 0
 player3_money_choice = 0
 insurance_bought = False
-player_cards = []
+user_cards = []
 player1_cards = []
 player2_cards = []
 player3_cards = []
 dealer_cards = []
+number_of_players = 0
 
 
 def another_game():
@@ -195,8 +196,8 @@ def game():  # sourcery no-metrics skip: merge-comparisons
     """
 This is the main code used for the game entirely
     """
-    global user_score, user_balance, user_bet, dealer_balance, player_cards, dealer_cards, user_money_choice
-    player_cards = []
+    global user_score, user_balance, user_bet, dealer_balance, user_cards, dealer_cards, user_money_choice
+    user_cards = []
     dealer_cards = []
 
     print(colors.green + "Your balance is $" + str(user_balance), "\n", colors.reset)
@@ -241,34 +242,34 @@ This is the main code used for the game entirely
             print(colors.red + "The Dealer has ? &", dealer_cards[1], colors.reset, "\n")
             time.sleep(1)
     # Player Cards
-    while len(player_cards) != 2:
-        player_cards.append(random.randint(1, 11))
-        if len(player_cards) == 2:
-            print(colors.green + "You have a total of", str(sum(player_cards)), "from these cards", player_cards,
+    while len(user_cards) != 2:
+        user_cards.append(random.randint(1, 11))
+        if len(user_cards) == 2:
+            print(colors.green + "You have a total of", str(sum(user_cards)), "from these cards", user_cards,
                   colors.reset, "\n")
             time.sleep(1)
     # Total of Dealer cards
     if sum(dealer_cards) >= 21:
         game_scoring()
     # Total of Player cards
-    elif len(player_cards) == 5 and sum(player_cards) < 21:
+    elif len(user_cards) == 5 and sum(user_cards) < 21:
         game_scoring()
 
-    while sum(player_cards) < 21 and len(player_cards) < 5:
+    while sum(user_cards) < 21 and len(user_cards) < 5:
         choice = str(
             input("Do you want to hit, stay, double down, call for help, or quit the game (hit | stay | "
                   "double down | help | quit): "))
         print()
         time.sleep(1)
 
-        if len(player_cards) == 5:
+        if len(user_cards) == 5:
             game_scoring()
         elif choice.lower() in ["hit", "h"]:
             user_draws_card()
         elif choice.lower() in ['s', 'stay']:
             dealers_turn()
         elif choice.lower() in ["d", "double", 'double down']:
-            if sum(player_cards) <= 11:
+            if sum(user_cards) <= 11:
                 print('You will now double down on your bets and pull only 1 more card and then you will stand for '
                       'this round!\n')
                 user_bet *= 2
@@ -279,14 +280,14 @@ This is the main code used for the game entirely
                 red('You cannot double down here since the sum of your cards is over 11!')
                 time.sleep(1)
         elif choice.lower() in ["help", "help", 'call help']:
-            if sum(player_cards) == 10 or sum(player_cards) == 11:
+            if sum(user_cards) == [10, 11]:
                 blue("Since your total is equal to either 10 or 11, we recommend that this is the best time to double "
                      "down if you have enough money!")
                 time.sleep(3)
-            elif sum(player_cards) <= 14:
+            elif sum(user_cards) <= 14:
                 blue("Since your total is under or equal to 14, we recommend that you hit!")
                 time.sleep(2)
-            elif sum(player_cards) >= 15:
+            elif sum(user_cards) >= 15:
                 blue("Your odds are looking high enough to win, if your card total is closer to 15, we recommend only "
                      "making 1 hit move and then staying!")
                 time.sleep(3)
@@ -308,10 +309,10 @@ def user_draws_card():
     """
 Used for whenever the player is required to draw a card
     """
-    global player_cards
-    player_cards.append(random.randint(1, 11))
-    print(colors.green + "You now have a total of " + str(sum(player_cards)) + " from these cards",
-          player_cards, colors.reset, "\n")
+    global user_cards
+    user_cards.append(random.randint(1, 11))
+    print(colors.green + "You now have a total of " + str(sum(user_cards)) + " from these cards",
+          user_cards, colors.reset, "\n")
     time.sleep(1)
 
 
@@ -361,34 +362,34 @@ def game_scoring():
     """
 Handles of the end game scoring based upon card results between the dealer and end-user
     """
-    global player_cards, user_score, user_balance, dealer_balance, dealer_cards, insurance_bought
+    global user_cards, user_score, user_balance, dealer_balance, dealer_cards, insurance_bought
     print(colors.red + "The Dealer has a grand total of", str(sum(dealer_cards)), "from these cards",
           dealer_cards, colors.reset, "\n")
     time.sleep(1)
-    print(colors.green + "You have a grand total of " + str(sum(player_cards)) + " with", player_cards,
+    print(colors.green + "You have a grand total of " + str(sum(user_cards)) + " with", user_cards,
           colors.reset, "\n")
     time.sleep(1)
 
-    if len(dealer_cards) == 5 and sum(player_cards) >= sum(dealer_cards):
+    if len(dealer_cards) == 5 and sum(user_cards) >= sum(dealer_cards):
         Push_tie_game_result()
-    elif len(player_cards) == 5 and sum(dealer_cards) >= sum(player_cards):
+    elif len(user_cards) == 5 and sum(dealer_cards) >= sum(user_cards):
         Push_tie_game_result()
-    elif sum(player_cards) == sum(dealer_cards):
+    elif sum(user_cards) == sum(dealer_cards):
         Push_tie_game_result()
-    elif len(player_cards) == 5 and sum(player_cards) < 21:
+    elif len(user_cards) == 5 and sum(user_cards) < 21:
         time.sleep(1)
         green("You have automatically won since you have pulled a total of 5 cards without busting!")
         user_win_stats()
     elif len(dealer_cards) == 5 and sum(dealer_cards) < 21:
         red("You have automatically lost since the dealer has pulled a total of 5 cards without busting!")
         user_loses_stats()
-    elif sum(player_cards) > 21:
+    elif sum(user_cards) > 21:
         print(colors.red + "BUSTED! The Dealer Wins! You lost $" + str(user_bet) + "!\n", colors.reset)
         user_loses_stats()
     elif sum(dealer_cards) > 21:
         print(colors.green + "The Dealer BUSTED! You win! You won $" + str(user_bet) + "!\n", colors.reset)
         user_win_stats()
-    elif sum(player_cards) == 21:
+    elif sum(user_cards) == 21:
         print(colors.green + "BLACKJACK! You hit 21! You won $" + str(user_bet) + "!\n", colors.reset)
         user_win_stats()
     elif insurance_bought and sum(dealer_cards) == 21:
@@ -397,11 +398,11 @@ Handles of the end game scoring based upon card results between the dealer and e
         insurance_game_results(
             "BLACKJACK! Since you did not purchased insurance, you will lose your original plus half the "
             "original amount bet!")
-    elif sum(player_cards) > sum(dealer_cards):
+    elif sum(user_cards) > sum(dealer_cards):
         print(colors.green + "You Win! Your cards were greater than the dealers deck, You won $" + str(user_bet) +
               "!\n", colors.reset)
         user_win_stats()
-    elif sum(dealer_cards) > sum(player_cards):
+    elif sum(dealer_cards) > sum(user_cards):
         print(colors.red + "The dealer wins! Your cards were less than the dealers deck, You lost $" + str(user_bet) +
               "!\n", colors.reset)
         user_loses_stats()
@@ -442,17 +443,171 @@ def user_win_stats():
     another_game()
 
 
-def bot_game():
+def bot_game():  # sourcery no-metrics
+    global user_score, user_balance, user_bet, dealer_balance, user_cards, dealer_cards, user_money_choice, \
+        player1_cards, player2_cards, player3_cards, number_of_players
+    user_cards = []
+    player1_cards = []
+    player2_cards = []
+    player3_cards = []
+    dealer_cards = []
+    yellow('Each bot will take their turn first and then you will play afterwards!')
+    if number_of_players == 1:
+        player1_bet = random.randint(1, player1_balance)
+        while len(player1_cards) != 2:
+            player1_cards.append(random.randint(1, 11))
+            if len(player1_cards) == 2:
+                print("Player1 Cards are set!\n!")
+                time.sleep(1)
+    elif number_of_players == 2:
+        player1_bet = random.randint(1, player1_balance)
+        player2_bet = random.randint(1, player2_balance)
+        while len(player1_cards) != 2:
+            player1_cards.append(random.randint(1, 11))
+            if len(player1_cards) == 2:
+                print("Player1 Cards are set!\n")
+                time.sleep(1)
+        while len(player2_cards) != 2:
+            player2_cards.append(random.randint(1, 11))
+            if len(player2_cards) == 2:
+                print("Player2 Cards are set!\n")
+                time.sleep(1)
+    elif number_of_players == 3:
+        player1_bet = random.randint(1, player1_balance)
+        player2_bet = random.randint(1, player2_balance)
+        player3_bet = random.randint(1, player3_balance)
+        while len(player1_cards) != 2:
+            player1_cards.append(random.randint(1, 11))
+            if len(player1_cards) == 2:
+                print("Player1 Cards are set!\n")
+                time.sleep(1)
+        while len(player2_cards) != 2:
+            player2_cards.append(random.randint(1, 11))
+            if len(player2_cards) == 2:
+                print("Player2 Cards are set!\n")
+                time.sleep(1)
+        while len(player3_cards) != 2:
+            player3_cards.append(random.randint(1, 11))
+            if len(player3_cards) == 2:
+                print("Player3 Cards are set!\n")
+                time.sleep(1)
+
+    print(colors.green + "Your balance is $" + str(user_balance), "\n", colors.reset)
+    time.sleep(1)
+    print(colors.red + "The dealers balance is $" + str(dealer_balance), "\n", colors.reset)
+    time.sleep(1)
+
+    user_all_in = str(input("Would you like to go all in (yes / no): "))
+    print()
+    time.sleep(.500)
+
+    if user_all_in.lower() in ["y", "yes"]:
+        user_bet = user_balance
+        time.sleep(.500)
+    elif user_all_in.lower() in ["n", "no"]:
+        while True:
+            try:
+                user_bet = int(input("How much would you like to bet in dollar amount? "))
+                print()
+                time.sleep(.500)
+            except ValueError:
+                print()
+                red('Please enter a valid dollar amount!')
+                continue
+            else:
+                break
+
+        if user_bet > user_balance:
+            user_bet_error_handling("Your total balance cannot make this bet! Your bet is too high for your balance!")
+        elif user_bet <= 0:
+            user_bet_error_handling("You cannot make a negative bet! Please place a higher bet than 0 dollars!")
+    else:
+        red('User input for all in feature found an error!\n')
+        time.sleep(1)
+        restart()
+
+    while len(dealer_cards) != 2:
+        dealer_cards.append(random.randint(1, 11))
+        if len(dealer_cards) == 2:
+            print(colors.red + "The Dealer has ? &", dealer_cards[1], colors.reset, "\n")
+            time.sleep(1)
+    # Player Cards
+    while len(user_cards) != 2:
+        user_cards.append(random.randint(1, 11))
+        if len(user_cards) == 2:
+            print(colors.green + "You have a total of", str(sum(user_cards)), "from these cards", user_cards,
+                  colors.reset, "\n")
+            time.sleep(1)
+    # Total of Dealer cards
+    if sum(dealer_cards) >= 21:
+        game_scoring()
+    # Total of Player cards
+    elif len(user_cards) == 5 and sum(user_cards) < 21:
+        game_scoring()
+
+    while sum(user_cards) < 21 and len(user_cards) < 5:
+        choice = str(
+            input("Do you want to hit, stay, double down, call for help, or quit the game (hit | stay | "
+                  "double down | help | quit): "))
+        print()
+        time.sleep(1)
+
+        if len(user_cards) == 5:
+            game_scoring()
+        elif choice.lower() in ["hit", "h"]:
+            user_draws_card()
+        elif choice.lower() in ['s', 'stay']:
+            dealers_turn()
+        elif choice.lower() in ["d", "double", 'double down']:
+            if sum(user_cards) <= 11:
+                print('You will now double down on your bets and pull only 1 more card and then you will stand for '
+                      'this round!\n')
+                user_bet *= 2
+                time.sleep(1)
+                user_draws_card()
+                dealers_turn()
+            else:
+                red('You cannot double down here since the sum of your cards is over 11!')
+                time.sleep(1)
+        elif choice.lower() in ["help", "help", 'call help']:
+            if sum(user_cards) == [10, 11]:
+                blue("Since your total is equal to either 10 or 11, we recommend that this is the best time to double "
+                     "down if you have enough money!")
+                time.sleep(3)
+            elif sum(user_cards) <= 14:
+                blue("Since your total is under or equal to 14, we recommend that you hit!")
+                time.sleep(2)
+            elif sum(user_cards) >= 15:
+                blue("Your odds are looking high enough to win, if your card total is closer to 15, we recommend only "
+                     "making 1 hit move and then staying!")
+                time.sleep(3)
+                blue("If your card total is closer to 21, don't risk it! make a stay move!")
+                time.sleep(3)
+        elif choice.lower() in ["q", "quit", "end"]:
+            green("Ending game... Thanks for playing!\n")
+            time.sleep(1)
+            quit()
+
+        else:
+            game_scoring()
+
+    # Endgame results
+    game_scoring()
+
+
+def bot_player_choice():
+    global number_of_players
     number_of_players = int(input('How many bots would you like to play with (1, 2, 3): '))
     print()
     if number_of_players == 1:
-        print('1 bot will be added into the game!')
+        green('1 bot will be added into the game!')
     elif number_of_players == 2:
-        print('2 bots will be added into the game!')
+        green('2 bots will be added into the game!')
     elif number_of_players == 3:
-        print('3 bots will be added into the game!')
+        green('3 bots will be added into the game!')
     else:
         red('Number of players input error found...\n')
+    bot_game()
 
 
 def game_options():
@@ -483,7 +638,7 @@ Allows the end-user to be able to play the game but with custom money, win count
     if user_game_picker.lower() in ['b', 'blackjack', 'blackjack 21', 'black jack', 'n', 'normal']:
         game()
     elif user_game_picker.lower() in ['blackjack with bots', 'blackjack 21 with bots', 'bots', 'bot']:
-        bot_game()
+        bot_player_choice()
     elif user_game_picker.lower() in ['c', 'custom', 'custom game', 'custom blackjack', 'custom blackjack game']:
         custom_game_main()
     else:
@@ -524,7 +679,7 @@ def dealers_turn():
     """
 Handles all of the card pulling actions for the dealer
     """
-    global user_score, user_balance, user_bet, dealer_balance, player_cards, dealer_cards, user_money_choice, \
+    global user_score, user_balance, user_bet, dealer_balance, user_cards, dealer_cards, user_money_choice, \
         insurance_bought
     red('The Dealer says No More Bets...')
     time.sleep(.500)
