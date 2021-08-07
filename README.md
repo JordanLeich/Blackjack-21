@@ -30,4 +30,7 @@
 # TODO List ❗
 - Check out the issues page for this project [here](https://github.com/JordanLeich/Blackjack-21/issues/3)
 
+# Bug Reporting 🐞
+- Check out the [Issues Page](https://github.com/JordanLeich/Blackjack-21/issues/5)
+
 ![BlackJack](images/blackjack.jpg "BlackJack 21")
