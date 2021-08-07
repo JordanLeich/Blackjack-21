@@ -28,9 +28,9 @@
 2. [Oldest](https://github.com/JordanLeich/Blackjack-21/releases/tag/v5.0) version of Blackjack 21, this release is super outdated and lacks hundreds of improvements and features.
 
 # TODO List ❗
-- Check out the issues page for this project [here](https://github.com/JordanLeich/Blackjack-21/issues/3)
+- View the TODO List [here](https://github.com/JordanLeich/Blackjack-21/issues/3)
 
 # Bug Reporting 🐞
-- Check out the [Issues Page](https://github.com/JordanLeich/Blackjack-21/issues/5)
+- Report a bug [here](https://github.com/JordanLeich/Blackjack-21/issues/5)
 
 ![BlackJack](images/blackjack.jpg "BlackJack 21")
