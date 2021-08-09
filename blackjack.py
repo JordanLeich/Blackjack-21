@@ -11,22 +11,37 @@ import json
 
 
 def highlight(color, string):
+    """
+Used to highlight a printed line color based upon the color specified
+    """
     print(color + string + colors.reset + '\n')
 
 
 def red(string):
+    """
+Used to highlight a printed line with a red color
+    """
     highlight(colors.red, string)
 
 
 def green(string):
+    """
+Used to highlight a printed line with a green color
+    """
     highlight(colors.green, string)
 
 
 def yellow(string):
+    """
+Used to highlight a printed line with a yellow color
+    """
     highlight(colors.yellow, string)
 
 
 def blue(string):
+    """
+Used to highlight a printed line with a blue color
+    """
     highlight(colors.blue, string)
 
 
@@ -56,7 +71,7 @@ player1_bet = 0
 player2_bet = 0
 player3_bet = 0
 user_dealer_money_choice = 0
-user_money_choice = 0
+custom_game_starting_balance = 0
 player1_money_choice = 0
 player2_money_choice = 0
 player3_money_choice = 0
@@ -79,12 +94,29 @@ player3_bankrupt = bool
 donate_money = 0
 
 
+def reset_stats():
+    global user_balance, dealer_balance, user_score, user_data_file, player1_balance, player2_balance, player3_balance
+    green('All players and the dealers money/stats will be reset to their original defaults...')
+    time.sleep(1)
+    user_balance = 1000
+    player1_balance = 1000
+    player2_balance = 1000
+    player3_balance = 1000
+    user_score = 0
+    dealer_balance = 5000
+    with open('data.json', 'w') as user_data_file:
+        json.dump({'ubalance': user_balance, 'uscore': user_score,
+                   'deal_balance': dealer_balance, 'player1_balance': player1_balance,
+                   'player2_balance': player2_balance, 'player3_balance': player3_balance}, user_data_file)
+    main()
+
+
 def another_game():  # sourcery no-metrics
     """
 Used when 1 single round of blackjack has ended. Allows the user to play another game of blackjack or quit playing
     """
-    global user_score, user_balance, dealer_balance, user_dealer_money_choice, user_money_choice, user_data_file, \
-        player1_balance, player2_balance, player3_balance
+    global user_score, user_balance, dealer_balance, user_dealer_money_choice, custom_game_starting_balance, \
+        user_data_file, player1_balance, player2_balance, player3_balance
     print(colors.green + "Your win count is", user_score, "and your total balance is $" + str(user_balance), "\n",
           colors.reset)
     time.sleep(1)
@@ -104,27 +136,24 @@ Used when 1 single round of blackjack has ended. Allows the user to play another
         time.sleep(1)
 
         if choice.lower() in ['yes', 'y', 'sure']:
-            if not player1_bankrupt and player1_presence:
-                bot_donation = random.randint(1, player1_balance)
-                user_balance += bot_donation
-                player1_balance -= bot_donation
-                print(colors.green + 'Player1 has donated to you $' + str(bot_donation), '\n', colors.reset)
+            if not player1_bankrupt and player1_presence and (player1_balance / user_balance) > user_balance:
+                bot_donation_amount = user_balance * -1.5
+                user_balance += bot_donation_amount
+                player1_balance -= bot_donation_amount
+                print(colors.green + 'Player1 has donated to you $' + str(bot_donation_amount), '\n', colors.reset)
                 time.sleep(1)
-                bot_game()
-            elif not player2_bankrupt and player2_presence:
-                bot_donation = random.randint(1, player2_balance)
-                user_balance += bot_donation
-                player2_balance -= bot_donation
-                print(colors.green + 'Player2 has donated to you $' + str(bot_donation), '\n', colors.reset)
+            elif not player2_bankrupt and player2_presence and (player2_balance / user_balance) > user_balance:
+                bot_donation_amount = user_balance * -1.5
+                user_balance += bot_donation_amount
+                player2_balance -= bot_donation_amount
+                print(colors.green + 'Player2 has donated to you $' + str(bot_donation_amount), '\n', colors.reset)
                 time.sleep(1)
-                bot_game()
-            elif not player3_bankrupt and player3_presence:
-                bot_donation = random.randint(1, player3_balance)
-                user_balance += bot_donation
-                player3_balance -= bot_donation
-                print(colors.green + 'Player3 has donated to you $' + str(bot_donation), '\n', colors.reset)
+            elif not player3_bankrupt and player3_presence and (player3_balance / user_balance) > user_balance:
+                bot_donation_amount = user_balance * -1.5
+                user_balance += bot_donation_amount
+                player3_balance -= bot_donation_amount
+                print(colors.green + 'Player3 has donated to you $' + str(bot_donation_amount), '\n', colors.reset)
                 time.sleep(1)
-                bot_game()
             else:
                 red('No other players were able to donate anything to you!')
                 time.sleep(1)
@@ -202,19 +231,29 @@ Used when 1 single round of blackjack has ended. Allows the user to play another
 
 
 def new_game_starting():
-    global user_balance, dealer_balance, user_score, player1_balance, player2_balance, player3_balance
-    print('A brand new game will begin...\n')
-    time.sleep(1)
+    """
+Used to start a brand new game from scratch with all default stats being loaded
+    """
+    global user_balance, dealer_balance, user_score, player1_balance, player2_balance, player3_balance, user_data_file
+    print('A brand new game will begin... All saved data will be restored to default cash balances and values!\n')
+    time.sleep(2)
     user_balance = 1000
     player1_balance = 1000
     player2_balance = 1000
     player3_balance = 1000
     dealer_balance = 5000
     user_score = 0
+    with open('data.json', 'w') as user_data_file:
+        json.dump({'ubalance': user_balance, 'uscore': user_score,
+                   'deal_balance': dealer_balance, 'player1_balance': player1_balance,
+                   'player2_balance': player2_balance, 'player3_balance': player3_balance}, user_data_file)
     main()
 
 
 def exiting_game():
+    """
+Exits the game while setting the default stats
+    """
     global user_balance, dealer_balance, user_score, user_data_file, player1_balance, player2_balance, player3_balance
     green('Thanks for playing! Exiting game now...')
     time.sleep(1)
@@ -232,9 +271,12 @@ def exiting_game():
 
 
 def new_game_starting_custom_game():
+    """
+Used to start a new game for a custom game that was previously selected while also loading the default stats
+    """
     global user_balance, dealer_balance, user_score, user_data_file, player1_balance, player2_balance, player3_balance
-    print('A brand new game will begin...\n')
-    time.sleep(1)
+    print('A brand new game will begin... All saved data will be restored to default cash balances and values!\n')
+    time.sleep(2)
     user_balance = 1000
     player1_balance = 1000
     player2_balance = 1000
@@ -249,6 +291,9 @@ def new_game_starting_custom_game():
 
 
 def getting_input(arg0, arg1):
+    """
+Used for simply receiving input as an argument
+    """
     result = input(arg0)
     print()
     time.sleep(arg1)
@@ -284,7 +329,7 @@ def game():  # sourcery no-metrics skip: assign-if-exp, boolean-if-exp-identity,
     """
 This is the main code used for the game entirely
     """
-    global user_score, user_balance, user_bet, dealer_balance, user_cards, dealer_cards, user_money_choice, \
+    global user_score, user_balance, user_bet, dealer_balance, user_cards, dealer_cards, custom_game_starting_balance, \
         normal_game_selected, custom_game_selected, player1_presence, player2_presence, player3_presence, \
         bot_game_selected
     bot_game_selected = False
@@ -433,10 +478,11 @@ def main():
 Used as the first piece of the program introduced to the end-user. This section allows the user to skip around in the
 game by using the game mode selection choices
     """
-    user_knowledge = input('Do you know how to play Blackjack 21 or would you like to watch a tutorial via youtube or '
-                           'skip all setup options to play Blackjack 21 quickly (start / tutorial / express): ')
+    user_knowledge = input('Would you like to start playing Blackjack 21, watch Blackjack 21 tutorial, skip all setup '
+                           'options and play, or reset your saved money/stats to default (start / tutorial / '
+                           'express / reset): ')
     print()
-    time.sleep(1)
+    time.sleep(.5)
 
     if user_knowledge.lower() in ['start', 'yes', 's']:
         game_options()
@@ -449,6 +495,8 @@ game by using the game mode selection choices
         game()
     elif user_knowledge.lower() in ['e', 'express']:
         game()
+    elif user_knowledge.lower() in ['reset', 'reset stats', 'stats']:
+        reset_stats()
     else:
         red('User knowledge input error found...')
         time.sleep(1)
@@ -515,18 +563,27 @@ Handles of the end game scoring based upon card results between the dealer and e
 
 
 def insurance_game_results(arg0):
+    """
+Used for when the player either buys or doesnt buy insurance to get to the endgame results
+    """
     yellow(arg0)
     time.sleep(1)
     another_game()
 
 
 def Push_tie_game_result():
+    """
+Used for when there is a tie game between a player and the dealer
+    """
     yellow("PUSH! This is a tie! All bet money is refunded!")
     time.sleep(1)
     another_game()
 
 
 def user_loses_stats():
+    """
+Used when the user loses the round
+    """
     global user_score, user_balance, dealer_balance
     time.sleep(1)
     user_score -= 1
@@ -536,6 +593,9 @@ def user_loses_stats():
 
 
 def user_win_stats():
+    """
+Used when the user wins the round
+    """
     global user_score, user_balance, dealer_balance
     time.sleep(1)
     user_score += 1
@@ -545,7 +605,10 @@ def user_win_stats():
 
 
 def bot_game_scoring():  # sourcery no-metrics
-    global user_score, user_balance, user_bet, dealer_balance, user_cards, dealer_cards, user_money_choice, \
+    """
+Used for the scoring results when a bot game is selected
+    """
+    global user_score, user_balance, user_bet, dealer_balance, user_cards, dealer_cards, custom_game_starting_balance, \
         player1_cards, player2_cards, player3_cards, player1_balance, player2_balance, player3_balance, player1_bet, \
         player3_bet, player2_bet
 
@@ -701,7 +764,10 @@ def bot_game_scoring():  # sourcery no-metrics
 
 
 def bot_game_dealers_turn():
-    global user_score, user_balance, user_bet, dealer_balance, user_cards, dealer_cards, user_money_choice, \
+    """
+Used for the dealers turn to make a move while a bot game is selected
+    """
+    global user_score, user_balance, user_bet, dealer_balance, user_cards, dealer_cards, custom_game_starting_balance, \
         insurance_bought
     red('The Dealer says No More Bets!')
     time.sleep(.500)
@@ -728,8 +794,16 @@ def bot_game_dealers_turn():
     bot_game_scoring()
 
 
-def bot_game():  # sourcery no-metrics
-    global user_score, user_balance, user_bet, dealer_balance, user_cards, dealer_cards, user_money_choice, \
+def bot_game():
+    """
+This controls the majority of what occurs when a bot game is selected. This is a separate and edited version of the
+solo game of blackjack but with the usage of up to 3 bot players added to the game.
+    """
+    # sourcery no-metrics skip: assign-if-exp, boolean-if-exp-identity, hoist-statement-from-if
+    # sourcery skip: merge-nested-ifs, merge-repeated-ifs, remove-redundant-if, swap-nested-ifs
+    # sourcery skip: lift - duplicated - conditional, merge - nested - ifs, merge - repeated - ifs
+    # sourcery skip: remove - redundant - if, swap - nested - ifs
+    global user_score, user_balance, user_bet, dealer_balance, user_cards, dealer_cards, \
         player1_cards, player2_cards, player3_cards, number_of_players, player3_bet, player2_bet, player1_bet, \
         bot_game_selected, player1_balance, player2_balance, player3_balance, player1_bankrupt, player2_bankrupt, \
         player3_bankrupt, donate_money, normal_game_selected, custom_game_selected
@@ -855,9 +929,18 @@ def bot_game():  # sourcery no-metrics
             red('Donating money input error found...')
             restart_game_error()
 
-    player1_bankrupt = False
-    player2_bankrupt = False
-    player3_bankrupt = False
+    if player1_balance <= 0:
+        player1_bankrupt = True
+    else:
+        player1_bankrupt = False
+    if player2_balance <= 0:
+        player2_bankrupt = True
+    else:
+        player2_bankrupt = False
+    if player3_balance <= 0:
+        player3_bankrupt = True
+    else:
+        player3_bankrupt = False
 
     if number_of_players == 1 and not player1_bankrupt:
         player1_bet = random.randint(1, player1_balance)
@@ -941,6 +1024,20 @@ def bot_game():  # sourcery no-metrics
             player3_bet = random.randint(1, player3_balance)
             print(colors.blue + 'Player3 decided to bet $' + str(player3_bet), '\n', colors.reset)
             time.sleep(1)
+        if player1_bankrupt and player2_bankrupt and player3_bankrupt and user_balance <= 0:
+            red('All players including you are bankrupt and the game can no longer be continued! You Lost!')
+            time.sleep(2)
+            new_game_starting()
+        elif player1_bankrupt and player2_bankrupt and player3_bankrupt and user_balance > 0:
+            yellow('All players are bankrupt but you are still maintaining a positive balance, the fate of the game '
+                   'depends on you now!')
+            time.sleep(2)
+        if player1_bankrupt:
+            red('Player1 is bankrupt and not playing!')
+        if player2_bankrupt:
+            red('Player1 is bankrupt and not playing!')
+        if player3_bankrupt:
+            red('Player1 is bankrupt and not playing!')
         while len(player1_cards) != 2 and not player1_bankrupt:
             player1_cards.append(random.randint(1, 11))
         while len(player2_cards) != 2 and not player2_bankrupt:
@@ -1014,27 +1111,24 @@ def bot_game():  # sourcery no-metrics
         time.sleep(1)
 
         if choice.lower() in ['yes', 'y', 'sure']:
-            if not player1_bankrupt and player1_presence:
-                bot_donation = random.randint(1, player1_balance)
-                user_balance += bot_donation
-                player1_balance -= bot_donation
-                print(colors.green + 'Player1 has donated to you $' + str(bot_donation), '\n', colors.reset)
+            if not player1_bankrupt and player1_presence and (player1_balance / user_balance) > user_balance:
+                bot_donation_amount = user_balance * -1.5
+                user_balance += bot_donation_amount
+                player1_balance -= bot_donation_amount
+                print(colors.green + 'Player1 has donated to you $' + str(bot_donation_amount), '\n', colors.reset)
                 time.sleep(1)
-                bot_game()
-            elif not player2_bankrupt and player2_presence:
-                bot_donation = random.randint(1, player2_balance)
-                user_balance += bot_donation
-                player2_balance -= bot_donation
-                print(colors.green + 'Player2 has donated to you $' + str(bot_donation), '\n', colors.reset)
+            elif not player2_bankrupt and player2_presence and (player2_balance / user_balance) > user_balance:
+                bot_donation_amount = user_balance * -1.5
+                user_balance += bot_donation_amount
+                player2_balance -= bot_donation_amount
+                print(colors.green + 'Player2 has donated to you $' + str(bot_donation_amount), '\n', colors.reset)
                 time.sleep(1)
-                bot_game()
-            elif not player3_bankrupt and player3_presence:
-                bot_donation = random.randint(1, player3_balance)
-                user_balance += bot_donation
-                player3_balance -= bot_donation
-                print(colors.green + 'Player3 has donated to you $' + str(bot_donation), '\n', colors.reset)
+            elif not player3_bankrupt and player3_presence and (player3_balance / user_balance) > user_balance:
+                bot_donation_amount = user_balance * -1.5
+                user_balance += bot_donation_amount
+                player3_balance -= bot_donation_amount
+                print(colors.green + 'Player3 has donated to you $' + str(bot_donation_amount), '\n', colors.reset)
                 time.sleep(1)
-                bot_game()
             else:
                 red('No other players were able to donate anything to you!')
                 time.sleep(1)
@@ -1171,9 +1265,13 @@ def bot_game():  # sourcery no-metrics
 
 
 def bot_player_choice():
+    """
+Allows the user to choose how many bots will enter a bot game
+    """
     global number_of_players, player1_presence, player2_presence, player3_presence
     number_of_players = int(input('How many bots would you like to play with (1, 2, 3): '))
     print()
+    time.sleep(.5)
     if number_of_players == 1:
         green('1 bot will be added into the game!')
         player1_presence = True
@@ -1203,9 +1301,10 @@ def game_options():
     """
 Allows the end-user to be able to play the game but with custom money, win counts, and more
     """
-    global user_balance, dealer_balance, user_score, user_dealer_money_choice, user_money_choice
+    global user_balance, dealer_balance, user_score, user_dealer_money_choice, custom_game_starting_balance
     music_choice = str(input('Would you like to play music while playing (yes / no): '))
     print()
+    time.sleep(.5)
 
     if music_choice.lower() in ['y', 'yes', 'sure']:
         choice = str(input('YouTube Music or Spotify Music? '))
@@ -1220,8 +1319,7 @@ Allows the end-user to be able to play the game but with custom money, win count
         game_options()
 
     user_game_picker = str(input('Would you like to play normal solo Blackjack 21, Blackjack 21 with bots, '
-                                 'or a Custom Game with custom user game settings (blackjack / blackjack with bots / '
-                                 'custom): '))
+                                 'or a Custom Game with custom user game settings (blackjack / bots / custom): '))
     print()
     time.sleep(.5)
 
@@ -1236,14 +1334,18 @@ Allows the end-user to be able to play the game but with custom money, win count
 
 
 def custom_game_main():
-    global user_money_choice, user_balance, dealer_balance, user_score, user_dealer_money_choice, custom_game_selected
+    """
+Allows the user to set up and play a custom game
+    """
+    global custom_game_starting_balance, user_balance, dealer_balance, user_score, user_dealer_money_choice, \
+        custom_game_selected
     custom_game_selected = True
-    user_money_choice = custom_game_stat_changer('How much would you like your starting balance to be? ')
+    custom_game_starting_balance = custom_game_stat_changer('How much would you like your starting balance to be? ')
 
-    if user_money_choice <= 0:
+    if custom_game_starting_balance <= 0:
         invalid_starting_balance_error('Invalid starting balance... Please choose a balance greater than 0 dollars!')
 
-    user_balance = user_money_choice
+    user_balance = custom_game_starting_balance
     user_dealer_money_choice = custom_game_stat_changer('How much would you to set the dealers starting balance to? ')
 
     dealer_balance = user_dealer_money_choice
@@ -1254,12 +1356,18 @@ def custom_game_main():
 
 
 def invalid_starting_balance_error(arg0):
+    """
+Used for when the user has a negative or invalid starting balance
+    """
     red(arg0)
     time.sleep(2)
     restart_game_error()
 
 
 def custom_game_stat_changer(arg0):
+    """
+Used for taking in an argument while a custom game is being set up
+    """
     result = int(input(arg0))
     print()
     time.sleep(.500)
@@ -1270,7 +1378,7 @@ def dealers_turn():
     """
 Handles all of the card pulling actions for the dealer
     """
-    global user_score, user_balance, user_bet, dealer_balance, user_cards, dealer_cards, user_money_choice, \
+    global user_score, user_balance, user_bet, dealer_balance, user_cards, dealer_cards, custom_game_starting_balance, \
         insurance_bought
     red('The Dealer says No More Bets!')
     time.sleep(.500)
@@ -1298,6 +1406,9 @@ Handles all of the card pulling actions for the dealer
 
 
 def bot_game_dealer_draws_card():
+    """
+Allows the dealer to draw a card while a bot game is selected
+    """
     global user_bet, dealer_cards, insurance_bought
     dealer_cards.append(random.randint(1, 11))
     red("The Dealer has pulled a card...")
@@ -1317,6 +1428,9 @@ def bot_game_dealer_draws_card():
 
 
 def dealer_draws_card():  # sourcery skip: remove-redundant-if
+    """
+Allows the dealer to draw a card into their deck
+    """
     global user_bet, dealer_cards, insurance_bought, bot_game_selected
 
     if len(dealer_cards) == 5 and sum(dealer_cards) <= 21 and not bot_game_selected:
