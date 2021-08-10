@@ -476,12 +476,12 @@ Used for whenever the player makes a bet that causes an error or is logically in
 def view_stats():
     green('Your current in game stats will now be displayed below!')
     time.sleep(1)
-    print('Your balance is $'+str(user_balance))
-    print('Your wincount is '+str(user_score))
-    print('The dealers balance is $'+str(dealer_balance))
-    print('Player1 balance is $'+str(player1_balance))
-    print('Player2 balance is $'+str(player2_balance))
-    print('Player3 balance is $'+str(player3_balance), '\n')
+    print('Your balance is $' + str(user_balance))
+    print('Your wincount is ' + str(user_score))
+    print('The dealers balance is $' + str(dealer_balance))
+    print('Player1 balance is $' + str(player1_balance))
+    print('Player2 balance is $' + str(player2_balance))
+    print('Player3 balance is $' + str(player3_balance), '\n')
     time.sleep(6)
     main()
 
@@ -978,6 +978,9 @@ solo game of blackjack but with the usage of up to 3 bot players added to the ga
                 print(colors.blue + "Player1 now has a total of " + str(sum(player1_cards)) + " from these cards",
                       player1_cards, colors.reset, "\n")
                 time.sleep(1)
+                if sum(player1_cards) > 15:
+                    blue('Player1 will now stay!')
+                    time.sleep(1)
 
     elif number_of_players == 2:
         if not player1_bankrupt:
@@ -1013,6 +1016,9 @@ solo game of blackjack but with the usage of up to 3 bot players added to the ga
                 print(colors.blue + "Player1 now has a total of " + str(sum(player1_cards)) + " from these cards",
                       player1_cards, colors.reset, "\n")
                 time.sleep(1)
+                if sum(player1_cards) > 15:
+                    blue('Player1 will now stay!')
+                    time.sleep(1)
         while sum(player2_cards) <= 15:
             if len(player2_cards) == 5:
                 blue('Player2 has pulled a total of 5 cards without busting!')
@@ -1025,7 +1031,9 @@ solo game of blackjack but with the usage of up to 3 bot players added to the ga
                 print(colors.blue + "Player2 now has a total of " + str(sum(player2_cards)) + " from these cards",
                       player2_cards, colors.reset, "\n")
                 time.sleep(1)
-
+                if sum(player2_cards) > 15:
+                    blue('Player2 will now stay!')
+                    time.sleep(1)
     elif number_of_players == 3:
         if not player1_bankrupt:
             player1_bet = random.randint(1, player1_balance)
@@ -1059,19 +1067,10 @@ solo game of blackjack but with the usage of up to 3 bot players added to the ga
             player2_cards.append(random.randint(1, 11))
         while len(player3_cards) != 2 and not player3_bankrupt:
             player3_cards.append(random.randint(1, 11))
-            if sum(player1_cards) > 15:
-                blue('Player1 chooses to stay!')
-                time.sleep(1)
-                if sum(player2_cards) > 15:
-                    blue('Player2 chooses to stay!')
-                    time.sleep(1)
-                    if sum(player3_cards) > 15:
-                        blue('Player3 chooses to stay!')
-                        time.sleep(1)
-                elif sum(player3_cards) > 15:
-                    blue('Player3 chooses to stay!')
-                    time.sleep(1)
-            elif sum(player2_cards) > 15:
+        if sum(player1_cards) > 15:
+            blue('Player1 chooses to stay!')
+            time.sleep(1)
+            if sum(player2_cards) > 15:
                 blue('Player2 chooses to stay!')
                 time.sleep(1)
                 if sum(player3_cards) > 15:
@@ -1080,6 +1079,15 @@ solo game of blackjack but with the usage of up to 3 bot players added to the ga
             elif sum(player3_cards) > 15:
                 blue('Player3 chooses to stay!')
                 time.sleep(1)
+        elif sum(player2_cards) > 15:
+            blue('Player2 chooses to stay!')
+            time.sleep(1)
+            if sum(player3_cards) > 15:
+                blue('Player3 chooses to stay!')
+                time.sleep(1)
+        elif sum(player3_cards) > 15:
+            blue('Player3 chooses to stay!')
+            time.sleep(1)
         while sum(player1_cards) <= 15:
             if len(player1_cards) == 5:
                 blue('Player1 has pulled a total of 5 cards without busting!')
@@ -1092,6 +1100,9 @@ solo game of blackjack but with the usage of up to 3 bot players added to the ga
                 print(colors.blue + "Player1 now has a total of " + str(sum(player1_cards)) + " from these cards",
                       player1_cards, colors.reset, "\n")
                 time.sleep(1)
+                if sum(player1_cards) > 15:
+                    blue('Player1 will now stay!')
+                    time.sleep(1)
         while sum(player2_cards) <= 15:
             if len(player2_cards) == 5:
                 blue('Player2 has pulled a total of 5 cards without busting!')
@@ -1104,6 +1115,9 @@ solo game of blackjack but with the usage of up to 3 bot players added to the ga
                 print(colors.blue + "Player2 now has a total of " + str(sum(player2_cards)) + " from these cards",
                       player2_cards, colors.reset, "\n")
                 time.sleep(1)
+                if sum(player2_cards) > 15:
+                    blue('Player2 will now stay!')
+                    time.sleep(1)
         while sum(player3_cards) <= 15:
             if len(player3_cards) == 5:
                 blue('Player3 has pulled a total of 5 cards without busting!')
@@ -1116,6 +1130,9 @@ solo game of blackjack but with the usage of up to 3 bot players added to the ga
                 print(colors.blue + "Player3 now has a total of " + str(sum(player3_cards)) + " from these cards",
                       player3_cards, colors.reset, "\n")
                 time.sleep(1)
+                if sum(player3_cards) > 15:
+                    blue('Player3 will now stay!')
+                    time.sleep(1)
 
     if user_balance <= 0 and bot_game_selected:
         red('You are currently out of money and cannot make a bet!')
@@ -1436,6 +1453,8 @@ Allows the dealer to draw a card while a bot game is selected
         bot_game_scoring()
 
     elif sum(dealer_cards) > 15:
+        red('The Dealer will now stay!')
+        time.sleep(1)
         bot_game_scoring()
 
     elif sum(dealer_cards) >= 21:
@@ -1473,8 +1492,12 @@ Allows the dealer to draw a card into their deck
     elif len(dealer_cards) == 5 and sum(dealer_cards) <= 21 and bot_game_selected:
         bot_game_scoring()
     elif sum(dealer_cards) > 15 and not bot_game_selected:
+        red('The Dealer will now stay!')
+        time.sleep(1)
         game_scoring()
     elif sum(dealer_cards) > 15 and bot_game_selected:
+        red('The Dealer will now stay!')
+        time.sleep(1)
         bot_game_scoring()
     elif sum(dealer_cards) >= 21 and not bot_game_selected:
         game_scoring()
