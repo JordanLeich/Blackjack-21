@@ -473,14 +473,25 @@ Used for whenever the player makes a bet that causes an error or is logically in
     restart_game_error()
 
 
+def view_stats():
+    green('Your current in game stats will now be displayed below!')
+    time.sleep(1)
+    print('Your balance is $'+str(user_balance))
+    print('Your wincount is '+str(user_score))
+    print('The dealers balance is $'+str(dealer_balance))
+    print('Player1 balance is $'+str(player1_balance))
+    print('Player2 balance is $'+str(player2_balance))
+    print('Player3 balance is $'+str(player3_balance), '\n')
+    time.sleep(6)
+    main()
+
+
 def main():
     """
 Used as the first piece of the program introduced to the end-user. This section allows the user to skip around in the
 game by using the game mode selection choices
     """
-    user_knowledge = input('Would you like to start playing Blackjack 21, watch Blackjack 21 tutorial, skip all setup '
-                           'options and play, or reset your saved money/stats to default (start / tutorial / '
-                           'express / reset): ')
+    user_knowledge = input('Start / Tutorial / Express / View Stats / Reset Stats / Quit: ')
     print()
     time.sleep(.5)
 
@@ -495,8 +506,12 @@ game by using the game mode selection choices
         game()
     elif user_knowledge.lower() in ['e', 'express']:
         game()
-    elif user_knowledge.lower() in ['reset', 'reset stats', 'stats']:
+    elif user_knowledge.lower() in ['reset', 'reset stats']:
         reset_stats()
+    elif user_knowledge.lower() in ['stats', 'view stats', 'v', 'view']:
+        view_stats()
+    elif user_knowledge.lower() in ['quit', 'q', 'exit']:
+        quit()
     else:
         red('User knowledge input error found...')
         time.sleep(1)
