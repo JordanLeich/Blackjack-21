@@ -136,45 +136,24 @@ Used when 1 single round of blackjack has ended. Allows the user to play another
         time.sleep(1)
 
         if choice.lower() in ['yes', 'y', 'sure']:
-            if not player1_bankrupt and player1_presence and (player1_balance / (user_balance + 1)) > user_balance:
-                if user_balance < 0:
-                    bot_donation_amount = (user_balance + 50) * -1.5
-                    user_balance += bot_donation_amount
-                    player1_balance -= bot_donation_amount
-                    print(colors.green + 'Player1 has donated to you $' + str(bot_donation_amount), '\n', colors.reset)
-                    time.sleep(1)
-                elif user_balance == 0:
-                    bot_donation_amount = (user_balance + 50) * 1.5
-                    user_balance += bot_donation_amount
-                    player1_balance -= bot_donation_amount
-                    print(colors.green + 'Player1 has donated to you $' + str(bot_donation_amount), '\n', colors.reset)
-                    time.sleep(1)
+            if not player1_bankrupt and player1_presence and (player1_balance / user_balance) > user_balance:
+                bot_donation_amount = user_balance * -1.5
+                user_balance += bot_donation_amount
+                player1_balance -= bot_donation_amount
+                print(colors.green + 'Player1 has donated to you $' + str(bot_donation_amount), '\n', colors.reset)
+                time.sleep(1)
             elif not player2_bankrupt and player2_presence and (player2_balance / user_balance) > user_balance:
-                if user_balance < 0:
-                    bot_donation_amount = (user_balance + 50) * -1.5
-                    user_balance += bot_donation_amount
-                    player2_balance -= bot_donation_amount
-                    print(colors.green + 'Player2 has donated to you $' + str(bot_donation_amount), '\n', colors.reset)
-                    time.sleep(1)
-                elif user_balance == 0:
-                    bot_donation_amount = (user_balance + 50) * 1.5
-                    user_balance += bot_donation_amount
-                    player2_balance -= bot_donation_amount
-                    print(colors.green + 'Player2 has donated to you $' + str(bot_donation_amount), '\n', colors.reset)
-                    time.sleep(1)
+                bot_donation_amount = user_balance * -1.5
+                user_balance += bot_donation_amount
+                player2_balance -= bot_donation_amount
+                print(colors.green + 'Player2 has donated to you $' + str(bot_donation_amount), '\n', colors.reset)
+                time.sleep(1)
             elif not player3_bankrupt and player3_presence and (player3_balance / user_balance) > user_balance:
-                if user_balance < 0:
-                    bot_donation_amount = (user_balance + 50) * -1.5
-                    user_balance += bot_donation_amount
-                    player3_balance -= bot_donation_amount
-                    print(colors.green + 'Player3 has donated to you $' + str(bot_donation_amount), '\n', colors.reset)
-                    time.sleep(1)
-                elif user_balance == 0:
-                    bot_donation_amount = (user_balance + 50) * 1.5
-                    user_balance += bot_donation_amount
-                    player3_balance -= bot_donation_amount
-                    print(colors.green + 'Player3 has donated to you $' + str(bot_donation_amount), '\n', colors.reset)
-                    time.sleep(1)
+                bot_donation_amount = user_balance * -1.5
+                user_balance += bot_donation_amount
+                player3_balance -= bot_donation_amount
+                print(colors.green + 'Player3 has donated to you $' + str(bot_donation_amount), '\n', colors.reset)
+                time.sleep(1)
             else:
                 red('No other players were able to donate anything to you!')
                 time.sleep(1)
@@ -499,8 +478,9 @@ def main():
 Used as the first piece of the program introduced to the end-user. This section allows the user to skip around in the
 game by using the game mode selection choices
     """
-    print('Which option would you like to select?\n')
-    user_knowledge = input('Start / Tutorial / Express / Reset: ')
+    user_knowledge = input('Would you like to start playing Blackjack 21, watch Blackjack 21 tutorial, skip all setup '
+                           'options and play, or reset your saved money/stats to default (start / tutorial / '
+                           'express / reset): ')
     print()
     time.sleep(.5)
 
@@ -1131,45 +1111,24 @@ solo game of blackjack but with the usage of up to 3 bot players added to the ga
         time.sleep(1)
 
         if choice.lower() in ['yes', 'y', 'sure']:
-            if not player1_bankrupt and player1_presence and (player1_balance / (user_balance + 1)) > user_balance:
-                if user_balance < 0:
-                    bot_donation_amount = (user_balance+50) * -1.5
-                    user_balance += bot_donation_amount
-                    player1_balance -= bot_donation_amount
-                    print(colors.green + 'Player1 has donated to you $' + str(bot_donation_amount), '\n', colors.reset)
-                    time.sleep(1)
-                elif user_balance == 0:
-                    bot_donation_amount = (user_balance+50) * 1.5
-                    user_balance += bot_donation_amount
-                    player1_balance -= bot_donation_amount
-                    print(colors.green + 'Player1 has donated to you $' + str(bot_donation_amount), '\n', colors.reset)
-                    time.sleep(1)
+            if not player1_bankrupt and player1_presence and (player1_balance / user_balance) > user_balance:
+                bot_donation_amount = user_balance * -1.5
+                user_balance += bot_donation_amount
+                player1_balance -= bot_donation_amount
+                print(colors.green + 'Player1 has donated to you $' + str(bot_donation_amount), '\n', colors.reset)
+                time.sleep(1)
             elif not player2_bankrupt and player2_presence and (player2_balance / user_balance) > user_balance:
-                if user_balance < 0:
-                    bot_donation_amount = (user_balance + 50) * -1.5
-                    user_balance += bot_donation_amount
-                    player2_balance -= bot_donation_amount
-                    print(colors.green + 'Player2 has donated to you $' + str(bot_donation_amount), '\n', colors.reset)
-                    time.sleep(1)
-                elif user_balance == 0:
-                    bot_donation_amount = (user_balance + 50) * 1.5
-                    user_balance += bot_donation_amount
-                    player2_balance -= bot_donation_amount
-                    print(colors.green + 'Player2 has donated to you $' + str(bot_donation_amount), '\n', colors.reset)
-                    time.sleep(1)
+                bot_donation_amount = user_balance * -1.5
+                user_balance += bot_donation_amount
+                player2_balance -= bot_donation_amount
+                print(colors.green + 'Player2 has donated to you $' + str(bot_donation_amount), '\n', colors.reset)
+                time.sleep(1)
             elif not player3_bankrupt and player3_presence and (player3_balance / user_balance) > user_balance:
-                if user_balance < 0:
-                    bot_donation_amount = (user_balance + 50) * -1.5
-                    user_balance += bot_donation_amount
-                    player3_balance -= bot_donation_amount
-                    print(colors.green + 'Player3 has donated to you $' + str(bot_donation_amount), '\n', colors.reset)
-                    time.sleep(1)
-                elif user_balance == 0:
-                    bot_donation_amount = (user_balance + 50) * 1.5
-                    user_balance += bot_donation_amount
-                    player3_balance -= bot_donation_amount
-                    print(colors.green + 'Player3 has donated to you $' + str(bot_donation_amount), '\n', colors.reset)
-                    time.sleep(1)
+                bot_donation_amount = user_balance * -1.5
+                user_balance += bot_donation_amount
+                player3_balance -= bot_donation_amount
+                print(colors.green + 'Player3 has donated to you $' + str(bot_donation_amount), '\n', colors.reset)
+                time.sleep(1)
             else:
                 red('No other players were able to donate anything to you!')
                 time.sleep(1)
