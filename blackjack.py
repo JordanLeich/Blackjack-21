@@ -111,7 +111,7 @@ def reset_stats():
     main()
 
 
-def another_game():  # sourcery no-metrics skip: hoist-statement-from-if
+def another_game():  # sourcery no-metrics
     """
 Used when 1 single round of blackjack has ended. Allows the user to play another game of blackjack or quit playing
     """
@@ -326,7 +326,7 @@ def restart_game_error():
     """
 Used for error handling to prevent the game from crashing.
     """
-    print("Restarting Blackjack Game...\n")
+    print("Restarting Blackjack Game from scratch...\n")
     main()
 
 
@@ -353,21 +353,6 @@ This is the main code used for the game entirely
     global user_score, user_balance, user_bet, dealer_balance, user_cards, dealer_cards, custom_game_starting_balance, \
         normal_game_selected, custom_game_selected, player1_presence, player2_presence, player3_presence, \
         bot_game_selected
-
-    if user_balance <= 0:
-        red("You don't have any more money to bet... Game Over!")
-        time.sleep(2)
-        user_game_over_choice = getting_input('Would you like to play all over again (yes / no): ', 0.500)
-
-        if user_game_over_choice.lower() in ['y', 'yes']:
-            new_game_starting()
-        elif user_game_over_choice.lower() in ['n', 'no']:
-            exiting_game()
-        else:
-            red('User game over choice selection error found...\n')
-            time.sleep(2)
-            restart_game_error()
-
     bot_game_selected = False
     player1_presence = False
     player2_presence = False
@@ -398,19 +383,6 @@ This is the main code used for the game entirely
                 user_bet = int(input("How much would you like to bet in dollar amount? "))
                 print()
                 time.sleep(.500)
-                if user_bet == user_balance:
-                    yellow('You have selected not to go all in but still decided to bet all of your cash balance')
-                    user_bet_warning = str(input('Do you still want to continue (yes / no): '))
-                    print()
-                    time.sleep(2)
-                    if user_bet_warning.lower() in ['y', 'yes']:
-                        break
-                    elif user_bet_warning.lower() in ['n', 'no']:
-                        print('The game will now restart so that you can use a different bet amount!\n')
-                        time.sleep(1)
-                        game()
-                    else:
-                        restart_game_error()
             except ValueError:
                 print()
                 red('Please enter a valid dollar amount!')
