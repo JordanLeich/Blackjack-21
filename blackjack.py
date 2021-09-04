@@ -8,6 +8,7 @@ import time
 from other import colors
 import webbrowser
 import json
+import sys
 
 
 def highlight(color, string):
@@ -316,7 +317,7 @@ Used when 1 single round of blackjack has ended. Allows the user to play another
                 else:
                     green('Thanks for playing!')
                     time.sleep(1)
-                    quit()
+                    sys.exit()
 
         elif choice.lower() in ['no', 'n', 'nah']:
             choice = str(input('Since you refuse to take a donation, this is game over for you... Would you like to '
@@ -328,7 +329,7 @@ Used when 1 single round of blackjack has ended. Allows the user to play another
             else:
                 green('Thanks for playing!')
                 time.sleep(1)
-                quit()
+                sys.exit()
         else:
             red('Donation request user input error found...')
             time.sleep(1)
@@ -367,7 +368,7 @@ Used when 1 single round of blackjack has ended. Allows the user to play another
             print(colors.green + "You won a total of", user_score, 'games and you walked away with a total of $' +
                   str(user_balance) + str(" dollars. Thanks for playing!\n"), colors.reset)
             time.sleep(1)
-            quit()
+            sys.exit()
         elif restart_action.lower() in ["new", "new game", "restart"]:
             new_game_starting()
         else:
@@ -417,7 +418,7 @@ Exits the game while setting the default stats
         json.dump({'ubalance': user_balance, 'uscore': user_score,
                    'deal_balance': dealer_balance, 'player1_balance': player1_balance,
                    'player2_balance': player2_balance, 'player3_balance': player3_balance}, user_data_file)
-    quit()
+    sys.exit()
 
 
 def new_game_starting_custom_game():
@@ -592,7 +593,7 @@ This is the main code used for the game entirely
         elif choice.lower() in ["q", "quit", "end"]:
             green("Ending game... Thanks for playing!\n")
             time.sleep(1)
-            quit()
+            sys.exit()
 
         else:
             game_scoring()
@@ -663,7 +664,7 @@ game by using the game mode selection choices
     elif user_knowledge.lower() in ['extra', 'extras']:
         extra()
     elif user_knowledge.lower() in ['quit', 'q', 'exit']:
-        quit()
+        sys.exit()
     else:
         red('User knowledge input error found...')
         time.sleep(1)
@@ -1346,7 +1347,7 @@ solo game of blackjack but with the usage of up to 3 bot players added to the ga
                 else:
                     green('Thanks for playing!')
                     time.sleep(1)
-                    quit()
+                    sys.exit()
 
         elif choice.lower() in ['no', 'n', 'nah']:
             choice = str(input('Since you refuse to take a donation, this is game over for you... Would you like to '
@@ -1358,7 +1359,7 @@ solo game of blackjack but with the usage of up to 3 bot players added to the ga
             else:
                 green('Thanks for playing!')
                 time.sleep(1)
-                quit()
+                sys.exit()
         else:
             red('Donation request user input error found...')
             time.sleep(1)
@@ -1461,7 +1462,7 @@ solo game of blackjack but with the usage of up to 3 bot players added to the ga
         elif choice.lower() in ["q", "quit", "end"]:
             green("Ending game... Thanks for playing!\n")
             time.sleep(1)
-            quit()
+            sys.exit()
         else:
             bot_game_scoring()
 
