@@ -31,6 +31,9 @@
 # TODO List ❗
 - View the TODO List [here](https://github.com/JordanLeich/Blackjack-21/issues/3)
 
+# Contributing ✍️
+- Here a easy and quick [guide](https://youtu.be/waEb2c9NDL8) for learning how to contribute via GitHub 
+
 # Bug Reporting 🐞
 - Report a bug [here](https://github.com/JordanLeich/Blackjack-21/issues/5)
 
