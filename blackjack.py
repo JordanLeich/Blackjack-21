@@ -363,7 +363,7 @@ Used when 1 single round of blackjack has ended. Allows the user to play another
                 bot_game()
             else:
                 game()
-        elif restart_action.lower() in ["cash out", "n", "no", "c", "cash", "exit", "leave"]:
+        elif restart_action.lower() in ["cash out", "n", "no", "c", "cash", "exit", "leave", "q", "quit"]:
             print(colors.green + "You won a total of", user_score, 'games and you walked away with a total of $' +
                   str(user_balance) + str(" dollars. Thanks for playing!\n"), colors.reset)
             time.sleep(1)
