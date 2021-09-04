@@ -22,17 +22,17 @@
 ### Option 2 (Python installed)
 1. Make sure you installed all the python modules found in the requirements document [here](https://github.com/JordanLeich/Blackjack-21/blob/master/requirements.txt).
 2. Go to the releases page on GitHub and download the [latest](https://github.com/JordanLeich/Blackjack-21/releases) zip file
-3. unzip the zip file wherever you like, simply run Blackjack.py, and enjoy!
+3. unzip the zip file wherever you like, simply run Blackjack.py.
 
 # Additional 📓
-1. [Latest](https://github.com/JordanLeich/Blackjack-21/releases) version of Blackjack 21, this release is the most recommended for players and developers. The latest release will always contain completed code and will be considered a stable, working project.
-2. [Oldest](https://github.com/JordanLeich/Blackjack-21/releases/tag/v5.0) version of Blackjack 21, this release is super outdated and lacks hundreds of improvements and features.
+1. [Latest](https://github.com/JordanLeich/Blackjack-21/releases) version of Blackjack 21, this release is the most recommended for players and developers. The latest release will always contain completed code and will be considered a stable, working release.
+2. [Oldest](https://github.com/JordanLeich/Blackjack-21/releases/tag/v5.0) version of Blackjack 21, this release is super outdated and lacks hundreds of improvements and features. Ideally, this version is best if you don't want all the newest features but want the most basic version of Blackjack 21.
 
 # TODO List ❗
 - View the TODO List [here](https://github.com/JordanLeich/Blackjack-21/issues/3)
 
 # Contributing ✍️
-- Here a easy and quick [guide](https://youtu.be/waEb2c9NDL8) for learning how to contribute via GitHub 
+- Here’s a easy and quick [video guide](https://youtu.be/waEb2c9NDL8) for learning how to contribute via GitHub 
 
 # Bug Reporting 🐞
 - Report a bug [here](https://github.com/JordanLeich/Blackjack-21/issues/5)
