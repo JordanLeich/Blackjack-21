@@ -9,7 +9,7 @@
     <img src="https://img.shields.io/github/languages/code-size/JordanLeich/blackjack-21">    
     <img src="https://img.shields.io/github/repo-size/JordanLeich/blackjack-21"> 
     <img src="https://img.shields.io/tokei/lines/github/JordanLeich/blackjack-21?label=lines%20of%20code">
-    <img src="https://img.shields.io/github/stars/jordanleich/blackjack-21?style=socialhttps://img.shields.io/tokei/lines/github/JordanLeich/Ultimate-Calculator?label=lines%20of%20code"> 
+    <img src="https://img.shields.io/github/stars/jordanleich/blackjack-21?style=socialhttps://img.shields.io/tokei/lines/github/JordanLeich/blackjack-21?label=lines%20of%20code"> 
     <img src="https://img.shields.io/github/stars/jordanleich?label=user%20stars&style=social"> 
     <img src="https://img.shields.io/github/v/release/jordanleich/blackjack-21?include_prereleases"> 
     <img src="https://img.shields.io/github/last-commit/jordanleich/blackjack-21">    
