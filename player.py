@@ -8,10 +8,10 @@ class Player:
     def __init__(self, bet_amount=0, mc=0, presence=False,
                  bankrupt=False, cards=None, bank_roll=1000,
                  bot_player=False, dealer=False, p_score=None):
-        if cards == None:
+        if cards is None:
             cards = []
-        if p_score == None:
-            p_score == [0,0]
+        if p_score is None:
+            p_score == [0, 0]
         if dealer:
             bank_roll = 2000000
         self.bet = bet_amount
@@ -23,7 +23,6 @@ class Player:
         self.bot_player = bot_player
         self.dealer = dealer
         self.wlscore = p_score
-
 
     def show_cards(self):
         print(self.cards)
@@ -37,19 +36,18 @@ class Player:
             temp_card = self.cards[card]
             if len(temp_card) > 2:
                 sum_c += 10
-            elif temp_card[0] in ['J','Q','K']:
+            elif temp_card[0] in ['J', 'Q', 'K']:
                 sum_c += 10
             elif temp_card[0] == 'A':
-                if len(self.cards) > 2 and (sum_c + 11) < 21:
+                if len(self.cards) > 2 and sum_c < 10:
                     sum_c += 11
                 else:
-                    sum_c += 1 
+                    sum_c += 1
             else:
                 sum_c += int(temp_card[0])
 
-            #sum_card += int(temp_card)
-        print(self.cards, 'card sum' , sum_c)
-        #return sum_card
+                # sum_card += int(temp_card)
+        print(self.cards, 'card sum', sum_c)
 
     def betting_amount(self):
         return self.bet
@@ -62,5 +60,3 @@ class Player:
 
     def player_loose(self):
         self.p_score[1] -= 1
-
-
