@@ -5,66 +5,36 @@
 # Imports
 import random
 import time
-from other import colors
 import webbrowser
 import json
 import sys
+import Decks
+import Player
 
+# from files
+from other import colors
 
-def highlight(color, string):
-    """
-Used to highlight a printed line color based upon the color specified
-    """
-    print(color + string + colors.reset + '\n')
+def load_saved_game():
 
-
-def red(string):
-    """
-Used to highlight a printed line with a red color
-    """
-    highlight(colors.red, string)
-
-
-def green(string):
-    """
-Used to highlight a printed line with a green color
-    """
-    highlight(colors.green, string)
-
-
-def yellow(string):
-    """
-Used to highlight a printed line with a yellow color
-    """
-    highlight(colors.yellow, string)
-
-
-def blue(string):
-    """
-Used to highlight a printed line with a blue color
-    """
-    highlight(colors.blue, string)
-
-
-try:  # This try and except block runs first in the code to be able to load a users saved stats, if no stats are
-    # found, the default stats are automatically set to the end-users stats
-    with open('data.json', 'r') as user_data_file:
-        user_data = json.load(user_data_file)
-    user_balance = user_data['ubalance']
-    user_score = user_data['uscore']
-    dealer_balance = user_data['deal_balance']
-    player1_balance = user_data['player1_balance']
-    player2_balance = user_data['player2_balance']
-    player3_balance = user_data['player3_balance']
-    green('Save file found and loaded!')
-except FileNotFoundError:
-    user_balance = 1000
-    player1_balance = 1000
-    player2_balance = 1000
-    player3_balance = 1000
-    user_score = 0
-    dealer_balance = 5000
-    yellow('Save file not found, A new save file will be created shortly!')
+    try:  # This try and except block runs first in the code to be able to load a users saved stats, if no stats are
+        # found, the default stats are automatically set to the end-users stats
+        with open('data.json', 'r') as user_data_file:
+            user_data = json.load(user_data_file)
+        user_balance = user_data['ubalance']
+        user_score = user_data['uscore']
+        dealer_balance = user_data['deal_balance']
+        player1_balance = user_data['player1_balance']
+        player2_balance = user_data['player2_balance']
+        player3_balance = user_data['player3_balance']
+        green('Save file found and loaded!')
+    except FileNotFoundError:
+        user_balance = 1000
+        player1_balance = 1000
+        player2_balance = 1000
+        player3_balance = 1000
+        user_score = 0
+        dealer_balance = 5000
+        yellow('Save file not found, A new save file will be created shortly!')
 
 # Global Variables
 user_bet = 0
