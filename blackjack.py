@@ -26,7 +26,7 @@ def load_saved_game():
         player1_balance = user_data['player1_balance']
         player2_balance = user_data['player2_balance']
         player3_balance = user_data['player3_balance']
-        colors.green('Save file found and loaded!')
+        print(colors.green + 'Save file found and loaded!', colors.reset)
     except FileNotFoundError:
         user_balance = 1000
         player1_balance = 1000
@@ -34,11 +34,13 @@ def load_saved_game():
         player3_balance = 1000
         user_score = 0
         dealer_balance = 5000
-        colors.yellow('Save file not found, A new save file will be created shortly!')
+        print(colors.yellow + 'Save file not found, A new save file will be created shortly!', colors.reset)
 
 
 # Global Variables
 user_bet = 0
+user_balance = 1000
+dealer_balance = 5000
 player1_bet = 0
 player2_bet = 0
 player3_bet = 0
@@ -197,7 +199,8 @@ def reset_stats():
 Used for the end-user to automatically reset their saved stats back to default while in-game
     """
     global user_balance, dealer_balance, user_score, user_data_file, player1_balance, player2_balance, player3_balance
-    colors.green('All players and the dealers money/stats will be reset to their original defaults...')
+    print(colors.green + 'All players and the dealers money/stats will be reset to their original defaults...',
+          colors.reset)
     time.sleep(1)
     user_balance = 1000
     player1_balance = 1000
@@ -229,7 +232,7 @@ Used when 1 single round of blackjack has ended. Allows the user to play another
                    'player2_balance': player2_balance, 'player3_balance': player3_balance}, user_data_file)
 
     if user_balance <= 0 and bot_game_selected:
-        colors.red('You are currently out of money and cannot make a bet!')
+        print(colors.red + 'You are currently out of money and cannot make a bet!', colors.reset)
         time.sleep(1)
         choice = str(input('Since you are playing with others, would you like to request a donation from a player '
                            '(yes / no): '))
@@ -277,7 +280,7 @@ Used when 1 single round of blackjack has ended. Allows the user to play another
                     print(colors.green + 'Player3 has donated to you $' + str(bot_donation_amount), '\n', colors.reset)
                     time.sleep(1)
             else:
-                colors.red('No other players were able to donate anything to you!')
+                print(colors.red + 'No other players were able to donate anything to you!', colors.reset)
                 time.sleep(1)
                 choice = str(
                     input('Would you like to restart from scratch (yes / no): '))
@@ -286,7 +289,7 @@ Used when 1 single round of blackjack has ended. Allows the user to play another
                 if choice.lower() in ['yes', 'y', 'sure']:
                     new_game_starting()
                 else:
-                    colors.green('Thanks for playing!')
+                    print(colors.green + 'Thanks for playing!', colors.reset)
                     time.sleep(1)
                     sys.exit()
 
@@ -298,16 +301,16 @@ Used when 1 single round of blackjack has ended. Allows the user to play another
             if choice.lower() in ['yes', 'y', 'sure']:
                 new_game_starting()
             else:
-                colors.green('Thanks for playing!')
+                print(colors.green + 'Thanks for playing!', colors.reset)
                 time.sleep(1)
                 sys.exit()
         else:
-            colors.red('Donation request user input error found...')
+            print(colors.red + 'Donation request user input error found...', colors.reset)
             time.sleep(1)
             restart_game_error()
 
     elif user_balance <= 0:
-        colors.red("You don't have any more money to bet... Game Over!")
+        print(colors.red + "You don't have any more money to bet... Game Over!", colors.reset)
         time.sleep(2)
         user_game_over_choice = getting_input('Would you like to play all over again (yes / no): ', 0.500)
 
@@ -316,16 +319,19 @@ Used when 1 single round of blackjack has ended. Allows the user to play another
         elif user_game_over_choice.lower() in ['n', 'no']:
             exiting_game()
         else:
-            colors.red('User game over choice selection error found...\n')
+            print(colors.red + 'User game over choice selection error found...\n', colors.reset)
             time.sleep(2)
             restart_game_error()
 
     elif user_balance >= 1:
         if dealer_balance <= 0:
-            colors.green("Congratulations! You have beat the BlackJack 21 game by defeating the dealers balance!")
+            print(
+                colors.green + "Congratulations! You have beat the BlackJack 21 game by defeating the dealers balance!"
+                , colors.reset)
             time.sleep(2)
         elif dealer_balance <= 2500:
-            colors.green("The dealers balance is looking small enough for you to win! You're doing well...")
+            print(colors.green + "The dealers balance is looking small enough for you to win! You're doing well...",
+                  colors.reset)
             time.sleep(2)
         restart_action = getting_input(
             "Do you want to play again or cash out your earning or play a brand new game (play "
@@ -343,11 +349,11 @@ Used when 1 single round of blackjack has ended. Allows the user to play another
         elif restart_action.lower() in ["new", "new game", "restart"]:
             new_game_starting()
         else:
-            colors.red("Invalid input... Restarting choice...")
+            print(colors.red + "Invalid input... Restarting choice...", colors.reset)
             time.sleep(1)
             another_game()
     else:
-        colors.red("User Balance Error found...\n")
+        print(colors.red + "User Balance Error found...\n", colors.reset)
         time.sleep(1)
         restart_game_error()
 
@@ -378,7 +384,7 @@ def exiting_game():
 Exits the game while setting the default stats
     """
     global user_balance, dealer_balance, user_score, user_data_file, player1_balance, player2_balance, player3_balance
-    colors.green('Thanks for playing! Exiting game now...')
+    print(colors.green + 'Thanks for playing! Exiting game now...', colors.reset)
     time.sleep(1)
     user_balance = 1000
     player1_balance = 1000
@@ -488,7 +494,7 @@ This is the main code used for the game entirely
                 time.sleep(.500)
             except ValueError:
                 print()
-                colors.red('Please enter a valid dollar amount!')
+                print(colors.red + 'Please enter a valid dollar amount!', colors.reset)
                 continue
             else:
                 break
@@ -500,7 +506,7 @@ This is the main code used for the game entirely
             user_bet_error_handling("You cannot make a negative bet! Please place a higher bet than 0 dollars!")
 
     else:
-        colors.red('User input for all in feature found an error!\n')
+        print(colors.red + 'User input for all in feature found an error!\n', colors.reset)
         time.sleep(1)
         restart_game_error()
 
@@ -547,26 +553,26 @@ This is the main code used for the game entirely
                 user_draws_card()
                 dealers_turn()
             else:
-                colors.red('You cannot double down here since the sum of your cards is over 11!')
+                print(colors.red + 'You cannot double down here since the sum of your cards is over 11!', colors.reset)
                 time.sleep(1)
         elif choice.lower() in ["help", "help", 'call help']:
             if sum(user_cards) == [10, 11]:
-                colors.blue(
-                    "Since your total is equal to either 10 or 11, we recommend that this is the best time to double "
-                    "down if you have enough money!")
+                print(colors.blue +
+                      "Since your total is equal to either 10 or 11, we recommend that this is the best time to double "
+                      "down if you have enough money!", colors.reset)
                 time.sleep(3)
             elif sum(user_cards) <= 14:
-                colors.blue("Since your total is under or equal to 14, we recommend that you hit!")
+                print(colors.blue + "Since your total is under or equal to 14, we recommend that you hit!", colors.reset)
                 time.sleep(2)
             elif sum(user_cards) >= 15:
-                colors.blue(
-                    "Your odds are looking high enough to win, if your card total is closer to 15, we recommend only "
-                    "making 1 hit move and then staying!")
+                print(colors.blue +
+                      "Your odds are looking high enough to win, if your card total is closer to 15, we recommend only "
+                      "making 1 hit move and then staying!", colors.reset)
                 time.sleep(3)
-                colors.blue("If your card total is closer to 21, don't risk it! make a stay move!")
+                print(colors.blue + "If your card total is closer to 21, don't risk it! make a stay move!", colors.reset)
                 time.sleep(3)
         elif choice.lower() in ["q", "quit", "end"]:
-            colors.green("Ending game... Thanks for playing!\n")
+            print(colors.green + "Ending game... Thanks for playing!\n", colors.reset)
             time.sleep(1)
             sys.exit()
 
@@ -594,13 +600,13 @@ def user_bet_error_handling(arg0):
     """
 Used for whenever the player makes a bet that causes an error or is logically incorrect
     """
-    colors.red(arg0)
+    print(colors.red + arg0, colors.reset)
     time.sleep(2)
     restart_game_error()
 
 
 def view_stats():
-    colors.green('Your current in game stats will now be displayed below!')
+    print(colors.green + 'Your current in game stats will now be displayed below!', colors.reset)
     time.sleep(1)
     print('Your balance is $' + str(user_balance))
     print('Your wincount is ' + str(user_score))
@@ -624,9 +630,9 @@ game by using the game mode selection choices
     if user_knowledge.lower() in ['start', 'yes', 's']:
         game_options()
     elif user_knowledge.lower() in ['no', 'n', 't', 'tutorial']:
-        colors.green(
-            'A youtube video should now be playing... This game will auto resume once the video has been fully '
-            'played...')
+        print(colors.green +
+              'A youtube video should now be playing... This game will auto resume once the video has been fully '
+              'played...', colors.reset)
         url = "https://www.youtube.com/watch?v=eyoh-Ku9TCI"
         webbrowser.open(url, new=1)
         time.sleep(140)
@@ -642,7 +648,7 @@ game by using the game mode selection choices
     elif user_knowledge.lower() in ['quit', 'q', 'exit']:
         sys.exit()
     else:
-        colors.red('User knowledge input error found...')
+        print(colors.red + 'User knowledge input error found...', colors.reset)
         time.sleep(1)
         restart_game_error()
 
@@ -667,10 +673,12 @@ Handles of the end game scoring based upon card results between the dealer and e
         Push_tie_game_result()
     elif len(user_cards) == 5 and sum(user_cards) < 21:
         time.sleep(1)
-        colors.green("You have automatically won since you have pulled a total of 5 cards without busting!")
+        print(colors.green + "You have automatically won since you have pulled a total of 5 cards without busting!",
+              colors.reset)
         user_win_stats()
     elif len(dealer_cards) == 5 and sum(dealer_cards) < 21:
-        colors.red("You have automatically lost since the dealer has pulled a total of 5 cards without busting!")
+        print(
+            colors.red + "You have automatically lost since the dealer has pulled a total of 5 cards without busting!", colors.reset)
         user_loses_stats()
     elif sum(user_cards) > 21:
         print(colors.red + "BUSTED! The Dealer Wins! You lost $" + str(user_bet) + "!\n", colors.reset)
@@ -701,7 +709,7 @@ Handles of the end game scoring based upon card results between the dealer and e
         user_loses_stats()
     else:  # This else statement is most likely unreachable but still used as a safety net in case anything with
         # scoring goes wrong.
-        colors.red('Scoring error found...')
+        print(colors.red + 'Scoring error found...', colors.reset)
         time.sleep(1)
         restart_game_error()
 
@@ -710,7 +718,7 @@ def insurance_game_results(arg0):
     """
 Used for when the player either buys or doesnt buy insurance to get to the endgame results
     """
-    colors.yellow(arg0)
+    print(colors.yellow + arg0, colors.reset)
     time.sleep(1)
     another_game()
 
@@ -719,7 +727,7 @@ def Push_tie_game_result():
     """
 Used for when there is a tie game between a player and the dealer
     """
-    colors.yellow("PUSH! This is a tie! All bet money is refunded!")
+    print(colors.yellow + "PUSH! This is a tie! All bet money is refunded!", colors.reset)
     time.sleep(1)
     another_game()
 
@@ -762,13 +770,13 @@ Used for the scoring results when a bot game is selected
 
     if player1_presence:
         if len(dealer_cards) == 5 and sum(player1_cards) >= sum(dealer_cards):
-            colors.yellow('Player1 pushed this round! Player1s bet has been refunded!')
+            print(colors.yellow + 'Player1 pushed this round! Player1s bet has been refunded!', colors.reset)
             time.sleep(1)
         elif len(player1_cards) == 5 and sum(dealer_cards) >= sum(player1_cards):
-            colors.yellow('Player1 pushed this round! Player1s bet has been refunded!')
+            print(colors.yellow + 'Player1 pushed this round! Player1s bet has been refunded!', colors.reset)
             time.sleep(1)
         elif sum(player1_cards) == sum(dealer_cards):
-            colors.yellow('Player1 pushed this round! Player1s bet has been refunded!')
+            print(colors.yellow + 'Player1 pushed this round! Player1s bet has been refunded!', colors.reset)
             time.sleep(1)
         elif len(player1_cards) == 5 and sum(player1_cards) < 21:
             player1_balance += player1_bet
@@ -810,13 +818,13 @@ Used for the scoring results when a bot game is selected
 
     if player2_presence:
         if len(dealer_cards) == 5 and sum(player2_cards) >= sum(dealer_cards):
-            colors.yellow('Player2 pushed this round! Player2s bet has been refunded!')
+            print(colors.yellow + 'Player2 pushed this round! Player2s bet has been refunded!', colors.reset)
             time.sleep(1)
         elif len(player2_cards) == 5 and sum(dealer_cards) >= sum(player2_cards):
-            colors.yellow('Player2 pushed this round! Player2s bet has been refunded!')
+            print(colors.yellow + 'Player2 pushed this round! Player2s bet has been refunded!', colors.reset)
             time.sleep(1)
         elif sum(player2_cards) == sum(dealer_cards):
-            colors.yellow('Player2 pushed this round! Player2s bet has been refunded!')
+            print(colors.yellow + 'Player2 pushed this round! Player2s bet has been refunded!', colors.reset)
             time.sleep(1)
         elif len(player2_cards) == 5 and sum(player2_cards) < 21:
             player2_balance += player2_bet
@@ -858,13 +866,13 @@ Used for the scoring results when a bot game is selected
 
     if player3_presence:
         if len(dealer_cards) == 5 and sum(player3_cards) >= sum(dealer_cards):
-            colors.yellow('Player3 pushed this round! Player3s bet has been refunded!')
+            print(colors.yellow + 'Player3 pushed this round! Player3s bet has been refunded!', colors.reset)
             time.sleep(1)
         elif len(player3_cards) == 5 and sum(dealer_cards) >= sum(player3_cards):
-            colors.yellow('Player3 pushed this round! Player3s bet has been refunded!')
+            print(colors.yellow + 'Player3 pushed this round! Player3s bet has been refunded!', colors.reset)
             time.sleep(1)
         elif sum(player3_cards) == sum(dealer_cards):
-            colors.yellow('Player3 pushed this round! Player3s bet has been refunded!')
+            print(colors.yellow + 'Player3 pushed this round! Player3s bet has been refunded!', colors.reset)
             time.sleep(1)
         elif len(player3_cards) == 5 and sum(player3_cards) < 21:
             player3_balance += player3_bet
@@ -913,7 +921,7 @@ Used for the dealers turn to make a move while a bot game is selected
     """
     global user_score, user_balance, user_bet, dealer_balance, user_cards, dealer_cards, custom_game_starting_balance, \
         insurance_bought
-    colors.red('The Dealer says No More Bets!')
+    print(colors.red + 'The Dealer says No More Bets!', colors.reset)
     time.sleep(.500)
 
     while sum(dealer_cards) <= 15:
@@ -959,12 +967,12 @@ solo game of blackjack but with the usage of up to 3 bot players added to the ga
     player2_cards = []
     player3_cards = []
     dealer_cards = []
-    colors.yellow('Each bot will take their turns first and then you will play afterwards!')
+    print(colors.yellow + 'Each bot will take their turns first and then you will play afterwards!', colors.reset)
     time.sleep(1)
 
     if player1_balance <= 0:
         player1_bankrupt = True
-        colors.red('Player1 is currently bankrupt and therefore not participating in the game!')
+        print(colors.red + 'Player1 is currently bankrupt and therefore not participating in the game!', colors.reset)
         time.sleep(1)
         donate_money_question = str(input('Would you like to donate some money to this player to get them back in the '
                                           'game (yes / no): '))
@@ -977,7 +985,7 @@ solo game of blackjack but with the usage of up to 3 bot players added to the ga
                     time.sleep(.500)
                 except ValueError:
                     print()
-                    colors.red('Please enter a valid dollar amount!')
+                    print(colors.red + 'Please enter a valid dollar amount!', colors.reset)
                     continue
                 else:
                     break
@@ -991,17 +999,17 @@ solo game of blackjack but with the usage of up to 3 bot players added to the ga
                 player1_bankrupt = False
                 player1_balance += donate_money
                 user_balance -= donate_money
-                colors.green('Donation successful!')
+                print(colors.green + 'Donation successful!', colors.reset)
         elif donate_money_question.lower() in ['no', 'n', 'nope', 'nah']:
             print('Donation skipped!\n')
             time.sleep(.5)
         else:
-            colors.red('Donating money input error found...')
+            print(colors.red + 'Donating money input error found...', colors.reset)
             restart_game_error()
 
     if player2_balance <= 0:
         player2_bankrupt = True
-        colors.red('Player2 is currently bankrupt and therefore not participating in the game!')
+        print(colors.red + 'Player2 is currently bankrupt and therefore not participating in the game!', colors.reset)
         time.sleep(1)
         donate_money_question = str(input('Would you like to donate some money to this player to get them back in the '
                                           'game (yes / no): '))
@@ -1014,7 +1022,7 @@ solo game of blackjack but with the usage of up to 3 bot players added to the ga
                     time.sleep(.500)
                 except ValueError:
                     print()
-                    colors.red('Please enter a valid dollar amount!')
+                    print(colors.red + 'Please enter a valid dollar amount!', colors.reset)
                     continue
                 else:
                     break
@@ -1028,17 +1036,17 @@ solo game of blackjack but with the usage of up to 3 bot players added to the ga
                 player2_bankrupt = False
                 player2_balance += donate_money
                 user_balance -= donate_money
-                colors.green('Donation successful!')
+                print(colors.green + 'Donation successful!', colors.reset)
         elif donate_money_question.lower() in ['no', 'n', 'nope', 'nah']:
             print('Donation skipped!\n')
             time.sleep(.5)
         else:
-            colors.red('Donating money input error found...')
+            print(colors.red + 'Donating money input error found...', colors.reset)
             restart_game_error()
 
     if player3_balance <= 0:
         player3_bankrupt = True
-        colors.red('Player3 is currently bankrupt and therefore not participating in the game!')
+        print(colors.red + 'Player3 is currently bankrupt and therefore not participating in the game!', colors.reset)
         time.sleep(1)
         donate_money_question = str(input('Would you like to donate some money to this player to get them back in the '
                                           'game (yes / no): '))
@@ -1051,7 +1059,7 @@ solo game of blackjack but with the usage of up to 3 bot players added to the ga
                     time.sleep(.500)
                 except ValueError:
                     print()
-                    colors.red('Please enter a valid dollar amount!')
+                    print(colors.red + 'Please enter a valid dollar amount!', colors.reset)
                     continue
                 else:
                     break
@@ -1065,12 +1073,12 @@ solo game of blackjack but with the usage of up to 3 bot players added to the ga
                 player3_bankrupt = False
                 player3_balance += donate_money
                 user_balance -= donate_money
-                colors.green('Donation successful!')
+                print(colors.green + 'Donation successful!', colors.reset)
         elif donate_money_question.lower() in ['no', 'n', 'nope', 'nah']:
             print('Donation skipped!\n')
             time.sleep(.5)
         else:
-            colors.red('Donating money input error found...')
+            print(colors.red + 'Donating money input error found...', colors.reset)
             restart_game_error()
 
     if player1_balance <= 0:
@@ -1093,22 +1101,22 @@ solo game of blackjack but with the usage of up to 3 bot players added to the ga
         while len(player1_cards) != 2:
             player1_cards.append(random.randint(1, 11))
             if sum(player1_cards) > 15:
-                colors.blue('Player1 chooses to stay!')
+                print(colors.blue + 'Player1 chooses to stay!', colors.reset)
                 time.sleep(1)
         while sum(player1_cards) <= 15:
             if len(player1_cards) == 5:
-                colors.blue('Player1 has pulled a total of 5 cards without busting!')
+                print(colors.blue + 'Player1 has pulled a total of 5 cards without busting!', colors.reset)
                 time.sleep(1)
                 break
             elif not player1_bankrupt:
                 player1_cards.append(random.randint(1, 11))
-                colors.blue("Player1 has pulled a card...")
+                print(colors.blue + "Player1 has pulled a card...", colors.reset)
                 time.sleep(1)
                 print(colors.blue + "Player1 now has a total of " + str(sum(player1_cards)) + " from these cards",
                       player1_cards, colors.reset, "\n")
                 time.sleep(1)
                 if sum(player1_cards) > 15:
-                    colors.blue('Player1 will now stay!')
+                    print(colors.blue + 'Player1 will now stay!', colors.reset)
                     time.sleep(1)
 
     elif number_of_players == 2:
@@ -1125,43 +1133,43 @@ solo game of blackjack but with the usage of up to 3 bot players added to the ga
         while len(player2_cards) != 2:
             player2_cards.append(random.randint(1, 11))
             if sum(player1_cards) > 15:
-                colors.blue('Player1 chooses to stay!')
+                print(colors.blue + 'Player1 chooses to stay!', colors.reset)
                 time.sleep(1)
                 if sum(player2_cards) > 15:
-                    colors.blue('Player2 chooses to stay!')
+                    print(colors.blue + 'Player2 chooses to stay!', colors.reset)
                     time.sleep(1)
             elif sum(player2_cards) > 15:
-                colors.blue('Player2 chooses to stay!')
+                print(colors.blue + 'Player2 chooses to stay!', colors.reset)
                 time.sleep(1)
         while sum(player1_cards) <= 15:
             if len(player1_cards) == 5:
-                colors.blue('Player1 has pulled a total of 5 cards without busting!')
+                print(colors.blue + 'Player1 has pulled a total of 5 cards without busting!', colors.reset)
                 time.sleep(1)
                 break
             elif not player1_bankrupt:
                 player1_cards.append(random.randint(1, 11))
-                colors.blue("Player1 has pulled a card...")
+                print(colors.blue + "Player1 has pulled a card...", colors.reset)
                 time.sleep(1)
                 print(colors.blue + "Player1 now has a total of " + str(sum(player1_cards)) + " from these cards",
                       player1_cards, colors.reset, "\n")
                 time.sleep(1)
                 if sum(player1_cards) > 15:
-                    colors.blue('Player1 will now stay!')
+                    print(colors.blue + 'Player1 will now stay!', colors.reset)
                     time.sleep(1)
         while sum(player2_cards) <= 15:
             if len(player2_cards) == 5:
-                colors.blue('Player2 has pulled a total of 5 cards without busting!')
+                print(colors.blue + 'Player2 has pulled a total of 5 cards without busting!', colors.reset)
                 time.sleep(1)
                 break
             elif not player2_bankrupt:
                 player2_cards.append(random.randint(1, 11))
-                colors.blue("Player2 has pulled a card...")
+                print(colors.blue + "Player2 has pulled a card...", colors.reset)
                 time.sleep(1)
                 print(colors.blue + "Player2 now has a total of " + str(sum(player2_cards)) + " from these cards",
                       player2_cards, colors.reset, "\n")
                 time.sleep(1)
                 if sum(player2_cards) > 15:
-                    colors.blue('Player2 will now stay!')
+                    print(colors.blue + 'Player2 will now stay!', colors.reset)
                     time.sleep(1)
     elif number_of_players == 3:
         if not player1_bankrupt:
@@ -1177,20 +1185,21 @@ solo game of blackjack but with the usage of up to 3 bot players added to the ga
             print(colors.blue + 'Player3 decided to bet $' + str(player3_bet), '\n', colors.reset)
             time.sleep(1)
         if player1_bankrupt and player2_bankrupt and player3_bankrupt and user_balance <= 0:
-            colors.red('All players including you are bankrupt and the game can no longer be continued! You Lost!')
+            print(
+                colors.red + 'All players including you are bankrupt and the game can no longer be continued! You Lost!', colors.reset)
             time.sleep(2)
             new_game_starting()
         elif player1_bankrupt and player2_bankrupt and player3_bankrupt and user_balance > 0:
-            colors.yellow(
-                'All players are bankrupt but you are still maintaining a positive balance, the fate of the game '
-                'depends on you now!')
+            print(colors.yellow +
+                  'All players are bankrupt but you are still maintaining a positive balance, the fate of the game '
+                  'depends on you now!', colors.reset)
             time.sleep(2)
         if player1_bankrupt:
-            colors.red('Player1 is bankrupt and not playing!')
+            print(colors.red + 'Player1 is bankrupt and not playing!', colors.reset)
         if player2_bankrupt:
-            colors.red('Player1 is bankrupt and not playing!')
+            print(colors.red + 'Player1 is bankrupt and not playing!', colors.reset)
         if player3_bankrupt:
-            colors.red('Player1 is bankrupt and not playing!')
+            print(colors.red + 'Player1 is bankrupt and not playing!', colors.reset)
         while len(player1_cards) != 2 and not player1_bankrupt:
             player1_cards.append(random.randint(1, 11))
         while len(player2_cards) != 2 and not player2_bankrupt:
@@ -1198,74 +1207,74 @@ solo game of blackjack but with the usage of up to 3 bot players added to the ga
         while len(player3_cards) != 2 and not player3_bankrupt:
             player3_cards.append(random.randint(1, 11))
         if sum(player1_cards) > 15:
-            colors.blue('Player1 chooses to stay!')
+            print(colors.blue + 'Player1 chooses to stay!', colors.reset)
             time.sleep(1)
             if sum(player2_cards) > 15:
-                colors.blue('Player2 chooses to stay!')
+                print(colors.blue + 'Player2 chooses to stay!', colors.reset)
                 time.sleep(1)
                 if sum(player3_cards) > 15:
-                    colors.blue('Player3 chooses to stay!')
+                    print(colors.blue + 'Player3 chooses to stay!', colors.reset)
                     time.sleep(1)
             elif sum(player3_cards) > 15:
-                colors.blue('Player3 chooses to stay!')
+                print(colors.blue + 'Player3 chooses to stay!', colors.reset)
                 time.sleep(1)
         elif sum(player2_cards) > 15:
-            colors.blue('Player2 chooses to stay!')
+            print(colors.blue + 'Player2 chooses to stay!', colors.reset)
             time.sleep(1)
             if sum(player3_cards) > 15:
-                colors.blue('Player3 chooses to stay!')
+                print(colors.blue + 'Player3 chooses to stay!', colors.reset)
                 time.sleep(1)
         elif sum(player3_cards) > 15:
-            colors.blue('Player3 chooses to stay!')
+            print(colors.blue + 'Player3 chooses to stay!', colors.reset)
             time.sleep(1)
         while sum(player1_cards) <= 15:
             if len(player1_cards) == 5:
-                colors.blue('Player1 has pulled a total of 5 cards without busting!')
+                print(colors.blue + 'Player1 has pulled a total of 5 cards without busting!', colors.reset)
                 time.sleep(1)
                 break
             elif not player1_bankrupt:
                 player1_cards.append(random.randint(1, 11))
-                colors.blue("Player1 has pulled a card...")
+                print(colors.blue + "Player1 has pulled a card...", colors.reset)
                 time.sleep(1)
                 print(colors.blue + "Player1 now has a total of " + str(sum(player1_cards)) + " from these cards",
                       player1_cards, colors.reset, "\n")
                 time.sleep(1)
                 if sum(player1_cards) > 15:
-                    colors.blue('Player1 will now stay!')
+                    print(colors.blue + 'Player1 will now stay!', colors.reset)
                     time.sleep(1)
         while sum(player2_cards) <= 15:
             if len(player2_cards) == 5:
-                colors.blue('Player2 has pulled a total of 5 cards without busting!')
+                print(colors.blue + 'Player2 has pulled a total of 5 cards without busting!', colors.reset)
                 time.sleep(1)
                 break
             elif not player2_bankrupt:
                 player2_cards.append(random.randint(1, 11))
-                colors.blue("Player2 has pulled a card...")
+                print(colors.blue + "Player2 has pulled a card...", colors.reset)
                 time.sleep(1)
                 print(colors.blue + "Player2 now has a total of " + str(sum(player2_cards)) + " from these cards",
                       player2_cards, colors.reset, "\n")
                 time.sleep(1)
                 if sum(player2_cards) > 15:
-                    colors.blue('Player2 will now stay!')
+                    print(colors.blue + 'Player2 will now stay!', colors.reset)
                     time.sleep(1)
         while sum(player3_cards) <= 15:
             if len(player3_cards) == 5:
-                colors.blue('Player3 has pulled a total of 5 cards without busting!')
+                print(colors.blue + 'Player3 has pulled a total of 5 cards without busting!', colors.reset)
                 time.sleep(1)
                 break
             elif not player3_bankrupt:
                 player3_cards.append(random.randint(1, 11))
-                colors.blue("Player3 has pulled a card...")
+                print(colors.blue + "Player3 has pulled a card...", colors.reset)
                 time.sleep(1)
                 print(colors.blue + "Player3 now has a total of " + str(sum(player3_cards)) + " from these cards",
                       player3_cards, colors.reset, "\n")
                 time.sleep(1)
                 if sum(player3_cards) > 15:
-                    colors.blue('Player3 will now stay!')
+                    print(colors.blue + 'Player3 will now stay!', colors.reset)
                     time.sleep(1)
 
     if user_balance <= 0 and bot_game_selected:
-        colors.red('You are currently out of money and cannot make a bet!')
+        print(colors.red + 'You are currently out of money and cannot make a bet!', colors.reset)
         time.sleep(1)
         choice = str(input('Since you are playing with others, would you like to request a donation from a player '
                            '(yes / no): '))
@@ -1313,7 +1322,7 @@ solo game of blackjack but with the usage of up to 3 bot players added to the ga
                     print(colors.green + 'Player2 has donated to you $' + str(bot_donation_amount), '\n', colors.reset)
                     time.sleep(1)
             else:
-                colors.red('No other players were able to donate anything to you!')
+                print(colors.red + 'No other players were able to donate anything to you!', colors.reset)
                 time.sleep(1)
                 choice = str(
                     input('Would you like to restart from scratch (yes / no): '))
@@ -1322,7 +1331,7 @@ solo game of blackjack but with the usage of up to 3 bot players added to the ga
                 if choice.lower() in ['yes', 'y', 'sure']:
                     new_game_starting()
                 else:
-                    colors.green('Thanks for playing!')
+                    print(colors.green + 'Thanks for playing!', colors.reset)
                     time.sleep(1)
                     sys.exit()
 
@@ -1334,15 +1343,15 @@ solo game of blackjack but with the usage of up to 3 bot players added to the ga
             if choice.lower() in ['yes', 'y', 'sure']:
                 new_game_starting()
             else:
-                colors.green('Thanks for playing!')
+                print(colors.green + 'Thanks for playing!', colors.reset)
                 time.sleep(1)
                 sys.exit()
         else:
-            colors.red('Donation request user input error found...')
+            print(colors.red + 'Donation request user input error found...', colors.reset)
             time.sleep(1)
             restart_game_error()
 
-    colors.green('Now it is your turn to play!')
+    print(colors.green + 'Now it is your turn to play!', colors.reset)
     time.sleep(.5)
     print(colors.green + "Your balance is $" + str(user_balance), "\n", colors.reset)
     time.sleep(1)
@@ -1364,7 +1373,7 @@ solo game of blackjack but with the usage of up to 3 bot players added to the ga
                 time.sleep(.500)
             except ValueError:
                 print()
-                colors.red('Please enter a valid dollar amount!')
+                print(colors.red + 'Please enter a valid dollar amount!', colors.reset)
                 continue
             else:
                 break
@@ -1374,7 +1383,7 @@ solo game of blackjack but with the usage of up to 3 bot players added to the ga
         elif user_bet <= 0:
             user_bet_error_handling("You cannot make a negative bet! Please place a higher bet than 0 dollars!")
     else:
-        colors.red('User input for all in feature found an error!\n')
+        print(colors.red + 'User input for all in feature found an error!\n', colors.reset)
         time.sleep(1)
         restart_game_error()
     while len(dealer_cards) != 2:
@@ -1420,26 +1429,27 @@ solo game of blackjack but with the usage of up to 3 bot players added to the ga
                 user_draws_card()
                 bot_game_dealers_turn()
             else:
-                colors.red('You cannot double down here since the sum of your cards is over 11!')
+                print(colors.red + 'You cannot double down here since the sum of your cards is over 11!', colors.reset)
                 time.sleep(1)
         elif choice.lower() in ["help", "help", 'call help']:
             if sum(user_cards) == [10, 11]:
-                colors.blue(
-                    "Since your total is equal to either 10 or 11, we recommend that this is the best time to double "
-                    "down if you have enough money!")
+                print(colors.blue +
+                      "Since your total is equal to either 10 or 11, we recommend that this is the best time to double "
+                      "down if you have enough money!", colors.reset)
                 time.sleep(3)
             elif sum(user_cards) <= 14:
-                colors.blue("Since your total is under or equal to 14, we recommend that you hit!")
+                print(colors.blue + "Since your total is under or equal to 14, we recommend that you hit!", colors.reset)
                 time.sleep(2)
             elif sum(user_cards) >= 15:
-                colors.blue(
-                    "Your odds are looking high enough to win, if your card total is closer to 15, we recommend only "
-                    "making 1 hit move and then staying!")
+                print(colors.blue +
+                      "Your odds are looking high enough to win, if your card total is closer to 15, we recommend only "
+                      "making 1 hit move and then staying!", colors.reset)
                 time.sleep(3)
-                colors.blue("If your card total is closer to 21, don't risk it! make a stay move!")
+                print(colors.blue + "If your card total is closer to 21, don't risk it! make a stay move!",
+                      colors.reset)
                 time.sleep(3)
         elif choice.lower() in ["q", "quit", "end"]:
-            colors.green("Ending game... Thanks for playing!\n")
+            print(colors.green + "Ending game... Thanks for playing!\n", colors.reset)
             time.sleep(1)
             sys.exit()
         else:
@@ -1458,25 +1468,25 @@ Allows the user to choose how many bots will enter a bot game
     print()
     time.sleep(.5)
     if number_of_players == 1:
-        colors.green('1 bot will be added into the game!')
+        print(colors.green + '1 bot will be added into the game!', colors.reset)
         player1_presence = True
         player2_presence = False
         player3_presence = False
         time.sleep(1)
     elif number_of_players == 2:
-        colors.green('2 bots will be added into the game!')
+        print(colors.green + '2 bots will be added into the game!', colors.reset)
         player1_presence = True
         player2_presence = True
         player3_presence = False
         time.sleep(1)
     elif number_of_players == 3:
-        colors.green('3 bots will be added into the game!')
+        print(colors.green + '3 bots will be added into the game!', colors.reset)
         player1_presence = True
         player2_presence = True
         player3_presence = True
         time.sleep(1)
     else:
-        colors.red('Number of players input error found...\n')
+        print(colors.red + 'Number of players input error found...\n', colors.reset)
         time.sleep(1)
         restart_game_error()
     bot_game()
@@ -1544,7 +1554,7 @@ def invalid_starting_balance_error(arg0):
     """
 Used for when the user has a negative or invalid starting balance
     """
-    colors.red(arg0)
+    print(colors.red + arg0, colors.reset)
     time.sleep(2)
     restart_game_error()
 
@@ -1565,7 +1575,7 @@ Handles all of the card pulling actions for the dealer
     """
     global user_score, user_balance, user_bet, dealer_balance, user_cards, dealer_cards, custom_game_starting_balance, \
         insurance_bought
-    colors.red('The Dealer says No More Bets!')
+    print(colors.red + 'The Dealer says No More Bets!', colors.reset)
     time.sleep(.500)
 
     while sum(dealer_cards) <= 15:
@@ -1596,7 +1606,7 @@ Allows the dealer to draw a card while a bot game is selected
     """
     global user_bet, dealer_cards, insurance_bought
     dealer_cards.append(random.randint(1, 11))
-    colors.red("The Dealer has pulled a card...")
+    print(colors.red + "The Dealer has pulled a card...", colors.reset)
     time.sleep(1)
     print(colors.red + "The Dealer now has a total of " + str(sum(dealer_cards)) + " from these cards",
           dealer_cards, colors.reset, "\n")
@@ -1606,7 +1616,7 @@ Allows the dealer to draw a card while a bot game is selected
         bot_game_scoring()
 
     elif sum(dealer_cards) > 15:
-        colors.red('The Dealer will now stay!')
+        print(colors.red + 'The Dealer will now stay!', colors.reset)
         time.sleep(1)
         bot_game_scoring()
 
@@ -1634,7 +1644,7 @@ Allows the dealer to draw a card into their deck
         bot_game_scoring()
 
     dealer_cards.append(random.randint(1, 11))
-    colors.red("The Dealer has pulled a card...")
+    print(colors.red + "The Dealer has pulled a card...", colors.reset)
     time.sleep(1)
     print(colors.red + "The Dealer now has a total of " + str(sum(dealer_cards)) + " from these cards",
           dealer_cards, colors.reset, "\n")
@@ -1645,11 +1655,12 @@ Allows the dealer to draw a card into their deck
     elif len(dealer_cards) == 5 and sum(dealer_cards) <= 21 and bot_game_selected:
         bot_game_scoring()
     elif sum(dealer_cards) > 15 and not bot_game_selected:
-        colors.red('The Dealer will now stay!')
+        print(colors.red + 'The Dealer will now stay!', colors.reset)
         time.sleep(1)
+
         game_scoring()
     elif sum(dealer_cards) > 15 and bot_game_selected:
-        colors.red('The Dealer will now stay!')
+        print(colors.red + 'The Dealer will now stay!', colors.reset)
         time.sleep(1)
         bot_game_scoring()
     elif sum(dealer_cards) >= 21 and not bot_game_selected:
