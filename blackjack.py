@@ -39,7 +39,11 @@ def load_saved_game():
 
 # Global Variables
 user_bet = 0
+user_score = 0
 user_balance = 1000
+player1_balance = 1000
+player2_balance = 1000
+player3_balance = 1000
 dealer_balance = 5000
 player1_bet = 0
 player2_bet = 0
@@ -921,7 +925,7 @@ Used for the dealers turn to make a move while a bot game is selected
     """
     global user_score, user_balance, user_bet, dealer_balance, user_cards, dealer_cards, custom_game_starting_balance, \
         insurance_bought
-    print(colors.red + 'The Dealer says No More Bets!', colors.reset)
+    print(colors.red + 'The Dealer says No More Bets!\n', colors.reset)
     time.sleep(.500)
 
     while sum(dealer_cards) <= 15:
@@ -1110,7 +1114,7 @@ solo game of blackjack but with the usage of up to 3 bot players added to the ga
                 break
             elif not player1_bankrupt:
                 player1_cards.append(random.randint(1, 11))
-                print(colors.blue + "Player1 has pulled a card...", colors.reset)
+                print(colors.blue + "Player1 has pulled a card...\n", colors.reset)
                 time.sleep(1)
                 print(colors.blue + "Player1 now has a total of " + str(sum(player1_cards)) + " from these cards",
                       player1_cards, colors.reset, "\n")
@@ -1148,7 +1152,7 @@ solo game of blackjack but with the usage of up to 3 bot players added to the ga
                 break
             elif not player1_bankrupt:
                 player1_cards.append(random.randint(1, 11))
-                print(colors.blue + "Player1 has pulled a card...", colors.reset)
+                print(colors.blue + "Player1 has pulled a card...\n", colors.reset)
                 time.sleep(1)
                 print(colors.blue + "Player1 now has a total of " + str(sum(player1_cards)) + " from these cards",
                       player1_cards, colors.reset, "\n")
@@ -1163,7 +1167,7 @@ solo game of blackjack but with the usage of up to 3 bot players added to the ga
                 break
             elif not player2_bankrupt:
                 player2_cards.append(random.randint(1, 11))
-                print(colors.blue + "Player2 has pulled a card...", colors.reset)
+                print(colors.blue + "Player2 has pulled a card...\n", colors.reset)
                 time.sleep(1)
                 print(colors.blue + "Player2 now has a total of " + str(sum(player2_cards)) + " from these cards",
                       player2_cards, colors.reset, "\n")
@@ -1234,7 +1238,7 @@ solo game of blackjack but with the usage of up to 3 bot players added to the ga
                 break
             elif not player1_bankrupt:
                 player1_cards.append(random.randint(1, 11))
-                print(colors.blue + "Player1 has pulled a card...", colors.reset)
+                print(colors.blue + "Player1 has pulled a card...\n", colors.reset)
                 time.sleep(1)
                 print(colors.blue + "Player1 now has a total of " + str(sum(player1_cards)) + " from these cards",
                       player1_cards, colors.reset, "\n")
@@ -1249,7 +1253,7 @@ solo game of blackjack but with the usage of up to 3 bot players added to the ga
                 break
             elif not player2_bankrupt:
                 player2_cards.append(random.randint(1, 11))
-                print(colors.blue + "Player2 has pulled a card...", colors.reset)
+                print(colors.blue + "Player2 has pulled a card...\n", colors.reset)
                 time.sleep(1)
                 print(colors.blue + "Player2 now has a total of " + str(sum(player2_cards)) + " from these cards",
                       player2_cards, colors.reset, "\n")
@@ -1264,7 +1268,7 @@ solo game of blackjack but with the usage of up to 3 bot players added to the ga
                 break
             elif not player3_bankrupt:
                 player3_cards.append(random.randint(1, 11))
-                print(colors.blue + "Player3 has pulled a card...", colors.reset)
+                print(colors.blue + "Player3 has pulled a card...\n", colors.reset)
                 time.sleep(1)
                 print(colors.blue + "Player3 now has a total of " + str(sum(player3_cards)) + " from these cards",
                       player3_cards, colors.reset, "\n")
@@ -1575,7 +1579,7 @@ Handles all of the card pulling actions for the dealer
     """
     global user_score, user_balance, user_bet, dealer_balance, user_cards, dealer_cards, custom_game_starting_balance, \
         insurance_bought
-    print(colors.red + 'The Dealer says No More Bets!', colors.reset)
+    print(colors.red + 'The Dealer says No More Bets!\n', colors.reset)
     time.sleep(.500)
 
     while sum(dealer_cards) <= 15:
@@ -1606,7 +1610,7 @@ Allows the dealer to draw a card while a bot game is selected
     """
     global user_bet, dealer_cards, insurance_bought
     dealer_cards.append(random.randint(1, 11))
-    print(colors.red + "The Dealer has pulled a card...", colors.reset)
+    print(colors.red + "The Dealer has pulled a card...\n", colors.reset)
     time.sleep(1)
     print(colors.red + "The Dealer now has a total of " + str(sum(dealer_cards)) + " from these cards",
           dealer_cards, colors.reset, "\n")
@@ -1644,7 +1648,7 @@ Allows the dealer to draw a card into their deck
         bot_game_scoring()
 
     dealer_cards.append(random.randint(1, 11))
-    print(colors.red + "The Dealer has pulled a card...", colors.reset)
+    print(colors.red + "The Dealer has pulled a card...\n", colors.reset)
     time.sleep(1)
     print(colors.red + "The Dealer now has a total of " + str(sum(dealer_cards)) + " from these cards",
           dealer_cards, colors.reset, "\n")
@@ -1655,12 +1659,11 @@ Allows the dealer to draw a card into their deck
     elif len(dealer_cards) == 5 and sum(dealer_cards) <= 21 and bot_game_selected:
         bot_game_scoring()
     elif sum(dealer_cards) > 15 and not bot_game_selected:
-        print(colors.red + 'The Dealer will now stay!', colors.reset)
+        print(colors.red + 'The Dealer will now stay!\n', colors.reset)
         time.sleep(1)
-
         game_scoring()
     elif sum(dealer_cards) > 15 and bot_game_selected:
-        print(colors.red + 'The Dealer will now stay!', colors.reset)
+        print(colors.red + 'The Dealer will now stay!\n', colors.reset)
         time.sleep(1)
         bot_game_scoring()
     elif sum(dealer_cards) >= 21 and not bot_game_selected:
