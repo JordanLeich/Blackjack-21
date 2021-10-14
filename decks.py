@@ -13,8 +13,8 @@ class Decks:
         decks can be added with the add_decks function."""
 
     def __init__(self):
-        # self.qdeck = [1,2,3,4,5,6,7,8,9,10,10,10,10]
-        # self.fdeck = self.qdeck * 4
+        self.deck = []
+        self.last_round = False
         self.diamond_suit = ['AD', '2D', '3D', '4D', '5D', '6D', '7D', '8D', '9D', '10D', 'JD', 'QD', 'KD']
         self.spade_suit = ['AS', '2S', '3S', '4S', '5S', '6S', '7S', '8S', '9S', '10S', 'JS', 'QS', 'KS']
         self.heart_suit = ['AH', '2H', '3H', '4H', '5H', '6H', '7H', '8H', '9H', '10H', 'JH', 'QH', 'KH']

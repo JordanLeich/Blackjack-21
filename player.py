@@ -11,18 +11,23 @@ class Player:
         if cards is None:
             cards = []
         if p_score is None:
-            p_score == [0, 0]
+            p_score = ['0', '0']
         if dealer:
             bank_roll = 2000000
+            table_spot = 0
+        else:
+            table_spot = None
         self.bet = bet_amount
         self.bank_roll = bank_roll
         self.money_choice = mc
         self.presence = presence
         self.bankrupt = bankrupt
         self.cards = cards
+        self.card_value = 0
         self.bot_player = bot_player
         self.dealer = dealer
         self.wlscore = p_score
+        self.table_spot = table_spot
 
     def show_cards(self):
         print(self.cards)
@@ -30,9 +35,14 @@ class Player:
     def add_card(self, cards):
         self.cards.append(cards)
 
-    def sum_of_cards(self):
+    def sum_of_cards(self, is_dealer=False):
         sum_c = 0
-        for card in range(len(self.cards)):
+        if is_dealer:
+            card_count = 1
+        else:
+            card_count = len(self.cards)
+
+        for card in range(card_count):
             temp_card = self.cards[card]
             if len(temp_card) > 2:
                 sum_c += 10
@@ -46,8 +56,8 @@ class Player:
             else:
                 sum_c += int(temp_card[0])
 
-                # sum_card += int(temp_card)
-        print(self.cards, 'card sum', sum_c)
+        self.card_value = sum_c
+        return sum_c
 
     def betting_amount(self):
         return self.bet
@@ -56,7 +66,7 @@ class Player:
         return self.bet + (self.bet * .5)
 
     def player_win(self):
-        self.p_score[0] += 1
+        self.wlscore[0] = int(self.wlscore[0]) + 1
 
     def player_loose(self):
-        self.p_score[1] -= 1
+        self.wlscore[1] = int(self.wlscore[1]) - 1
