@@ -72,14 +72,14 @@ def game():
     Player1.table_spot = 1
     print("Game Starting")
     # Using while loop to cycle through all the players and dealer
-    finished_game = False
-    while not finished_game:
+    # finished_game = False # TODO: finish this line and line below.
+    # while not finished_game:
 
-        for _ in range(2):
-            if Player1.presence:
-                Player1.cards.append(decks.next_card())
-            if Dealer.presence:
-                Dealer.cards.append(decks.next_card())
+    for _ in range(2):
+        if Player1.presence:
+            Player1.cards.append(decks.next_card())
+        if Dealer.presence:
+            Dealer.cards.append(decks.next_card())
     print()
     display_table()
     display_table(2)
