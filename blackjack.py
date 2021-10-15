@@ -227,14 +227,17 @@ Used for error handling to prevent the game from crashing.
 
 def player_win_text(message_text):  # helper functions for score_bot
     print(colors.green + message_text, colors.reset, '\n')
+    time.sleep(1)
 
 
 def player_lose_text(message_text):  # helper functions for score_bot
     print(colors.red + message_text, colors.reset, '\n')
+    time.sleep(1)
 
 
 def player_tie_text(message_text):  # helper functions for score_bot
-    print(colors.yellow + message_text, colors.reset)
+    print(colors.yellow + message_text, colors.reset, '\n')
+    time.sleep(1)
 
 
 def donate_to_bot(player_balance, user_balance, player_name):
@@ -279,11 +282,11 @@ class Blackjack:
     def __init__(self, user_balance, user_score, dealer_balance):
         # user attributes
         self.user_cards = []
-        self.user_bet = int
+        self.user_bet = 0
         self.user_score = user_score
         self.user_balance = user_balance
         self.insurance_bought = False
-        self.donate_money = float
+        self.donate_money = 0
         # dealer attributes
         self.dealer_balance = dealer_balance
         self.dealer_cards = []
@@ -474,10 +477,10 @@ class Blackjack:
                         time.sleep(2)
                     elif sum(self.user_cards) >= 15:
                         print(colors.blue +
-                              "Your odds are looking high enough to win, if your card total is closer to 15, we recommend only "
-                              "making 1 hit move and then staying!", colors.reset)
+                              "Your odds are looking high enough to win, if your card total is closer to 15, we "
+                              "recommend only making 1 hit move and then staying!\n", colors.reset)
                         time.sleep(3)
-                        print(colors.blue + "If your card total is closer to 21, don't risk it! make a stay move!",
+                        print(colors.blue + "If your card total is closer to 21, don't risk it! make a stay move!\n",
                               colors.reset)
                         time.sleep(3)
                 elif choice.lower() in ["q", "quit", "end"]:
@@ -503,12 +506,12 @@ class Blackjack:
         self.bot_cards[value] = [random.randint(1, 11) for _ in range(2)]
 
         if sum(self.bot_cards[value]) > 15:
-            print(colors.blue + f'Player{value + 1} chooses to stay!', colors.reset)
+            print(colors.blue + f'Player{value + 1} chooses to stay!\n', colors.reset)
             time.sleep(1)
 
         while sum(self.bot_cards[value]) <= 15:
             if len(self.bot_cards[value]) == 5:
-                print(colors.blue + f'Player{value + 1} has pulled a total of 5 cards without busting!', colors.reset)
+                print(colors.blue + f'Player{value + 1} has pulled a total of 5 cards without busting!\n', colors.reset)
                 time.sleep(1)
                 break
             elif self.bot_balances[value] > 0:
@@ -520,9 +523,11 @@ class Blackjack:
                       self.bot_cards[value], colors.reset, "\n")
                 time.sleep(1)
                 if sum(self.bot_cards[value]) > 21:
-                    print(colors.blue + f'Player{value + 1} has BUSTED!', colors.reset)
+                    print(colors.blue + f'Player{value + 1} has BUSTED!\n', colors.reset)
+                    time.sleep(1)
                 elif sum(self.bot_cards[value]) > 15:
-                    print(colors.blue + f'Player{value + 1} will now stay!', colors.reset)
+                    print(colors.blue + f'Player{value + 1} will now stay!\n', colors.reset)
+                    time.sleep(1)
 
     def user_draws_card(self):
         """
@@ -596,13 +601,13 @@ class Blackjack:
             player_tie_text("PUSH! This is a tie! All bet money is refunded!")
         elif len(self.user_cards) == 5 and sum(self.user_cards) < 21:
             time.sleep(1)
-            print(colors.green + "You have automatically won since you have pulled a total of 5 cards without busting!",
-                  colors.reset)
+            print(colors.green + "You have automatically won since you have pulled a total of 5 cards without "
+                                 "busting!\n", colors.reset)
             self.user_win_stats()
         elif len(self.dealer_cards) == 5 and sum(self.dealer_cards) < 21:
-            print(
-                colors.red + "You have automatically lost since the dealer has pulled a total of 5 cards without busting!",
-                colors.reset)
+            print(colors.red + "You have automatically lost since the dealer has pulled a total of 5 cards without "
+                               "busting!\n", colors.reset)
+            time.sleep(1)
             self.user_loses_stats()
         elif sum(self.user_cards) > 21:
             print(colors.red + "BUSTED! The Dealer Wins! You lost $" + str(self.user_bet) + "!\n", colors.reset)
@@ -627,9 +632,8 @@ class Blackjack:
             print(colors.green + "BLACKJACK! The Dealer hit 21! You Lost $" + str(self.user_bet) + "!\n", colors.reset)
             self.user_loses_stats()
         elif sum(self.user_cards) > sum(self.dealer_cards):
-            print(colors.green + "You Win! Your cards were greater than the dealers deck, You won $" + str(
-                self.user_bet) +
-                  "!\n", colors.reset)
+            print(colors.green + "You Win! Your cards were greater than the dealers deck, You won $" +
+                  str(self.user_bet) + "!\n", colors.reset)
             self.user_win_stats()
         elif sum(self.dealer_cards) > sum(self.user_cards):
             print(colors.red + "The dealer wins! Your cards were less than the dealers deck, You lost $" + str(
@@ -675,9 +679,7 @@ class Blackjack:
         elif sum(self.bot_cards[value]) == 21:
             self.bot_balances[value] += player_bet
             self.dealer_balance -= player_bet
-            player_win_text(
-                f'Player{value + 1} won this round! Player{value + 1} won ${player_bet}'
-            )
+            player_win_text(f'Player{value + 1} won this round! Player{value + 1} won ${player_bet}')
 
         elif sum(self.bot_cards[value]) < sum(self.dealer_cards):
             self.bot_balances[value] -= player_bet
@@ -686,9 +688,7 @@ class Blackjack:
         elif sum(self.bot_cards[value]) > sum(self.dealer_cards):
             self.bot_balances[value] += player_bet
             self.dealer_balance -= player_bet
-            player_win_text(
-                f'Player{value + 1} won this round! Player{value + 1} won ${player_bet}'
-            )
+            player_win_text(f'Player{value + 1} won this round! Player{value + 1} won ${player_bet}')
 
         time.sleep(1)
         print(colors.blue + f'Player{value + 1} now has a balance of $' + str(self.bot_balances[value]), '\n',
@@ -780,10 +780,12 @@ def bot_player_choice():
         print()
         time.sleep(.5)
         if player_num == 1:
-            print(colors.green + str(player_num) + ' bot will be added into the game!', colors.reset)
+            print(colors.green + str(player_num) + ' bot will be added into the game!\n', colors.reset)
+            time.sleep(1)
             return player_num
         elif 1 < player_num < 4:
-            print(colors.green + str(player_num) + ' bots will be added into the game!', colors.reset)
+            print(colors.green + str(player_num) + ' bots will be added into the game!\n', colors.reset)
+            time.sleep(1)
             return player_num
         else:  # if num is not the correct bot count have the user retry their selection
             user_error('Number of players incorrect. Choose between 1 to 3 players...\n')
