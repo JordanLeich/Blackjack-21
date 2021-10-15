@@ -279,11 +279,11 @@ class Blackjack:
     def __init__(self, user_balance, user_score, dealer_balance):
         # user attributes
         self.user_cards = []
-        self.user_bet = 0
+        self.user_bet = int
         self.user_score = user_score
         self.user_balance = user_balance
         self.insurance_bought = False
-        self.donate_money = 0
+        self.donate_money = float
         # dealer attributes
         self.dealer_balance = dealer_balance
         self.dealer_cards = []
@@ -361,7 +361,7 @@ class Blackjack:
                         print()
                         time.sleep(1)
                         if choice.lower() in ['yes', 'y', 'sure']:
-                            new_game_starting()
+                            reset_stats()
                         else:
                             print(colors.green + 'Thanks for playing!', colors.reset)
                             time.sleep(1)
@@ -375,7 +375,7 @@ class Blackjack:
                     print()
                     time.sleep(1)
                     if choice.lower() in ['yes', 'y', 'sure']:
-                        new_game_starting()
+                        reset_stats()
                     else:
                         print(colors.green + 'Thanks for playing!', colors.reset)
                         time.sleep(1)
@@ -857,6 +857,23 @@ Allows the end-user to be able to play the game with custom money, win counts, a
             user_error("User game selection incorrect please try again....")
 
 
+def reset_stats():
+    print(colors.green + 'All players and the dealers money/stats will be reset to their original defaults...\n',
+          colors.reset)
+    time.sleep(1)
+    user_balance = 1000
+    player1_balance = 1000
+    player2_balance = 1000
+    player3_balance = 1000
+    user_score = 0
+    dealer_balance = 5000
+    with open('data.json', 'w') as user_data_file:
+        json.dump({'ubalance': user_balance, 'uscore': user_score,
+                   'deal_balance': dealer_balance, 'player1_balance': player1_balance,
+                   'player2_balance': player2_balance, 'player3_balance': player3_balance}, user_data_file)
+    main()
+
+
 def main():
     """
 The first piece of the program introduced to the end-user. This section allows the user to 
@@ -887,7 +904,7 @@ skip around in the game by using the game mode selection choices
         elif choice.lower() in ['quit', 'q', 'exit']:
             sys.exit()
         else:
-            user_error("User input incorrect please try again....")
+            user_error("User input incorrect please try again...\n")
 
 
 if __name__ == '__main__':
