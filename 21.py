@@ -45,6 +45,7 @@ decks = Decks()
 decks.shoe_build(4)
 decks.deck_shuffle()
 
+
 def display_table(dealer_turn=1):
     """This function is to create a text based table """
     print("Player1 Cards: " + str(Player1.cards) + "Cards sum: ", Player1.sum_of_cards())
@@ -64,7 +65,6 @@ def display_table(dealer_turn=1):
         print('-' * 10 + str(card_line[0]) + str(card_line[1]) + '-' * 10)
 
 
-
 def game():
     """This is the main game function. It will deal with single player
     and multiple players. """
@@ -73,13 +73,13 @@ def game():
     print("Game Starting")
     # Using while loop to cycle through all the players and dealer
     finished_game = False
-    while !finished_game:
-        
-    for i in range(2):
-        if Player1.presence:
-            Player1.cards.append(decks.next_card())
-        if Dealer.presence:
-            Dealer.cards.append(decks.next_card())
+    while not finished_game:
+
+        for _ in range(2):
+            if Player1.presence:
+                Player1.cards.append(decks.next_card())
+            if Dealer.presence:
+                Dealer.cards.append(decks.next_card())
     print()
     display_table()
     display_table(2)
@@ -97,7 +97,7 @@ def new_game_menu():
     any accidental exits before saves or loading games. """
     while True:
         os.system('cls')
-        print(colors.green + "Welcome Player! Thank you for Joining Us\n" 
+        print(colors.green + "Welcome Player! Thank you for Joining Us\n"
                              "Here at the BlackJack Game\n" + colors.reset)
         print("(1) Would you be Playing alone?")
         print("(2) Would you like to play with others?")

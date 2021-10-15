@@ -17,9 +17,9 @@ import player
 from other import colors
 from os import path
 
-# Initilize all players, 11 in total, 5 regular players,
+# Initialize all players, 11 in total, 5 regular players,
 # 5 bot players, 1 dealer. They will be using the Player
-# class. Dependin on the game being played, will determine
+# class. Depending on the game being played, will determine
 # which player/bot will be active along with the dealer.
 # The default names will be player1-5 and dealer, bots are 6-10.
 # You can change any name you want to, or leave these hard
