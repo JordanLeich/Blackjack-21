@@ -420,12 +420,12 @@ class Blackjack:
                 continue
 
             # dealer gets cards
-            self.dealer_cards = [random.randint(1, 11) for i in range(2)]
+            self.dealer_cards = [random.randint(1, 11) for _ in range(2)]
             print(colors.red + f'The Dealer has ? & {self.dealer_cards[1]}\n', colors.reset)
 
             time.sleep(1)
             # player gets cards
-            self.user_cards = [random.randint(1, 11) for i in range(2)]
+            self.user_cards = [random.randint(1, 11) for _ in range(2)]
             print(colors.green + f'You have a total of {sum(self.user_cards)} from {self.user_cards}\n', colors.reset)
 
             time.sleep(1)
