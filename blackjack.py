@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 # Created by Jordan Leich on 6/6/2020
+# Edited by Adam Smith
 
 # Imports
 import random
@@ -8,15 +9,56 @@ import time
 import webbrowser
 import json
 import sys
+import os
 import decks
 import player
 
 # from files
 from other import colors
+from os import path
+
+# Initilize all players, 11 in total, 5 regular players,
+# 5 bot players, 1 dealer. They will be using the Player
+# class. Dependin on the game being played, will determine
+# which player/bot will be active along with the dealer.
+# The default names will be player1-5 and dealer, bots are 6-10.
+# You can change any name you want to, or leave these hard
+# coded and add .name to the class so each one can have a
+# personalized name. The table can hold a max of 6 players
+# 5 players and the dealer.
+# Players will start with a bank roll of 1k and the dealer
+# will start with 2m. when the game starts and the player0
+# wants to load saved data then that will take over.
+
+Player1 = Player()
+Player2 = Player()
+Player3 = Player()
+Player4 = Player()
+Player5 = Player()
+Dealer = Player(,,True,,,,True,)
+Player6 = Player(,,,,,,True,,)
+Player7 = Player(,,,,,,True,,)
+PLayer8 = Player(,,,,,,True,,)
+Player9 = Player(,,,,,,True,,)
+Player10 = Player(,,,,,,True,,)
 
 
-def load_saved_game():
-    try:  # This try and except block runs first in the code to be able to load a users saved stats, if no stats are
+
+
+
+def game_data(load_stats = False, reset_stats = False):
+    """ Changed from trying to load the game when the game first runs
+        to where it gets checked during the beginning of the game. also
+        changed from a try/except to if statement. my opinion of better
+        file handling. """
+
+    if path.exists("data.json"):
+        file_exist = True
+    else:
+        file_exist = False
+
+    if load_stats and file_exist:
+    # try:  # This try and except block runs first in the code to be able to load a users saved stats, if no stats are
         # found, the default stats are automatically set to the end-users stats
         with open('data.json', 'r') as user_data_file:
             user_data = json.load(user_data_file)
@@ -26,8 +68,10 @@ def load_saved_game():
         player1_balance = user_data['player1_balance']
         player2_balance = user_data['player2_balance']
         player3_balance = user_data['player3_balance']
-        print(colors.green + 'Save file found and loaded!', colors.reset)
-    except FileNotFoundError:
+        print(colors.green + 'Save file loaded!\n' colors.reset)
+
+    #except FileNotFoundError:
+    Elif load_stats and not file_exist:
         user_balance = 1000
         player1_balance = 1000
         player2_balance = 1000
@@ -36,48 +80,24 @@ def load_saved_game():
         dealer_balance = 5000
         print(colors.yellow + 'Save file not found, A new save file will be created shortly!', colors.reset)
 
+        print(colors.yellow + 'Save file not found, A new save file will be created shortly!\n' + colors.reset)
+
+print(colors.green + 'All players and the dealers money/stats will be reset to their original defaults...\n' + colors.reset)
+
+
+
 
 # Global Variables
-user_bet = 0
-user_score = 0
-user_balance = 1000
-player1_balance = 1000
-player2_balance = 1000
-player3_balance = 1000
-dealer_balance = 5000
-player1_bet = 0
-player2_bet = 0
-player3_bet = 0
-user_dealer_money_choice = 0
-custom_game_starting_balance = 0
-player1_money_choice = 0
-player2_money_choice = 0
-player3_money_choice = 0
-insurance_bought = bool
-user_cards = []
-player1_cards = []
-player2_cards = []
-player3_cards = []
-dealer_cards = []
-number_of_players = 0
-player1_presence = bool
-player2_presence = bool
-player3_presence = bool
-bot_game_selected = bool
-normal_game_selected = bool
-custom_game_selected = bool
-player1_bankrupt = bool
-player2_bankrupt = bool
-player3_bankrupt = bool
-donate_money = 0
-
+# Changed to oop with the player class. hope it works better and
+# easier to maintain
 
 def contributions():
     """
 Allows the user to be able to view all of the contributors of this project via GitHub
     """
-    print(colors.green + "Opening all contributors of this project...\n", colors.reset)
-    webbrowser.open_new(
+    #print(colors.green + "Opening all contributors of this project...\n", colors.reset)
+    #webbrowser.open_new(
+    browser_opener("Opening all contributors of this project...\n",
         "https://github.com/JordanLeich/Blackjack-21/graphs/contributors")
     time.sleep(2)
 
@@ -90,31 +110,26 @@ Allows the user to be able to view either the latest or oldest release of this p
         choice = int(input('''(1) Latest Stable Release
 (2) Oldest Release
 (3) Return to previous window
-(4) Exit
 
 Which release would you like to view: '''))
         print()
 
         if choice == 1:
-            release_opener("Opening the latest stable release...\n",
+            browser_opener("Opening the latest stable release...\n",
                            "https://github.com/JordanLeich/Blackjack-21/releases")
 
         elif choice == 2:
-            release_opener("Opening the oldest release...\n",
+            browser_opener("Opening the oldest release...\n",
                            "https://github.com/JordanLeich/Blackjack-21/releases/tag/v5.0")
 
         elif choice == 3:
             return
-        elif choice == 4:
-            break
         else:
             print(colors.red + 'User input error found...\n', colors.reset)
             time.sleep(2)
-    print("Reached end of the program... Ending program...\n")
-    exit()
 
 
-def release_opener(arg0, arg1):
+def browser_opener(arg0, arg1):
     """
 Used to open a release version in the users default web browser
     """
@@ -141,11 +156,11 @@ Which donation option would you like to use: '''))
         print()
 
         if donate_choice == 1:
-            donation_opener("Opening PayPal Donation page...\n",
+            browser_opener("Opening PayPal Donation page...\n",
                             "https://www.paypal.com/donate/?business=8FGHU8Z4EJPME&no_recurring=0&currency_code=USD")
 
         elif donate_choice == 2:
-            donation_opener("Opening Cash App Donation page...\n", "https://cash.app/$JordanLeich")
+            browser_opener("Opening Cash App Donation page...\n", "https://cash.app/$JordanLeich")
 
         elif donate_choice == 3:
             return
@@ -154,17 +169,6 @@ Which donation option would you like to use: '''))
         else:
             print(colors.red + 'User input error found...\n', colors.reset)
             time.sleep(2)
-    print("Reached end of the program... Ending program...\n")
-    exit()
-
-
-def donation_opener(arg0, arg1):
-    """
-Used to open a donation page in the users default web browser
-    """
-    print(colors.green + arg0, colors.reset)
-    webbrowser.open_new(arg1)
-    time.sleep(2)
 
 
 def extra():
@@ -176,7 +180,6 @@ Main hub UI for the user to view additional information or extra parts of this p
 (2) Credits
 (3) Donate
 (4) Return to main window
-(5) Exit
 
 Which option would you like: '''))
         print()
@@ -189,22 +192,16 @@ Which option would you like: '''))
             donate()
         elif choice == 4:
             main()
-        elif choice == 5:
-            break
         else:
             print(colors.red + 'User input error found...\n', colors.reset)
             time.sleep(2)
-    print("Reached end of the program... Ending program...\n")
-    exit()
 
 
 def reset_stats():
     """
 Used for the end-user to automatically reset their saved stats back to default while in-game
     """
-    global user_balance, dealer_balance, user_score, user_data_file, player1_balance, player2_balance, player3_balance
-    print(colors.green + 'All players and the dealers money/stats will be reset to their original defaults...',
-          colors.reset)
+    # needs some rework
     time.sleep(1)
     user_balance = 1000
     player1_balance = 1000
@@ -212,12 +209,8 @@ Used for the end-user to automatically reset their saved stats back to default w
     player3_balance = 1000
     user_score = 0
     dealer_balance = 5000
-    with open('data.json', 'w') as user_data_file:
-        json.dump({'ubalance': user_balance, 'uscore': user_score,
-                   'deal_balance': dealer_balance, 'player1_balance': player1_balance,
-                   'player2_balance': player2_balance, 'player3_balance': player3_balance}, user_data_file)
-    main()
 
+    #save_game_data()
 
 def another_game():  # sourcery no-metrics skip: hoist-statement-from-if
     """
@@ -284,7 +277,7 @@ Used when 1 single round of blackjack has ended. Allows the user to play another
                     print(colors.green + 'Player3 has donated to you $' + str(bot_donation_amount), '\n', colors.reset)
                     time.sleep(1)
             else:
-                print(colors.red + 'No other players were able to donate anything to you!', colors.reset)
+                red('No other players were able to donate anything to you!')
                 time.sleep(1)
                 choice = str(
                     input('Would you like to restart from scratch (yes / no): '))
@@ -293,7 +286,7 @@ Used when 1 single round of blackjack has ended. Allows the user to play another
                 if choice.lower() in ['yes', 'y', 'sure']:
                     new_game_starting()
                 else:
-                    print(colors.green + 'Thanks for playing!', colors.reset)
+                    green('Thanks for playing!')
                     time.sleep(1)
                     sys.exit()
 
@@ -627,34 +620,37 @@ def main():
 Used as the first piece of the program introduced to the end-user. This section allows the user to skip around in the
 game by using the game mode selection choices
     """
-    user_knowledge = input('Start / Tutorial / Express / View Stats / Reset Stats / Extras / Quit: ')
-    print()
-    time.sleep(.5)
+    while True:
+        user_knowledge = input('''Start 
+                                Tutorial 
+                                Express
+                                View Stats
+                                Reset Stats
+                                Extras
+                                Quit: ''')
+        print()
+        time.sleep(.5)
 
-    if user_knowledge.lower() in ['start', 'yes', 's']:
-        game_options()
-    elif user_knowledge.lower() in ['no', 'n', 't', 'tutorial']:
-        print(colors.green +
-              'A youtube video should now be playing... This game will auto resume once the video has been fully '
-              'played...', colors.reset)
-        url = "https://www.youtube.com/watch?v=eyoh-Ku9TCI"
-        webbrowser.open(url, new=1)
-        time.sleep(140)
-        game()
-    elif user_knowledge.lower() in ['e', 'express']:
-        game()
-    elif user_knowledge.lower() in ['stats', 'view stats', 'v', 'view']:
-        view_stats()
-    elif user_knowledge.lower() in ['reset', 'reset stats']:
-        reset_stats()
-    elif user_knowledge.lower() in ['extra', 'extras']:
-        extra()
-    elif user_knowledge.lower() in ['quit', 'q', 'exit']:
-        sys.exit()
-    else:
-        print(colors.red + 'User knowledge input error found...', colors.reset)
-        time.sleep(1)
-        restart_game_error()
+        if user_knowledge.lower() in ['start', 'yes', 's']:
+            game_options()
+        elif user_knowledge.lower() in ['no', 'n', 't', 'tutorial']:
+            browser_opener('A youtube video should now be playing... This game will auto resume once the video has been fully '
+                  'played...', "https://www.youtube.com/watch?v=eyoh-Ku9TCI")
+            time.sleep(140)
+            game()
+        elif user_knowledge.lower() in ['e', 'express']:
+            game()
+        elif user_knowledge.lower() in ['stats', 'view stats', 'v', 'view']:
+            view_stats()
+        elif user_knowledge.lower() in ['reset', 'reset stats']:
+            reset_stats()
+        elif user_knowledge.lower() in ['extra', 'extras']:
+            extra()
+        elif user_knowledge.lower() in ['quit', 'q', 'exit']:
+            sys.exit()
+        else:
+            print(colors.red + 'User knowledge input error found... Please try again\n' + colors.reset)
+            time.sleep(1)
 
 
 def game_scoring():  # sourcery skip: remove-colors.redundant-if, remove-redundant-if
@@ -713,7 +709,7 @@ Handles of the end game scoring based upon card results between the dealer and e
         user_loses_stats()
     else:  # This else statement is most likely unreachable but still used as a safety net in case anything with
         # scoring goes wrong.
-        print(colors.red + 'Scoring error found...', colors.reset)
+        red('Scoring error found...')
         time.sleep(1)
         restart_game_error()
 
@@ -736,27 +732,23 @@ Used for when there is a tie game between a player and the dealer
     another_game()
 
 
-def user_loses_stats():
+def user_loses_stats(current_player, bet):
     """
 Used when the user loses the round
     """
-    global user_score, user_balance, dealer_balance
-    time.sleep(1)
-    user_score -= 1
-    user_balance -= user_bet
-    dealer_balance += user_bet
+    current_player.p_score[1] -= 1
+    current_player.bank_roll -= bet
+    Dealer.bank_roll += bet
     another_game()
 
 
-def user_win_stats():
+def user_win_stats(current_player, bet):
     """
 Used when the user wins the round
     """
-    global user_score, user_balance, dealer_balance
-    time.sleep(1)
-    user_score += 1
-    user_balance += user_bet
-    dealer_balance -= user_bet
+    current_player.p_score[0] += 1
+    current_player.bank_roll += bet
+    Dealer.bank_roll -= bet
     another_game()
 
 
@@ -1517,19 +1509,20 @@ Allows the end-user to be able to play the game but with custom money, win count
         time.sleep(1)
         game_options()
 
-    user_game_picker = str(input('Would you like to play normal solo Blackjack 21, Blackjack 21 with bots, '
-                                 'or a Custom Game with custom user game settings (blackjack / bots / custom): '))
-    print()
-    time.sleep(.5)
+    while True:
+        user_game_picker = str(input('Would you like to play normal solo Blackjack 21, Blackjack 21 with bots, '
+                                     'or a Custom Game with custom user game settings (blackjack / bots / custom): '))
+        print()
+        time.sleep(.5)
 
-    if user_game_picker.lower() in ['b', 'blackjack', 'blackjack 21', 'black jack', 'n', 'normal']:
-        game()
-    elif user_game_picker.lower() in ['blackjack with bots', 'blackjack 21 with bots', 'bots', 'bot', 'bo', '1']:
-        bot_player_choice()
-    elif user_game_picker.lower() in ['c', 'custom', 'custom game', 'custom blackjack', 'custom blackjack game']:
-        custom_game_main()
-    else:
-        invalid_starting_balance_error('User game selection choice error found...')
+        if user_game_picker.lower() in ['b', 'blackjack', 'blackjack 21', 'black jack', 'n', 'normal']:
+            game()
+        elif user_game_picker.lower() in ['blackjack with bots', 'blackjack 21 with bots', 'bots', 'bot', 'bo', '1']:
+            bot_player_choice()
+        elif user_game_picker.lower() in ['c', 'custom', 'custom game', 'custom blackjack', 'custom blackjack game']:
+            custom_game_main()
+        else:
+            print(colors.green + 'User game selection choice error found...Please enter correct choice' + colors.reset)
 
 
 def custom_game_main():
