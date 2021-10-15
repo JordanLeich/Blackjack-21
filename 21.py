@@ -70,7 +70,7 @@ def game():
     and multiple players. """
     Player1.presence = True
     Player1.table_spot = 1
-    print("Game Starting")
+    print(colors.green + "Game Starting", colors.reset)
     # Using while loop to cycle through all the players and dealer
     # finished_game = False # TODO: finish this line and line below.
     # while not finished_game:
@@ -84,7 +84,8 @@ def game():
     display_table()
     display_table(2)
 
-    user_knowledge = input("? ")
+    user_knowledge = input("Which choice would you like to pick:  ")
+    print()
     Player1.cards = []
     Dealer.cards = []
 
@@ -96,15 +97,13 @@ def new_game_menu():
     will revert back to the previous menu it come from so there cant be
     any accidental exits before saves or loading games. """
     while True:
-        os.system('cls')
-        print(colors.green + "Welcome Player! Thank you for Joining Us\n"
-                             "Here at the BlackJack Game\n" + colors.reset)
-        print("(1) Would you be Playing alone?")
-        print("(2) Would you like to play with others?")
-        print("(3) Or go back to the main menu?")
-        user_knowledge = input("? ")
+        print("(1) Play alone")
+        print("(2) Play with others")
+        print("(3) Main menu\n")
+        user_knowledge = input("Which choice would you like to pick:  ")
+        print()
         if user_knowledge not in ['1', '2', '3']:
-            print(colors.red + user_knowledge + " Is Not a valid input" + colors.reset + "\n")
+            print(colors.red + user_knowledge + " is not a valid input!" + colors.reset + "\n")
             time.sleep(1)
         elif user_knowledge == '1':
             game()
@@ -123,19 +122,18 @@ game by using the game mode selection choices
     while True:
         # Main Start menu
         # did the print command to make the alignment easier to work with
-        os.system('cls')
-        print("Welcome to BlackJack")
+        print(colors.green + "Welcome to BlackJack 21\n", colors.reset)
         print("(1) New Game")
         print("(2) Load Existing Game")
         print("(3) Options")
-        print("(4) Quit")
-        user_knowledge = input("? ")
+        print("(4) Quit\n")
+        user_knowledge = input("Which choice would you like to pick:  ")
 
         print()
         time.sleep(.5)
 
         if user_knowledge not in ['1', '2', '3', '4']:
-            print(colors.red + "Input error. Please select a number from 1 - 4" + colors.reset)
+            print(colors.red + "Input error, please select a number from 1 - 4 only!" + colors.reset)
 
         elif user_knowledge == '1':
             # print(colors.blue + "Welcome Player! we are headed to the New Game Menu" + colors.reset)
