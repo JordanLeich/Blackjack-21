@@ -315,7 +315,8 @@ class Blackjack:
                     sleep(1)
                     return
                 else:  # improper input 
-                    user_error("User input incorrect please try again...\n")
+                    print_red("User input incorrect please try again...\n")
+                    sleep(1)
                     continue
             # dealer's move
             while self._user_sum() == 21 and self._dealer_sum() < 15:
@@ -463,7 +464,7 @@ class Blackjack:
                 self.score_bot(c)
 
     def score_bot(self, i):
-        bet, player_value, player_bal = self.bot_bets[i], self._bot_sum(value), self.bot_balances[i]
+        bet, player_value, player_balance = self.bot_bets[i], self._bot_sum(value), self.bot_balances[i]
         dealer_value = self._dealer_sum()
 
         if len(self.dealer_cards) == 5 and player_value >= dealer_value:
@@ -473,25 +474,25 @@ class Blackjack:
         elif player_value == dealer_value:
             print_yellow(f"Player{i + 1} pushed this round! Player{i + 1}'s bet has been refunded!\n")
         elif len(self.bot_cards[i]) == 5 and player_value < 21:
-            self.bot_balances[i], self.dealer_balance = _win_bet(bet, player_bal, self.dealer_balance)
+            self.bot_balances[i], self.dealer_balance = _win_bet(bet, player_balance, self.dealer_balance)
             print_green(f'Player{i + 1} won this round! Player{i + 1} won ${player_bet}\n')
         elif len(self.dealer_cards) == 5 and dealer_value < 21:
-            self.bot_balances[i], self.dealer_balance = _lose_bet(bet, player_bal, self.dealer_balance)
+            self.bot_balances[i], self.dealer_balance = _lose_bet(bet, player_balance, self.dealer_balance)
             print_red(f'Player{i + 1} lost this round! Player{i + 1} lost ${player_bet}')
         elif player_value > 21:
-            self.bot_balances[i], self.dealer_balance = _lose_bet(bet, player_bal, self.dealer_balance)
+            self.bot_balances[i], self.dealer_balance = _lose_bet(bet, player_balance, self.dealer_balance)
             print_red(f'Player{i + 1} lost this round! Player{i + 1} lost ${player_bet}\n')
         elif dealer_value > 21:
-            self.bot_balances[i], self.dealer_balance = _win_bet(bet, player_bal, self.dealer_balance)
+            self.bot_balances[i], self.dealer_balance = _win_bet(bet, player_balance, self.dealer_balance)
             print_green(f'Player{i + 1} won this round! Player{i + 1} won ${player_bet}\n')
         elif player_value == 21:
-            self.bot_balances[i], self.dealer_balance = _win_bet(bet, player_bal, self.dealer_balance)
+            self.bot_balances[i], self.dealer_balance = _win_bet(bet, player_balance, self.dealer_balance)
             print_green(f'Player{i + 1} won this round! Player{i + 1} won ${player_bet}\n')
         elif player_value < dealer_value:
-            self.bot_balances[i], self.dealer_balance = _lose_bet(bet, player_bal, self.dealer_balance)
+            self.bot_balances[i], self.dealer_balance = _lose_bet(bet, player_balance, self.dealer_balance)
             print_red(f'Player{i + 1} lost this round! Player{i + 1} lost ${player_bet}\n')
         elif player_value > dealer_value:
-            self.bot_balances[i], self.dealer_balance = _win_bet(bet, player_bal, self.dealer_balance)
+            self.bot_balances[i], self.dealer_balance = _win_bet(bet, player_balance, self.dealer_balance)
             print_green(f'Player{i + 1} won this round! Player{i + 1} won ${player_bet}\n')
 
         sleep(1)
@@ -545,7 +546,7 @@ To prompt users to fix their mistakes in a yes/no question
         print()
         if text_choice in ['y', 'yes', 'ya', 'yah', 'sure']:
             return True
-        else:  # prompt user to fix mistake made
-            user_error("Invalid choice, please say either 'yes' or 'no'\n")
+        print_red("Invalid choice, please say either 'yes' or 'no'\n")
+        sleep(1)
     print()
     return False
