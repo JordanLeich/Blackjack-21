@@ -2,14 +2,13 @@
 
 # Created by Jordan Leich on 6/6/2020
 # Edited by Adam Smith
-
+import json
+from os import path
 from random import randint
 from time import sleep
 
 # from files
 from other.colors import print_green, print_red, print_yellow, print_blue
-from decks import Decks
-from player import Player
 
 '''
 # Initialize all players, 11 in total, 5 regular players,
@@ -86,6 +85,47 @@ def game():
 '''
 
 
+def load_or_save_game(save_game=None, stats=False):
+    # save_game = class instance (i.e. save_game=self)
+    """
+    loads the game only when Load Game feature used
+    """
+    user_score, user_balance, dealer_balance, bot_number = 0, 1000, 5000, 0
+    bot_balances = []
+
+    if not save_game and path.exists("data.json"):
+        with open('data.json', 'r') as user_data_file:
+            user_data = json.load(user_data_file)
+        user_score = user_data['score']
+        user_balance = user_data['balance']
+        dealer_balance = user_data['deal_balance']
+        bot_balances = user_data['bot_balances']
+        if not stats:
+            print_green('Save file loaded!\n')
+    elif not save_game:
+        if not stats:
+            print_yellow('Save file not found, A new save file will be created shortly!\n')
+            sleep(1)
+        default_stats = {'balance': user_balance,
+                         'score': user_score,
+                         'deal_balance': dealer_balance,
+                         'bot_balances': bot_balances,
+                         }
+        with open('data.json', 'w') as user_data_file:
+            json.dump(default_stats, user_data_file)
+    else:
+        user_score, user_balance, dealer_balance, bot_balances = save_game.get_data()
+        print_yellow('Saving game... Please do not exit the program!\n')
+        default_stats = {'balance': user_balance,
+                         'score': user_score,
+                         'deal_balance': dealer_balance,
+                         'bot_balances': bot_balances,
+                         }
+        with open('data.json', 'w') as user_data_file:
+            json.dump(default_stats, user_data_file)
+    return user_balance, user_score, dealer_balance, bot_number, bot_balances
+
+
 def money_transfer_input(input_text, user_balance, money_transfer):
     while True:
         try:
@@ -115,7 +155,7 @@ def donate_to_bot(player_balance, user_balance, player_name):
     if player_balance <= 0:
         print_red(f'{player_name} is bankrupt and can not participating in the game!')
         sleep(1)
-        
+
         if yes_or_no_choice('Would you like to donate some money to get them back in the game (yes / no): '):
             donate_money = money_transfer_input("How much would you like to donate: ", self.user_balance, 'donation')
             player_balance, user_balance = _win_bet(donate_money, player_balance, user_balance)
@@ -165,8 +205,8 @@ class Blackjack:
         print_red(f'The dealers balance is ${self.dealer_balance}\n')
         sleep(1)
 
-    def donation_from_bot(self): # random bot will donate
-        bot_able_to = [c for c, v in enumerate(self.bot_balances) if v > 0] 
+    def donation_from_bot(self):  # random bot will donate
+        bot_able_to = [c for c, v in enumerate(self.bot_balances) if v > 0]
         bot_index = randint(0, len(bot_able_to))
         bot_donation_amount = self.bot_balances[bot_index] / 5
         self.user_balance += bot_donation_amount
@@ -190,7 +230,7 @@ class Blackjack:
                 if self.user_balance <= 0 and max(self.bot_balances) <= 0:
                     print_red('All players are bankrupt! You Lost!')
                     sleep(2)
-                    return # exits the game
+                    return  # exits the game
                 elif max(self.bot_balances) <= 0:  # only the bots are bankrupt
                     print_yellow('The fate of the game depends on you now!')
                     sleep(2)
@@ -201,7 +241,8 @@ class Blackjack:
                 sleep(1)
 
                 # ask for donations from bots
-                donation_request = yes_or_no_choice('Would you like to request a donation from another player (yes / no): ')
+                donation_request = yes_or_no_choice(
+                    'Would you like to request a donation from another player (yes / no): ')
                 if donation_request:
                     if max(self.bot_balances) <= 0:
                         print_red('No other players were able to donate anything to you!')
@@ -218,7 +259,8 @@ class Blackjack:
                 self.user_bet = self.user_balance
                 sleep(.5)
             else:
-                self.user_bet = money_transfer_input("How many dollars would you like to bet? ",self.user_balance, 'bet')
+                self.user_bet = money_transfer_input("How many dollars would you like to bet? ", self.user_balance,
+                                                     'bet')
 
             # dealer gets cards
             self.dealer_cards = [randint(1, 11) for _ in range(2)]
@@ -228,6 +270,7 @@ class Blackjack:
             # player gets cards
             self.user_cards = [randint(1, 11) for _ in range(2)]
             print_green(f'You have a total of {self._user_sum()} from {self.user_cards}\n')
+            sleep(1)
 
             choice = ''
             while choice not in ['s', 'stay'] and self._user_sum() < 21 and len(self.user_cards) < 5:
@@ -255,13 +298,15 @@ class Blackjack:
                         sleep(1)
                 elif choice.lower() in ["help", "help", 'call help']:
                     if self._user_sum() == [10, 11]:
-                        print_blue("Since your total is equal to either 10 or 11, we recommend that this is the best time to double down if you have enough money!")
+                        print_blue(
+                            "Since your total is equal to either 10 or 11, we recommend that this is the best time to double down if you have enough money!")
                         sleep(3)
                     elif self._user_sum() <= 14:
                         print_blue("Since your total is under or equal to 14, we recommend that you hit!")
                         sleep(2)
                     elif self._user_sum() >= 15:
-                        print_blue("Your odds are looking high enough to win, if your card total is closer to 15, we recommend only making 1 hit move and then staying!\n")
+                        print_blue(
+                            "Your odds are looking high enough to win, if your card total is closer to 15, we recommend only making 1 hit move and then staying!\n")
                         sleep(3)
                         print_blue("If your card total is closer to 21, don't risk it! make a stay move!\n")
                         sleep(3)
@@ -303,7 +348,8 @@ class Blackjack:
                 self.bot_cards[value].append(randint(1, 11))
                 print_blue(f"Player{value + 1} has pulled a card...\n")
                 sleep(1)
-                print_blue(f"Player{value + 1} now has a total of {self._bot_sum(value)} from these cards {self.bot_cards[value]}\n")
+                print_blue(
+                    f"Player{value + 1} now has a total of {self._bot_sum(value)} from these cards {self.bot_cards[value]}\n")
                 sleep(1)
                 if self._bot_sum(value) > 21:
                     print_blue(f'Player{value + 1} has BUSTED!\n')
@@ -345,9 +391,8 @@ class Blackjack:
     def _user_sum(self):  # helper function for returning the sum of user's cards
         return sum(self.user_cards)
 
-    def _bot_sum(self, value):  # helper function for returning the sum of bot's cards
+    def _bot_sum(self, value):  # helper function for returning the sum of bots cards
         return sum(self.bot_cards[value])
-
 
     def dealer_draws_card(self):
         """
@@ -358,6 +403,7 @@ class Blackjack:
 
         self.dealer_cards.append(randint(1, 11))
         print_red("The Dealer has pulled a card...\n")
+        sleep(1)
         print_red(f'The Dealer now has {self._dealer_sum()} from these cards {self.dealer_cards}\n')
         sleep(1)
 
@@ -456,7 +502,8 @@ class Blackjack:
     Used when 1 single round of blackjack has ended. Allows the user to play another game of blackjack or quit playing
         """
         print_green(f"You have won {self.user_score} hands\n")
-        
+        sleep(1)
+
         if self.user_balance <= 0 and len(self.bot_balances) == 0:
             print_red("You don't have any more money to bet... Game Over!")
             sleep(2)
@@ -464,12 +511,12 @@ class Blackjack:
             print_green("Congratulations! You have beat the BlackJack 21 game by defeating the dealers balance!")
         elif self.dealer_balance <= self.user_balance / 5:
             print_green("The dealers balance is looking small enough for you to win! You're doing well...")
-        elif yes_or_no_choice('Would you like to continue (yes / no)'):
+        elif yes_or_no_choice('Would you like to continue (yes / no): '):
+            sleep(1)
             return False
         else:  # exit / cash out / new game
             load_or_save_game(save_game=self)
         return True
-
 
     def user_loses_stats(self, multiplier=1.0):
         """

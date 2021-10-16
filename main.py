@@ -10,7 +10,6 @@ import sys
 import os
 from os import path
 
-
 # from files
 from other.colors import print_green, print_red, print_yellow, print_blue
 from blackjack import Blackjack
@@ -23,7 +22,7 @@ def load_or_save_game(save_game=None, stats=False):
     """
     user_score, user_balance, dealer_balance, bot_number = 0, 1000, 5000, 0
     bot_balances = []
-    
+
     if not save_game and path.exists("data.json"):
         with open('data.json', 'r') as user_data_file:
             user_data = json.load(user_data_file)
@@ -35,22 +34,23 @@ def load_or_save_game(save_game=None, stats=False):
             print_green('Save file loaded!\n')
     elif not save_game:
         if not stats:
-            print_yellow('Save file not found, A new save file will be created shortly!')
-        default_stats = {'balance': user_balance, 
+            print_yellow('Save file not found, A new save file will be created shortly!\n')
+            sleep(1)
+        default_stats = {'balance': user_balance,
                          'score': user_score,
-                         'deal_balance': dealer_balance, 
-                         'bot_balances': bot_balances, 
-                        }
+                         'deal_balance': dealer_balance,
+                         'bot_balances': bot_balances,
+                         }
         with open('data.json', 'w') as user_data_file:
             json.dump(default_stats, user_data_file)
     else:
         user_score, user_balance, dealer_balance, bot_balances = save_game.get_data()
-        print_yellow('Saving game. Please do not exit the program.')
-        default_stats = {'balance': user_balance, 
+        print_yellow('Saving game... Please do not exit the program!\n')
+        default_stats = {'balance': user_balance,
                          'score': user_score,
-                         'deal_balance': dealer_balance, 
-                         'bot_balances': bot_balances, 
-                        }
+                         'deal_balance': dealer_balance,
+                         'bot_balances': bot_balances,
+                         }
         with open('data.json', 'w') as user_data_file:
             json.dump(default_stats, user_data_file)
     return user_balance, user_score, dealer_balance, bot_number, bot_balances
@@ -86,6 +86,7 @@ Main hub UI for the user to view additional information or extra parts of this p
         print("(5) Main Menu\n")
         choice = input("Which choice would you like to pick:  ")
         print()
+        sleep(.5)
 
         if choice == '1':
             view_stats()  # update stats to be more like hands won and total money gained
@@ -99,7 +100,7 @@ Main hub UI for the user to view additional information or extra parts of this p
             os.system('clear')
             return
         else:
-            user_error("Please select a number from 1 - 5.\n")
+            print_red("Please select a number from 1 - 5.\n")
 
 
 def view_stats():  # prints your stats based off the load file
@@ -160,9 +161,9 @@ def custom_game_setup():
     """
     Set up a custom game
     """
-    user_balance = custom_user_input('How much money would you like to start with? ')
-    dealer_balance = custom_user_input('How much money would you like the dealer to start with? ')
-    user_score = custom_user_input('How much would you like to set your scoring count to? ')
+    user_balance = custom_user_input('How much money would you like to start with: ')
+    dealer_balance = custom_user_input('How much money would you like the dealer to start with: ')
+    user_score = custom_user_input('How much would you like to set your scoring count to: ')
     return user_balance, user_score, dealer_balance
 
 
@@ -175,8 +176,9 @@ Allows the end-user to be able to play the game with custom money, win counts, a
         print("(2) Play with bots")
         print("(3) Play with custom settings")
         print("(4) Tutorial")
-        print("(5) Main menu\n")
-        game_choic = input("Which choice would you like to pick:  ")
+        print("(5) Main menu")
+        print("(6) Exit\n")
+        game_choice = input("Which choice would you like to pick:  ")
         print()
         sleep(.5)
 
@@ -190,18 +192,19 @@ Allows the end-user to be able to play the game with custom money, win counts, a
             print_green('A youtube video should now be playing... ')
             webbrowser.open("https://www.youtube.com/watch?v=eyoh-Ku9TCI", new=1)
         elif game_choice == '5':
-            os.system('clear')
             return
+        elif game_choice == '6':
+            sys.exit()
         else:
-            user_error("Please select a number from 1 - 5.\n")
+            print_red("Please select a number from 1 - 6.\n")
 
 
 def main():
     while True:
         print_green("Welcome to BlackJack 21\n")
-        print("(1) New Game") # tutorial
+        print("(1) New Game")  # tutorial
         print("(2) Load Existing Game")
-        print("(3) Options") # view stats, extras, releases, donate
+        print("(3) Options")  # view stats, extras, releases, donate
         print("(4) Quit\n")
 
         choice = input('Which choice would you like to pick:  ')
@@ -219,7 +222,7 @@ def main():
             print_green("Exiting the Game")
             sys.exit()
         else:
-            user_error("Please select a number from 1 - 4.\n")
+            print_red("Please select a number from 1 - 4.\n")
 
 
 if __name__ == '__main__':
