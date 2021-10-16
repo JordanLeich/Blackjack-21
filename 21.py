@@ -3,151 +3,223 @@
 # Created by Jordan Leich on 6/6/2020
 # Edited by Adam Smith
 
-# Imports
-import random
-import time
+from time import sleep
 import webbrowser
 import json
 import sys
 import os
+from os import path
+
 
 # from files
-from other import colors
-from os import path
-from decks import Decks
-from player import Player
-
-# Initialize all players, 11 in total, 5 regular players,
-# 5 bot players, 1 dealer. They will be using the Player
-# class. Depending on the game being played, will determine
-# which player/bot will be active along with the dealer.
-# The default names will be player1-5 and dealer, bots are 6-10.
-# You can change any name you want to, or leave these hard
-# coded and add .name to the class so each one can have a 
-# personalized name. The table can hold a max of 6 players
-# 5 players and the dealer.
-# Players will start with a bank roll of 1k and the dealer 
-# will start with 2m. when the game starts and the player0
-# wants to load saved data then that will take over.  
-
-Player1 = Player(5, 0, False, False, None, 1000, False, False, None)
-Player2 = Player(5, 0, False, False, None, 1000, False, False, None)
-Player3 = Player(5, 0, False, False, None, 1000, False, False, None)
-Player4 = Player(5, 0, False, False, None, 1000, False, False, None)
-Player5 = Player(5, 0, False, False, None, 1000, False, False, None)
-Dealer = Player(0, 0, True, False, None, 2000000, False, True, None)
-Player6 = Player(5, 0, False, False, None, 1000, True, False, None)
-Player7 = Player(5, 0, False, False, None, 1000, True, False, None)
-PLayer8 = Player(5, 0, False, False, None, 1000, True, False, None)
-Player9 = Player(5, 0, False, False, None, 1000, True, False, None)
-Player10 = Player(5, 0, False, False, None, 1000, True, False, None)
-decks = Decks()
-decks.shoe_build(4)
-decks.deck_shuffle()
+from other.colors import print_green, print_red, print_yellow, print_blue
+from blackjack import Blackjack
 
 
-def display_table(dealer_turn=1):
-    """This function is to create a text based table """
-    print("Player1 Cards: " + str(Player1.cards) + "Cards sum: ", Player1.sum_of_cards())
-    print("Dealer Cards: " + str(Dealer.cards[0]) + " + [?]", "Cards sum: ", Dealer.sum_of_cards(True))
-
-    print('-' * 12 + 'Dealer' + '-' * 12)
-    print('------------------------------')
-    card_line = []
-    for i in Dealer.cards:
-        if len(i) > 2:
-            card_line.append('[' + str(i) + ']')
-        else:
-            card_line.append('[ ' + str(i) + ']')
-    if dealer_turn == 1:
-        print('-' * 10 + str(card_line[0]) + '[ ? ]' + '-' * 10)
+def load_or_save_game(save_game=None, stats=False):
+    # save_game = class instance (i.e. save_game=self)
+    """
+    loads the game only when Load Game feature used 
+    """
+    user_score, user_balance, dealer_balance, bot_number = 0, 1000, 5000, 0
+    bot_balances = []
+    
+    if not save_game and path.exists("data.json"):
+        with open('data.json', 'r') as user_data_file:
+            user_data = json.load(user_data_file)
+        user_score = user_data['score']
+        user_balance = user_data['balance']
+        dealer_balance = user_data['deal_balance']
+        bot_balances = user_data['bot_balances']
+        if not stats:
+            print_green('Save file loaded!\n')
+    elif not save_game:
+        if not stats:
+            print_yellow('Save file not found, A new save file will be created shortly!')
+        default_stats = {'balance': user_balance, 
+                         'score': user_score,
+                         'deal_balance': dealer_balance, 
+                         'bot_balances': bot_balances, 
+                        }
+        with open('data.json', 'w') as user_data_file:
+            json.dump(default_stats, user_data_file)
     else:
-        print('-' * 10 + str(card_line[0]) + str(card_line[1]) + '-' * 10)
+        user_score, user_balance, dealer_balance, bot_balances = save_game.get_data()
+        print_yellow('Saving game. Please do not exit the program.')
+        default_stats = {'balance': user_balance, 
+                         'score': user_score,
+                         'deal_balance': dealer_balance, 
+                         'bot_balances': bot_balances, 
+                        }
+        with open('data.json', 'w') as user_data_file:
+            json.dump(default_stats, user_data_file)
+    return user_balance, user_score, dealer_balance, bot_number, bot_balances
 
 
-def game():
-    """This is the main game function. It will deal with single player
-    and multiple players. """
-    Player1.presence = True
-    Player1.table_spot = 1
-    print(colors.green + "Game Starting", colors.reset)
-    # Using while loop to cycle through all the players and dealer
-    # finished_game = False # TODO: finish this line and line below.
-    # while not finished_game:
-
-    for _ in range(2):
-        if Player1.presence:
-            Player1.cards.append(decks.next_card())
-        if Dealer.presence:
-            Dealer.cards.append(decks.next_card())
-    print()
-    display_table()
-    display_table(2)
-
-    user_knowledge = input("Which choice would you like to pick:  ")
-    print()
-    Player1.cards = []
-    Dealer.cards = []
+def open_github(print_text, website_append=''):
+    """
+    Open github in the users default web browser
+    """
+    print_green(print_text)
+    webbrowser.open_new(f'https://github.com/JordanLeich/Blackjack-21{website_append}')
+    sleep(1)
 
 
-def new_game_menu():
-    """This menu is to see if the player wants to play by their self
-    or add players. there can be 5 extra players added. whether its bots
-    or players the main person had to decide for. Each of the menus 
-    will revert back to the previous menu it come from so there cant be
-    any accidental exits before saves or loading games. """
+def donation_opener(website):
+    """
+    Open a donation page in the users default web browser
+    """
+    print_green("Opening PayPal Donation page...\n")
+    webbrowser.open_new(website)
+    sleep(2)
+
+
+def extra():
+    """
+Main hub UI for the user to view additional information or extra parts of this project such as donations and releases
+    """
+    while True:
+        print("(1) View Stats")
+        print("(2) Project Releases")
+        print("(3) Credits")
+        print("(4) Donate")
+        print("(5) Main Menu\n")
+        choice = input("Which choice would you like to pick:  ")
+        print()
+
+        if choice == '1':
+            view_stats()  # update stats to be more like hands won and total money gained
+        elif choice == '2':
+            open_github("Opening the latest stable release...\n", "/releases")
+        elif choice == '3':
+            open_github("Opening all contributors of this project...\n", "/graphs/contributors")
+        elif choice == '4':
+            donation_opener("https://www.paypal.com/donate/?business=8FGHU8Z4EJPME&no_recurring=0&currency_code=USD")
+        elif choice == '5':
+            os.system('clear')
+            return
+        else:
+            user_error("Please select a number from 1 - 5.\n")
+
+
+def view_stats():  # prints your stats based off the load file
+    user_balance, user_score, dealer_balance, _, bot_balances = load_or_save_game(stats=True)
+    print_green('Your current in game stats will now be displayed below!\n\n')
+    sleep(1)
+    print(f'Your balance is ${user_balance}')
+    print(f'Your win count is {user_score}')
+    print(f'The dealers balance is ${dealer_balance}\n')
+    for c, v in enumerate(bot_balances):
+        print(f"Player{c}'s balance is ${v}")
+    sleep(6)
+
+
+def game(user_balance=1000, user_score=0, dealer_balance=5000, players=0, bot_balances=[]):
+    """
+    Main code used for the game entirely
+    """
+    single_player = Blackjack(user_balance, user_score, dealer_balance)
+    if bot_balances:
+        single_player.add_bot_balances(bot_balances)
+    for _ in range(players):
+        single_player.add_bots()
+    single_player.play_game()
+
+
+def bot_player_choice():
+    """
+    User chooses how many bots to play with
+    """
+    while True:
+        player_num = int(input('How many bots would you like to play with: '))
+        print()
+        sleep(.5)
+        get_plural = 'bot' if player_num == 1 else 'bots'
+        print_green(f'{player_num} {get_plural} will be added into the game!\n')
+        return player_num
+
+
+def custom_user_input(user_message, result=0):
+    """
+    helper function for custom_game_setup() - validates that user input is a number greater than 0
+    """
+    while result <= 0:
+        try:
+            result = int(input(user_message))
+        except ValueError:
+            print_red('Please enter a number.')
+            continue
+        print()
+        sleep(.5)
+        if result <= 0:
+            print('Please choose a number greater than 0.')
+    return result
+
+
+def custom_game_setup():
+    """
+    Set up a custom game
+    """
+    user_balance = custom_user_input('How much money would you like to start with? ')
+    dealer_balance = custom_user_input('How much money would you like the dealer to start with? ')
+    user_score = custom_user_input('How much would you like to set your scoring count to? ')
+    return user_balance, user_score, dealer_balance
+
+
+def game_options():
+    """
+Allows the end-user to be able to play the game with custom money, win counts, and more
+    """
     while True:
         print("(1) Play alone")
-        print("(2) Play with others")
-        print("(3) Main menu\n")
-        user_knowledge = input("Which choice would you like to pick:  ")
+        print("(2) Play with bots")
+        print("(3) Play with custom settings")
+        print("(4) Tutorial")
+        print("(5) Main menu\n")
+        game_choic = input("Which choice would you like to pick:  ")
         print()
-        if user_knowledge not in ['1', '2', '3']:
-            print(colors.red + user_knowledge + " is not a valid input!" + colors.reset + "\n")
-            time.sleep(1)
-        elif user_knowledge == '1':
+        sleep(.5)
+
+        if game_choice == '1':
             game()
-        elif user_knowledge == '2':
-            pass
-        elif user_knowledge == '3':
-            os.system('cls')
+        elif game_choice == '2':
+            game(players=bot_player_choice())
+        elif game_choice == '3':
+            game(*custom_game_setup())
+        elif game_choice == '4':
+            print_green('A youtube video should now be playing... ')
+            webbrowser.open("https://www.youtube.com/watch?v=eyoh-Ku9TCI", new=1)
+        elif game_choice == '5':
+            os.system('clear')
             return
+        else:
+            user_error("Please select a number from 1 - 5.\n")
 
 
 def main():
-    """
-Used as the first piece of the program introduced to the end-user. This section allows the user to skip around in the
-game by using the game mode selection choices
-    """
     while True:
-        # Main Start menu
-        # did the print command to make the alignment easier to work with
-        print(colors.green + "Welcome to BlackJack 21\n", colors.reset)
-        print("(1) New Game")
+        print_green("Welcome to BlackJack 21\n")
+        print("(1) New Game") # tutorial
         print("(2) Load Existing Game")
-        print("(3) Options")
+        print("(3) Options") # view stats, extras, releases, donate
         print("(4) Quit\n")
-        user_knowledge = input("Which choice would you like to pick:  ")
 
+        choice = input('Which choice would you like to pick:  ')
         print()
-        time.sleep(.5)
+        sleep(.5)
 
-        if user_knowledge not in ['1', '2', '3', '4']:
-            print(colors.red + "Input error, please select a number from 1 - 4 only!" + colors.reset)
-
-        elif user_knowledge == '1':
-            # print(colors.blue + "Welcome Player! we are headed to the New Game Menu" + colors.reset)
-            new_game_menu()
-
-        elif user_knowledge == '2':
-            print(colors.blue + "Loading into the previous game." + colors.reset)
-
-        elif user_knowledge == '3':
-            print(colors.blue + "Heading to the Options Menu." + colors.reset)
-
-        elif user_knowledge == '4':
-            print(colors.green + "Exiting the Game" + colors.reset)
+        if choice == '1':
+            print_blue("Welcome Player!\n")
+            game_options()
+        elif choice == '2':
+            game(*load_or_save_game())
+        elif choice == '3':
+            extra()
+        elif choice == '4':
+            print_green("Exiting the Game")
             sys.exit()
+        else:
+            user_error("Please select a number from 1 - 4.\n")
 
 
 if __name__ == '__main__':
