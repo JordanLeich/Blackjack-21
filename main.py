@@ -83,7 +83,8 @@ Main hub UI for the user to view additional information or extra parts of this p
         print("(2) Project Releases")
         print("(3) Credits")
         print("(4) Donate")
-        print("(5) Main Menu\n")
+        print("(5) Main Menu")
+        print("(6) Exit\n")
         choice = input("Which choice would you like to pick:  ")
         print()
         sleep(.5)
@@ -97,15 +98,16 @@ Main hub UI for the user to view additional information or extra parts of this p
         elif choice == '4':
             donation_opener("https://www.paypal.com/donate/?business=8FGHU8Z4EJPME&no_recurring=0&currency_code=USD")
         elif choice == '5':
-            os.system('clear')
             return
+        elif choice == '6':
+            sys.exit()
         else:
             print_red("Please select a number from 1 - 5.\n")
 
 
 def view_stats():  # prints your stats based off the load file
     user_balance, user_score, dealer_balance, _, bot_balances = load_or_save_game(stats=True)
-    print_green('Your current in game stats will now be displayed below!\n\n')
+    print_green('Your current in game stats will now be displayed below!\n')
     sleep(1)
     print(f'Your balance is ${user_balance}')
     print(f'Your win count is {user_score}')
