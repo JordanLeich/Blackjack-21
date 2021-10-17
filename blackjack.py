@@ -313,7 +313,7 @@ class Blackjack:
                         print_blue("If your card total is closer to 21, don't risk it! make a stay move!\n")
                         sleep(3)
                 elif choice.lower() in ["q", "quit", "end"]:
-                    print_green("Ending game... Thanks for playing!\n")
+                    print_green("Ending this round...\n")
                     sleep(1)
                     return
                 else:  # improper input 
@@ -346,6 +346,7 @@ class Blackjack:
         while self._bot_sum(value) <= 15 and len(self.bot_cards[value]) < 6:
             if len(self.bot_cards[value]) == 5:
                 print_blue(f'Player{value + 1} has pulled a total of 5 cards without busting!\n')
+                break
             else:
                 self.bot_cards[value].append(randint(1, 11))
                 print_blue(f"Player{value + 1} has pulled a card...\n")
@@ -384,8 +385,12 @@ class Blackjack:
                     self.insurance_bought = False
                     print('Buying insurance has been skipped for you...\n')
                     sleep(1)
-
-            self.dealer_draws_card()
+            if len(self.dealer_cards) == 5 and self._dealer_sum() <= 21:
+                print_red('The Dealer has hit a total 5 cards!\n')
+                sleep(1)
+                self.game_scoring()
+            else:
+                self.dealer_draws_card()
 
     def _dealer_sum(self):  # helper function for returning the sum of dealer's cards
         return sum(self.dealer_cards)
@@ -400,8 +405,10 @@ class Blackjack:
         """
         Allows the dealer to draw a card into their deck
         """
-        if (len(self.dealer_cards) == 5 and self._dealer_sum() <= 21) or self._dealer_sum() > 15:
-            return
+        if len(self.dealer_cards) == 5 and self._dealer_sum() <= 21:
+            print_red('The Dealer has hit a total 5 cards!\n')
+            sleep(1)
+            self.game_scoring()
 
         self.dealer_cards.append(randint(1, 11))
         print_red("The Dealer has pulled a card...\n")
@@ -418,15 +425,10 @@ class Blackjack:
         print_green(f"You have a grand total of {self._user_sum()} with {self.user_cards}\n")
         sleep(1)
 
-        if len(self.dealer_cards) == 5 and self._dealer_sum() <= self._user_sum() <= 21:
-            print_yellow("PUSH! This is a tie! All bet money is refunded!")
+        if self._user_sum() == self._dealer_sum():
+            print_yellow("PUSH! This is a tie! All bet money is refunded!\n")
             sleep(1)
-        elif len(self.user_cards) == 5 and self._user_sum() <= self._dealer_sum() <= 21:
-            print_yellow("PUSH! This is a tie! All bet money is refunded!")
-            sleep(1)
-        elif self._user_sum() == self._dealer_sum():
-            print_yellow("PUSH! This is a tie! All bet money is refunded!")
-            sleep(1)
+            self.user_tie_stats()
         elif len(self.user_cards) == 5 and self._user_sum() < 21:
             print_green("You have automatically won since you have pulled a total of 5 cards without busting!\n")
             sleep(1)
@@ -479,7 +481,7 @@ class Blackjack:
         dealer_value = self._dealer_sum()
 
         if len(self.dealer_cards) == 5 and player_value >= dealer_value:
-            print_yellow(f"Player{value + 1} pushed this round! Player{i + 1}'s bet has been refunded!\n")
+            print_yellow(f"Player{i + 1} pushed this round! Player{i + 1}'s bet has been refunded!\n")
         elif len(self.bot_cards[i]) == 5 and dealer_value >= player_value:
             print_yellow(f"Player{i + 1} pushed this round! Player{i + 1}'s bet has been refunded!\n")
         elif player_value == dealer_value:
@@ -546,6 +548,14 @@ class Blackjack:
         self.user_score += 1
         self.user_balance += (self.user_bet * multiplier)
         self.dealer_balance -= (self.user_bet * multiplier)
+
+    def user_tie_stats(self, multiplier=1.0):
+        """
+        Update stats when the user ties the round
+        """
+        self.user_score += 0
+        self.user_balance += 0
+        self.dealer_balance -= 0
 
 
 def yes_or_no_choice(input_text):
