@@ -1,1 +1,1 @@
-pyinstaller -F -i images\icon.ico blackjack.py
+pyinstaller -F -i images\icon.ico main.py

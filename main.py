@@ -137,6 +137,7 @@ def bot_player_choice():
         sleep(.5)
         get_plural = 'bot' if player_num == 1 else 'bots'
         print_green(f'{player_num} {get_plural} will be added into the game!\n')
+        sleep(1)
         return player_num
 
 

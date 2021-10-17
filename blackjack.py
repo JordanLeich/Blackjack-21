@@ -157,7 +157,7 @@ def donate_to_bot(player_balance, user_balance, player_name):
         sleep(1)
 
         if yes_or_no_choice('Would you like to donate some money to get them back in the game (yes / no): '):
-            donate_money = money_transfer_input("How much would you like to donate: ", self.user_balance, 'donation')
+            donate_money = money_transfer_input("How much would you like to donate: ", user_balance, 'donation')
             player_balance, user_balance = _win_bet(donate_money, player_balance, user_balance)
             print_green('Donation successful!')
     return player_balance, user_balance
@@ -257,8 +257,10 @@ class Blackjack:
 
             if yes_or_no_choice("Would you like to go all in (yes / no): "):
                 self.user_bet = self.user_balance
-                sleep(.5)
+                print_green('Your entire balance is now being wagered! Good luck!\n')
+                sleep(1)
             else:
+                print()
                 self.user_bet = money_transfer_input("How many dollars would you like to bet? ", self.user_balance,
                                                      'bet')
 
@@ -418,13 +420,16 @@ class Blackjack:
 
         if len(self.dealer_cards) == 5 and self._dealer_sum() <= self._user_sum() <= 21:
             print_yellow("PUSH! This is a tie! All bet money is refunded!")
+            sleep(1)
         elif len(self.user_cards) == 5 and self._user_sum() <= self._dealer_sum() <= 21:
             print_yellow("PUSH! This is a tie! All bet money is refunded!")
+            sleep(1)
         elif self._user_sum() == self._dealer_sum():
             print_yellow("PUSH! This is a tie! All bet money is refunded!")
-        elif len(self.user_cards) == 5 and self._user_sum() < 21:
             sleep(1)
+        elif len(self.user_cards) == 5 and self._user_sum() < 21:
             print_green("You have automatically won since you have pulled a total of 5 cards without busting!\n")
+            sleep(1)
             self.user_win_stats()
         elif len(self.dealer_cards) == 5 and self._dealer_sum() < 21:
             print_red("You have automatically lost since the dealer has pulled a total of 5 cards without busting!\n")
@@ -432,30 +437,37 @@ class Blackjack:
             self.user_loses_stats()
         elif self._user_sum() > 21:
             print_red(f"BUSTED! The Dealer Wins! You lost ${self.user_bet}!\n")
+            sleep(1)
             self.user_loses_stats()
         elif self._dealer_sum() > 21:
             print_green(f"The Dealer BUSTED! You win! You won ${self.user_bet}!\n")
+            sleep(1)
             self.user_win_stats()
         elif self._user_sum() == 21:
             print_green(f"BLACKJACK! You hit 21! You won ${self.user_bet}!\n")
+            sleep(1)
             self.user_win_stats()
         elif self.insurance_bought and self._dealer_sum() == 21:
             print_yellow("BLACKJACK! Since you purchased insurance, you do not lose any money!")
+            sleep(1)
             self.user_loses_stats(0)
             self.insurance_bought = False
         elif 11 in self.dealer_cards and self._dealer_sum() == 21:  # offered insurance - not used
-            print_red(
-                "BLACKJACK! Since you did not purchased insurance, you will lose 1.5 times your original bet!\n")
+            print_red("BLACKJACK! Since you did not purchased insurance, you will lose 1.5 times your original bet!\n")
+            sleep(1)
             self.user_loses_stats(1.5)
             self.insurance_bought = False
         elif self._dealer_sum() == 21:
             print_green(f"BLACKJACK! The Dealer hit 21! You Lost ${self.user_bet}!\n")
+            sleep(1)
             self.user_loses_stats()
         elif self._user_sum() > self._dealer_sum():
             print_green(f"You Win! Your cards were greater than the dealers deck, You won ${self.user_bet}!\n")
+            sleep(1)
             self.user_win_stats()
         elif self._dealer_sum() >= self._user_sum():
             print_red(f"The dealer wins! Your cards were less than the dealers deck, You lost ${self.user_bet}!\n")
+            sleep(1)
             self.user_loses_stats()
 
         for c, balance in enumerate(self.bot_balances):
@@ -505,16 +517,17 @@ class Blackjack:
         sleep(1)
 
         if self.user_balance <= 0 and len(self.bot_balances) == 0:
-            print_red("You don't have any more money to bet... Game Over!")
+            print_red("You don't have any more money to bet... Game Over!\n")
             sleep(2)
         elif self.dealer_balance <= 0:
-            print_green("Congratulations! You have beat the BlackJack 21 game by defeating the dealers balance!")
+            print_green("Congratulations! You have beat the BlackJack 21 game by defeating the dealers balance!\n")
         elif self.dealer_balance <= self.user_balance / 5:
-            print_green("The dealers balance is looking small enough for you to win! You're doing well...")
+            print_green("The dealers balance is looking small enough for you to win! You're doing well...\n")
         elif yes_or_no_choice('Would you like to continue (yes / no): '):
             sleep(1)
             return False
         else:  # exit / cash out / new game
+            print()
             load_or_save_game(save_game=self)
         return True
 

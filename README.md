@@ -27,13 +27,13 @@
 
 # Instructions 🎲
 ### Option 1 (Python not installed)
-1. If you do not have python installed on your Windows system, or you just do not feel like using python, simply just [download](https://github.com/JordanLeich/Blackjack-21/blob/master/blackjack.exe) the exe file.
-2. Make sure to run blackjack.exe as administrator or else the game will not have the permission to write to a save file!
+1. If you do not have python installed on your Windows system, or you just do not feel like using python, simply just [download](https://github.com/JordanLeich/Blackjack-21/blob/master/main.exe) the exe file.
+2. Make sure to run main.exe as administrator or else the game will not have the permission to write to a save file!
 
 ### Option 2 (Python installed)
 1. Make sure you installed all the python modules found in the requirements document [here](https://github.com/JordanLeich/Blackjack-21/blob/master/requirements.txt).
-2. Go to the releases page on GitHub and download the [latest](https://github.com/JordanLeich/Blackjack-21/releases) zip file
-3. unzip the zip file wherever you like, simply run Blackjack.py.
+2. Go to the releases page on GitHub and download the [latest](https://github.com/JordanLeich/Blackjack-21/releases) zip file.
+3. unzip the zip file wherever you like, simply run main.py.
 
 # Additional 📓
 1. [Latest](https://github.com/JordanLeich/Blackjack-21/releases) version of Blackjack 21, this release is the most recommended for players and developers. The latest release will always contain completed code and will be considered a stable, working release.
