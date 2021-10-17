@@ -3,16 +3,13 @@
 # Created by Jordan Leich on 6/6/2020
 # Edited by Adam Smith
 
-from time import sleep
-import webbrowser
 import json
 import sys
-import os
+import webbrowser
 from os import path
-
-# from files
-from other.colors import print_green, print_red, print_yellow, print_blue
+from time import sleep
 from blackjack import Blackjack
+from other.colors import print_green, print_red, print_yellow, print_blue
 
 
 def load_or_save_game(save_game=None, stats=False):
@@ -105,22 +102,28 @@ Main hub UI for the user to view additional information or extra parts of this p
             print_red("Please select a number from 1 - 5.\n")
 
 
-def view_stats():  # prints your stats based off the load file
+def view_stats():
+    """
+Prints the users current in game stats based upon a load file
+    """
     user_balance, user_score, dealer_balance, _, bot_balances = load_or_save_game(stats=True)
     print_green('Your current in game stats will now be displayed below!\n')
     sleep(1)
     print(f'Your balance is ${user_balance}')
-    print(f'Your win count is {user_score}')
-    print(f'The dealers balance is ${dealer_balance}\n')
+    print(f'The dealers balance is ${dealer_balance}')
+    print(f'Total hands won is {user_score}')
     for c, v in enumerate(bot_balances):
         print(f"Player{c}'s balance is ${v}")
-    sleep(6)
+    print()
+    sleep(3)
 
 
-def game(user_balance=1000, user_score=0, dealer_balance=5000, players=0, bot_balances=[]):
+def game(user_balance=1000, user_score=0, dealer_balance=5000, players=0, bot_balances=None):
     """
     Main code used for the game entirely
     """
+    if bot_balances is None:
+        bot_balances = []
     single_player = Blackjack(user_balance, user_score, dealer_balance)
     if bot_balances:
         single_player.add_bot_balances(bot_balances)

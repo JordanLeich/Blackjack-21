@@ -202,7 +202,7 @@ class Blackjack:
     def print_user_dealer_balance(self):
         print_green(f'Your balance is ${self.user_balance}\n')
         sleep(1)
-        print_red(f'The dealers balance is ${self.dealer_balance}\n')
+        print_red(f'The Dealers balance is ${self.dealer_balance}\n')
         sleep(1)
 
     def donation_from_bot(self):  # random bot will donate
@@ -315,7 +315,7 @@ class Blackjack:
                 elif choice.lower() in ["q", "quit", "end"]:
                     print_green("Ending the game...\n")
                     sleep(1)
-                    return # return out of the function
+                    return  # return out of the function
                 else:
                     print_red("User input incorrect please try again...\n")
                     sleep(1)
@@ -346,6 +346,7 @@ class Blackjack:
         while self._bot_sum(value) <= 15 and len(self.bot_cards[value]) < 6:
             if len(self.bot_cards[value]) == 5:
                 print_blue(f'Player{value + 1} has pulled a total of 5 cards without busting!\n')
+                sleep(1)
                 break
             else:
                 self.bot_cards[value].append(randint(1, 11))
@@ -377,12 +378,13 @@ class Blackjack:
 
         while self._dealer_sum() <= 15 and len(self.dealer_cards) <= 5:
             if 11 in self.dealer_cards and not self.insurance_bought:
-                if yes_or_no_choice('The dealer has an ace. Would you like to buy insurance (yes / no): '):
+                if yes_or_no_choice('The Dealer has an ace. Would you like to buy insurance (yes / no): '):
                     self.insurance_bought = True
                     insurance_amount = self.user_bet / 2
                     self.user_bet += insurance_amount
                 else:
                     self.insurance_bought = False
+                    print()
                     print('Buying insurance has been skipped for you...\n')
                     sleep(1)
             self.dealer_draws_card()
@@ -408,7 +410,6 @@ class Blackjack:
         if len(self.dealer_cards) == 5 and self._dealer_sum() <= 21:
             print_red('The Dealer has hit a total 5 cards!\n')
             sleep(1)
-
 
     def game_scoring(self):
         """
@@ -437,10 +438,10 @@ class Blackjack:
             print_green(f"BLACKJACK! You hit 21! You won ${self.user_bet}!\n")
             self.user_win_stats()
         elif self.insurance_bought and self._dealer_sum() == 21:
-            print_yellow("BLACKJACK! Since you purchased insurance, you do not lose any money!")
+            print_yellow("BLACKJACK! Since you purchased insurance, you do not lose any money!\n")
             self.user_loses_stats(0)
             self.insurance_bought = False
-        elif 11 in self.dealer_cards and self._dealer_sum() == 21:  # offered insurance - not used
+        elif 11 in self.dealer_cards and self._dealer_sum() == 21 and not self.insurance_bought:
             print_red("BLACKJACK! Since you did not purchased insurance, you will lose 1.5 times your original bet!\n")
             self.user_loses_stats(1.5)
             self.insurance_bought = False
@@ -451,22 +452,24 @@ class Blackjack:
             print_green(f"You Win! Your cards were greater than the dealer's. You won ${self.user_bet}!\n")
             self.user_win_stats()
         elif self._dealer_sum() >= self._user_sum():
-            print_red(f"The dealer wins! Your cards were less than the dealer's. You lost ${self.user_bet}!\n")
+            print_red(f"The Dealer wins! Your cards were less than the dealer's. You lost ${self.user_bet}!\n")
             self.user_loses_stats()
-        
+
         sleep(1)
         for c, balance in enumerate(self.bot_balances):
             if balance > 0:
                 self.score_bot(c)
 
-    def score_bot(self, i):
+    def score_bot(self, i):  # sourcery skip: remove-redundant-if
         bet, player_value, player_balance = self.bot_bets[i], self._bot_sum(i), self.bot_balances[i]
         dealer_value = self._dealer_sum()
 
-        if len(self.dealer_cards) == 5 and player_value >= dealer_value:
-            print_yellow(f"Player{i + 1} pushed this round! Player{i + 1}'s bet has been refunded!\n")
-        elif len(self.bot_cards[i]) == 5 and dealer_value >= player_value:
-            print_yellow(f"Player{i + 1} pushed this round! Player{i + 1}'s bet has been refunded!\n")
+        if len(self.dealer_cards) == 5:
+            self.bot_balances[i], self.dealer_balance = _lose_bet(bet, player_balance, self.dealer_balance)
+            print_red(f'Player{i + 1} lost this round! Player{i + 1} lost ${bet}')
+        elif len(self.bot_cards[i]) == 5:
+            self.bot_balances[i], self.dealer_balance = _win_bet(bet, player_balance, self.dealer_balance)
+            print_green(f'Player{i + 1} won this round! Player{i + 1} won ${bet}\n')
         elif player_value == dealer_value:
             print_yellow(f"Player{i + 1} pushed this round! Player{i + 1}'s bet has been refunded!\n")
         elif len(self.bot_cards[i]) == 5 and player_value < 21:
@@ -490,9 +493,9 @@ class Blackjack:
         elif player_value > dealer_value:
             self.bot_balances[i], self.dealer_balance = _win_bet(bet, player_balance, self.dealer_balance)
             print_green(f'Player{i + 1} won this round! Player{i + 1} won ${bet}\n')
-
         sleep(1)
         print_blue(f'Player{i + 1} now has a balance of ${self.bot_balances[i]}\n')
+        sleep(1)
 
     def end_round_notification(self):
         """
@@ -507,7 +510,7 @@ class Blackjack:
         elif self.dealer_balance <= 0:
             print_green("Congratulations! You have beat the BlackJack 21 game by defeating the dealers balance!\n")
         elif self.dealer_balance <= self.user_balance / 5:
-            print_green("The dealers balance is looking small enough for you to win! You're doing well...\n")
+            print_green("The Dealers balance is looking small enough for you to win! You're doing well...\n")
         elif yes_or_no_choice('Would you like to continue (yes / no): '):
             sleep(1)
             return False
