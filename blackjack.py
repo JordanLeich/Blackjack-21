@@ -199,7 +199,7 @@ class Blackjack:
     def get_data(self):
         return self.user_score, self.user_balance, self.dealer_balance, self.bot_balances
 
-    def player_balance(self):
+    def print_user_dealer_balance(self):
         print_green(f'Your balance is ${self.user_balance}\n')
         sleep(1)
         print_red(f'The dealers balance is ${self.dealer_balance}\n')
@@ -216,7 +216,7 @@ class Blackjack:
 
     def play_game(self):  # sourcery no-metrics
         while self.user_balance > 0:
-            self.player_balance()
+            self.print_user_dealer_balance()
 
             # donate to bots only if they don't have any money
             for c, value in enumerate(self.bot_balances):
@@ -317,7 +317,6 @@ class Blackjack:
                 else:  # improper input 
                     print_red("User input incorrect please try again...\n")
                     sleep(1)
-                    continue
             # dealer's move
             while self._user_sum() == 21 and self._dealer_sum() < 15:
                 self.dealer_draws_card()
@@ -373,7 +372,7 @@ class Blackjack:
         print_red('The Dealer says No More Bets!\n')
         sleep(.5)
 
-        while self._dealer_sum() <= 15:
+        while self._dealer_sum() <= 15 and len(self.dealer_cards) <= 5:
             if 11 in self.dealer_cards and not self.insurance_bought:
                 if yes_or_no_choice('The dealer has an ace. Would you like to buy insurance (yes / no): '):
                     self.insurance_bought = True
@@ -464,7 +463,7 @@ class Blackjack:
                 self.score_bot(c)
 
     def score_bot(self, i):
-        bet, player_value, player_balance = self.bot_bets[i], self._bot_sum(value), self.bot_balances[i]
+        bet, player_value, player_balance = self.bot_bets[i], self._bot_sum(i), self.bot_balances[i]
         dealer_value = self._dealer_sum()
 
         if len(self.dealer_cards) == 5 and player_value >= dealer_value:
@@ -475,25 +474,25 @@ class Blackjack:
             print_yellow(f"Player{i + 1} pushed this round! Player{i + 1}'s bet has been refunded!\n")
         elif len(self.bot_cards[i]) == 5 and player_value < 21:
             self.bot_balances[i], self.dealer_balance = _win_bet(bet, player_balance, self.dealer_balance)
-            print_green(f'Player{i + 1} won this round! Player{i + 1} won ${player_bet}\n')
+            print_green(f'Player{i + 1} won this round! Player{i + 1} won ${bet}\n')
         elif len(self.dealer_cards) == 5 and dealer_value < 21:
             self.bot_balances[i], self.dealer_balance = _lose_bet(bet, player_balance, self.dealer_balance)
-            print_red(f'Player{i + 1} lost this round! Player{i + 1} lost ${player_bet}')
+            print_red(f'Player{i + 1} lost this round! Player{i + 1} lost ${bet}')
         elif player_value > 21:
             self.bot_balances[i], self.dealer_balance = _lose_bet(bet, player_balance, self.dealer_balance)
-            print_red(f'Player{i + 1} lost this round! Player{i + 1} lost ${player_bet}\n')
+            print_red(f'Player{i + 1} lost this round! Player{i + 1} lost ${bet}\n')
         elif dealer_value > 21:
             self.bot_balances[i], self.dealer_balance = _win_bet(bet, player_balance, self.dealer_balance)
-            print_green(f'Player{i + 1} won this round! Player{i + 1} won ${player_bet}\n')
+            print_green(f'Player{i + 1} won this round! Player{i + 1} won ${bet}\n')
         elif player_value == 21:
             self.bot_balances[i], self.dealer_balance = _win_bet(bet, player_balance, self.dealer_balance)
-            print_green(f'Player{i + 1} won this round! Player{i + 1} won ${player_bet}\n')
+            print_green(f'Player{i + 1} won this round! Player{i + 1} won ${bet}\n')
         elif player_value < dealer_value:
             self.bot_balances[i], self.dealer_balance = _lose_bet(bet, player_balance, self.dealer_balance)
-            print_red(f'Player{i + 1} lost this round! Player{i + 1} lost ${player_bet}\n')
+            print_red(f'Player{i + 1} lost this round! Player{i + 1} lost ${bet}\n')
         elif player_value > dealer_value:
             self.bot_balances[i], self.dealer_balance = _win_bet(bet, player_balance, self.dealer_balance)
-            print_green(f'Player{i + 1} won this round! Player{i + 1} won ${player_bet}\n')
+            print_green(f'Player{i + 1} won this round! Player{i + 1} won ${bet}\n')
 
         sleep(1)
         print_blue(f'Player{i + 1} now has a balance of ${self.bot_balances[i]}\n')
@@ -523,7 +522,6 @@ class Blackjack:
         """
         Update stats when the user loses the round
         """
-        sleep(1)
         self.user_score -= 1
         self.user_balance -= (self.user_bet * multiplier)
         self.dealer_balance += (self.user_bet * multiplier)
@@ -532,7 +530,6 @@ class Blackjack:
         """
         Update stats when the user wins the round
         """
-        sleep(1)
         self.user_score += 1
         self.user_balance += (self.user_bet * multiplier)
         self.dealer_balance -= (self.user_bet * multiplier)
@@ -548,5 +545,4 @@ To prompt users to fix their mistakes in a yes/no question
             return True
         print_red("Invalid choice, please say either 'yes' or 'no'\n")
         sleep(1)
-    print()
     return False
