@@ -3,12 +3,9 @@
 # Created by Jordan Leich on 6/6/2020
 # Edited by Adam Smith
 
-import json
 import sys
 import webbrowser
-from os import path
-from time import sleep
-from blackjack import Blackjack
+from blackjack import *
 from other.colors import print_green, print_red, print_yellow, print_blue
 
 
@@ -71,17 +68,36 @@ def donation_opener(website):
     sleep(2)
 
 
+def audio_options(audio_option):
+    choice = str(input('Would you like to have audio sound effects (On / Off): '))
+    print()
+    sleep(1)
+    if choice.lower() in ['y', 'yes', 'on', 'sure']:
+        audio_option = True
+        print_green('Audio sounds effects have been turned on!\n')
+    elif choice.lower() in ['n', 'no', 'nope', 'off']:
+        audio_option = False
+        print_green('Audio sounds effects have been turned off!\n')
+    else:
+        print_red('Audio input option error found!\n')
+        sleep(1)
+        audio_options(audio_option)
+    sleep(1)
+    return audio_option
+
+
 def extra():
     """
 Main hub UI for the user to view additional information or extra parts of this project such as donations and releases
     """
     while True:
         print("(1) View Stats")
-        print("(2) Project Releases")
-        print("(3) Credits")
-        print("(4) Donate")
-        print("(5) Main Menu")
-        print("(6) Exit\n")
+        print("(2) Audio")
+        print("(3) Project Releases")
+        print("(4) Credits")
+        print("(5) Donate")
+        print("(6) Main Menu")
+        print("(7) Exit\n")
         choice = input("Which choice would you like to pick:  ")
         print()
         sleep(.5)
@@ -89,17 +105,19 @@ Main hub UI for the user to view additional information or extra parts of this p
         if choice == '1':
             view_stats()  # update stats to be more like hands won and total money gained
         elif choice == '2':
-            open_github("Opening the latest stable release...\n", "/releases")
+            audio_options(True)
         elif choice == '3':
-            open_github("Opening all contributors of this project...\n", "/graphs/contributors")
+            open_github("Opening the latest stable release...\n", "/releases")
         elif choice == '4':
-            donation_opener("https://www.paypal.com/donate/?business=8FGHU8Z4EJPME&no_recurring=0&currency_code=USD")
+            open_github("Opening all contributors of this project...\n", "/graphs/contributors")
         elif choice == '5':
-            return
+            donation_opener("https://www.paypal.com/donate/?business=8FGHU8Z4EJPME&no_recurring=0&currency_code=USD")
         elif choice == '6':
+            return
+        elif choice == '7':
             sys.exit()
         else:
-            print_red("Please select a number from 1 - 5.\n")
+            print_red("Please select a number from 1 - 7.\n")
 
 
 def view_stats():
@@ -193,7 +211,7 @@ Allows the end-user to be able to play the game with custom money, win counts, a
         elif game_choice == '2':
             game(players=bot_player_choice())
         elif game_choice == '3':
-            game(*custom_game_setup())
+            game()
         elif game_choice == '4':
             print_green('A youtube video should now be playing... ')
             webbrowser.open("https://www.youtube.com/watch?v=eyoh-Ku9TCI", new=1)
@@ -221,7 +239,7 @@ def main():
             print_blue("Welcome Player!\n")
             game_options()
         elif choice == '2':
-            game(*load_or_save_game())
+            game()
         elif choice == '3':
             extra()
         elif choice == '4':

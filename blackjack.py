@@ -7,8 +7,11 @@ from os import path
 from random import randint
 from time import sleep
 
+
 # from files
 from other.colors import print_green, print_red, print_yellow, print_blue
+from other import sounds_effects
+from main import audio_options
 
 '''
 # Initialize all players, 11 in total, 5 regular players,
@@ -166,6 +169,7 @@ def donate_to_bot(player_balance, user_balance, player_name):
 class Blackjack:
     def __init__(self, user_balance, user_score, dealer_balance):
         # user attributes
+        self.audio_option = audio_options(audio_option=False)
         self.user_cards = []
         self.user_bet = 0
         self.user_score = user_score
@@ -415,6 +419,7 @@ class Blackjack:
         """
         Handles of the end game scoring based upon card results between the dealer and end-user
         """
+
         print_red(f'The Dealer has a grand total of {self._dealer_sum()} from these cards {self.dealer_cards}\n')
         sleep(1)
         print_green(f"You have a grand total of {self._user_sum()} with {self.user_cards}\n")
@@ -423,35 +428,55 @@ class Blackjack:
         if self._user_sum() == self._dealer_sum():
             print_yellow("PUSH! This is a tie! All bet money is refunded!\n")
         elif len(self.user_cards) == 5 and self._user_sum() < 21:
+            if self.audio_option:
+                sounds_effects.good_luck()
             print_green("You have automatically won since you have pulled a total of 5 cards without busting!\n")
             self.user_win_stats()
         elif len(self.dealer_cards) == 5 and self._dealer_sum() < 21:
+            if self.audio_option:
+                sounds_effects.bad_luck()
             print_red("You have automatically lost since the dealer has pulled a total of 5 cards without busting!\n")
             self.user_loses_stats()
         elif self._user_sum() > 21:
+            if self.audio_option:
+                sounds_effects.bad_luck()
             print_red(f"BUSTED! The Dealer Wins! You lost ${self.user_bet}!\n")
             self.user_loses_stats()
         elif self._dealer_sum() > 21:
+            if self.audio_option:
+                sounds_effects.good_luck()
             print_green(f"The Dealer BUSTED! You win! You won ${self.user_bet}!\n")
             self.user_win_stats()
         elif self._user_sum() == 21:
+            if self.audio_option:
+                sounds_effects.good_luck()
             print_green(f"BLACKJACK! You hit 21! You won ${self.user_bet}!\n")
             self.user_win_stats()
         elif self.insurance_bought and self._dealer_sum() == 21:
+            if self.audio_option:
+                sounds_effects.good_luck()
             print_yellow("BLACKJACK! Since you purchased insurance, you do not lose any money!\n")
             self.user_loses_stats(0)
             self.insurance_bought = False
         elif 11 in self.dealer_cards and self._dealer_sum() == 21 and not self.insurance_bought:
+            if self.audio_option:
+                sounds_effects.bad_luck()
             print_red("BLACKJACK! Since you did not purchased insurance, you will lose 1.5 times your original bet!\n")
             self.user_loses_stats(1.5)
             self.insurance_bought = False
         elif self._dealer_sum() == 21:
+            if self.audio_option:
+                sounds_effects.bad_luck()
             print_green(f"BLACKJACK! The Dealer hit 21! You Lost ${self.user_bet}!\n")
             self.user_loses_stats()
         elif self._user_sum() > self._dealer_sum():
+            if self.audio_option:
+                sounds_effects.good_luck()
             print_green(f"You Win! Your cards were greater than the dealer's. You won ${self.user_bet}!\n")
             self.user_win_stats()
         elif self._dealer_sum() >= self._user_sum():
+            if self.audio_option:
+                sounds_effects.bad_luck()
             print_red(f"The Dealer wins! Your cards were less than the dealer's. You lost ${self.user_bet}!\n")
             self.user_loses_stats()
 
