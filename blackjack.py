@@ -7,7 +7,6 @@ from os import path
 from random import randint
 from time import sleep
 
-
 # from files
 from other.colors import print_green, print_red, print_yellow, print_blue
 from other import sounds_effects
@@ -167,9 +166,10 @@ def donate_to_bot(player_balance, user_balance, player_name):
 
 
 class Blackjack:
-    def __init__(self, user_balance, user_score, dealer_balance):
+    def __init__(self, user_balance, user_score, dealer_balance, name):
         # user attributes
         self.audio_option = audio_options(audio_option=False)
+        self.name = name
         self.user_cards = []
         self.user_bet = 0
         self.user_score = user_score
@@ -415,11 +415,10 @@ class Blackjack:
             print_red('The Dealer has hit a total 5 cards!\n')
             sleep(1)
 
-    def game_scoring(self):
+    def game_scoring(self):  # sourcery no-metrics
         """
         Handles of the end game scoring based upon card results between the dealer and end-user
         """
-
         print_red(f'The Dealer has a grand total of {self._dealer_sum()} from these cards {self.dealer_cards}\n')
         sleep(1)
         print_green(f"You have a grand total of {self._user_sum()} with {self.user_cards}\n")
@@ -551,6 +550,8 @@ class Blackjack:
         self.user_score -= 1
         self.user_balance -= (self.user_bet * multiplier)
         self.dealer_balance += (self.user_bet * multiplier)
+        with open('leaderboards.txt', 'a') as f:
+            f.write(str('\n') + str(self.name) + str(': ') + str(self.user_score))
 
     def user_win_stats(self, multiplier=1.0):
         """
@@ -559,6 +560,8 @@ class Blackjack:
         self.user_score += 1
         self.user_balance += (self.user_bet * multiplier)
         self.dealer_balance -= (self.user_bet * multiplier)
+        with open('leaderboards.txt', 'a') as f:
+            f.write(str('\n') + str(self.name) + str(': ') + str(self.user_score))
 
 
 def yes_or_no_choice(input_text):

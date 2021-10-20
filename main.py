@@ -86,38 +86,53 @@ def audio_options(audio_option):
     return audio_option
 
 
+def view_leaderboards():
+    print_green('---User hands won leaderboards---\n')
+    sleep(.5)
+    with open('leaderboards.txt', 'r') as f:
+        leaderboard = [line.replace('\n', '') for line in f.readlines()]
+
+        for i in leaderboard:
+            print(i)
+        print()
+        sleep(2)
+
+
 def extra():
     """
 Main hub UI for the user to view additional information or extra parts of this project such as donations and releases
     """
     while True:
         print("(1) View Stats")
-        print("(2) Audio")
-        print("(3) Project Releases")
-        print("(4) Credits")
-        print("(5) Donate")
-        print("(6) Main Menu")
-        print("(7) Exit\n")
+        print("(2) View Leaderboards")
+        print("(3) Audio")
+        print("(4) Project Releases")
+        print("(5) Credits")
+        print("(6) Donate")
+        print("(7) Main Menu")
+        print("(8) Exit\n")
         choice = input("Which choice would you like to pick:  ")
         print()
         sleep(.5)
 
         if choice == '1':
-            view_stats()  # update stats to be more like hands won and total money gained
+            view_stats()
         elif choice == '2':
-            audio_options(True)
+            view_leaderboards()
         elif choice == '3':
-            open_github("Opening the latest stable release...\n", "/releases")
+            audio_options(True)
         elif choice == '4':
-            open_github("Opening all contributors of this project...\n", "/graphs/contributors")
+            open_github("Opening the latest stable release...\n", "/releases")
         elif choice == '5':
-            donation_opener("https://www.paypal.com/donate/?business=8FGHU8Z4EJPME&no_recurring=0&currency_code=USD")
+            open_github("Opening all contributors of this project...\n", "/graphs/contributors")
         elif choice == '6':
-            return
+            donation_opener("https://www.paypal.com/donate/?business=8FGHU8Z4EJPME&no_recurring=0&currency_code=USD")
         elif choice == '7':
+            return
+        elif choice == '8':
             sys.exit()
         else:
-            print_red("Please select a number from 1 - 7.\n")
+            print_red("Please select a number from 1 - 8.\n")
 
 
 def view_stats():
@@ -136,13 +151,17 @@ Prints the users current in game stats based upon a load file
     sleep(3)
 
 
-def game(user_balance=1000, user_score=0, dealer_balance=5000, players=0, bot_balances=None):
+def game(user_balance=1000, user_score=0, dealer_balance=5000, players=0, bot_balances=None, name=''):
     """
     Main code used for the game entirely
     """
     if bot_balances is None:
         bot_balances = []
-    single_player = Blackjack(user_balance, user_score, dealer_balance)
+    if name == '':
+        name = str(input('Enter your name: '))
+        print()
+        sleep(1)
+    single_player = Blackjack(user_balance, user_score, dealer_balance, name)
     if bot_balances:
         single_player.add_bot_balances(bot_balances)
     for _ in range(players):
