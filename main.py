@@ -258,7 +258,7 @@ def main():
             print_blue("Welcome Player!\n")
             game_options()
         elif choice == '2':
-            game()
+            game(*load_or_save_game())
         elif choice == '3':
             extra()
         elif choice == '4':
