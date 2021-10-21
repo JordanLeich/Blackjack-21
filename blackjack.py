@@ -471,7 +471,7 @@ class Blackjack:
         elif self._dealer_sum() == 21:
             if self.audio_option:
                 sounds_effects.bad_luck()
-            print_green(f"BLACKJACK! The Dealer hit 21! You Lost ${self.user_bet}!\n")
+            print_red(f"BLACKJACK! The Dealer hit 21! You Lost ${self.user_bet}!\n")
             self.user_loses_stats()
         elif self._user_sum() > self._dealer_sum():
             if self.audio_option:
@@ -483,7 +483,6 @@ class Blackjack:
                 sounds_effects.bad_luck()
             print_red(f"The Dealer wins! Your cards were less than the dealer's. You lost ${self.user_bet}!\n")
             self.user_loses_stats()
-
         sleep(1)
         for c, balance in enumerate(self.bot_balances):
             if balance > 0:
@@ -530,9 +529,13 @@ class Blackjack:
         """
     Used when 1 single round of blackjack has ended. Allows the user to play another game of blackjack or quit playing
         """
-        print_green(f'You have won {self.user_score[0]} loss {self.user_score[1]} hands\n')
+        if self.user_score[0] > self.user_score[1]:
+            print_green(f'You have won {self.user_score[0]} loss {self.user_score[1]} hands\n')
+        elif self.user_score[0] < self.user_score[1]:
+            print_red(f'You have won {self.user_score[0]} loss {self.user_score[1]} hands\n')
+        else:
+            print_yellow(f'You have won {self.user_score[0]} loss {self.user_score[1]} hands\n')
         sleep(1)
-
         if self.user_balance <= 0 and len(self.bot_balances) == 0:
             print_red("You don't have any more money to bet... Game Over!\n")
             sleep(1)
