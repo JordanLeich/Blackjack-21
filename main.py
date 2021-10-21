@@ -153,7 +153,7 @@ Prints the users current in game stats based upon a load file
     sleep(3)
 
 
-def game(user_balance=1000, user_score=0, dealer_balance=5000, players=0, bot_balances=None, name=''):
+def game(user_balance=1000, user_score=[0,0], dealer_balance=5000, players=0, bot_balances=None, name=''):
     """
     Main code used for the game entirely
     """

@@ -530,7 +530,7 @@ class Blackjack:
         """
     Used when 1 single round of blackjack has ended. Allows the user to play another game of blackjack or quit playing
         """
-        print_green(f"You have won {self.user_score} hands\n")
+        print_green(f"You have won {str(self.user_score[0])} loss {str(self.user_score[1])} hands\n")
         sleep(1)
 
         if self.user_balance <= 0 and len(self.bot_balances) == 0:
@@ -550,21 +550,21 @@ class Blackjack:
         """
         Update stats when the user loses the round
         """
-        self.user_score -= 1
+        self.user_score[1] = int(self.user_score[1]) + 1
         self.user_balance -= (self.user_bet * multiplier)
         self.dealer_balance += (self.user_bet * multiplier)
         with open('leaderboards.txt', 'a') as f:
-            f.write(str('\n') + str(self.name) + str(': ') + str(self.user_score))
+            f.write(str('\n') + str(self.name) + str(': Won ') + str(self.user_score[1]) + str(' Loss ') + str(self.user_score[1]))
 
     def user_win_stats(self, multiplier=1.0):
         """
         Update stats when the user wins the round
         """
-        self.user_score += 1
+        self.user_score[0] = int(self.user_score[0]) + 1
         self.user_balance += (self.user_bet * multiplier)
         self.dealer_balance -= (self.user_bet * multiplier)
         with open('leaderboards.txt', 'a') as f:
-            f.write(str('\n') + str(self.name) + str(': ') + str(self.user_score))
+            f.write(str('\n') + str(self.name) + str(': Won ') + str(self.user_score[0]) + str(' Loss ') + str(self.user_score[0]))
 
 
 def yes_or_no_choice(input_text):
