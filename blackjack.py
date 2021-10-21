@@ -530,7 +530,7 @@ class Blackjack:
         """
     Used when 1 single round of blackjack has ended. Allows the user to play another game of blackjack or quit playing
         """
-        print_green(f"You have won {str(self.user_score[0])} loss {str(self.user_score[1])} hands\n")
+        print_green(f'You have won {self.user_score[0]} loss {self.user_score[1]} hands\n')
         sleep(1)
 
         if self.user_balance <= 0 and len(self.bot_balances) == 0:

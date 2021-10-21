@@ -153,10 +153,12 @@ Prints the users current in game stats based upon a load file
     sleep(3)
 
 
-def game(user_balance=1000, user_score=[0,0], dealer_balance=5000, players=0, bot_balances=None, name=''):
+def game(user_balance=1000, user_score=None, dealer_balance=5000, players=0, bot_balances=None, name=''):
     """
     Main code used for the game entirely
     """
+    if user_score is None:
+        user_score = [0, 0]
     if bot_balances is None:
         bot_balances = []
     if name == '':
@@ -232,7 +234,7 @@ Allows the end-user to be able to play the game with custom money, win counts, a
         elif game_choice == '2':
             game(players=bot_player_choice())
         elif game_choice == '3':
-            game(*custom_game_setup())
+            game()
         elif game_choice == '4':
             print_green('A youtube video should now be playing... ')
             webbrowser.open("https://www.youtube.com/watch?v=eyoh-Ku9TCI", new=1)
@@ -262,7 +264,7 @@ def main():
             print_blue("Welcome Player!\n")
             game_options()
         elif choice == '2':
-            game(*load_or_save_game())
+            game()
         elif choice == '3':
             extra()
         elif choice == '4':
