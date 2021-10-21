@@ -255,12 +255,15 @@ class Blackjack:
                         self.donation_from_bot()
                 # exit game as there is no money w/ player or w/ bots
                 if not donation_request or max(self.bot_balances) <= 0:
+                    load_or_save_game(save_game=self)
+                    sleep(1)
                     print_green('Thanks for playing!')
                     sleep(1)
                     return
 
             if yes_or_no_choice("Would you like to go all in (yes / no): "):
                 self.user_bet = self.user_balance
+                print()
                 print_green('Your entire balance is now being wagered! Good luck!\n')
                 sleep(1)
             else:
@@ -293,8 +296,8 @@ class Blackjack:
                 elif choice.lower() in ["d", "double", 'double down']:
                     if self._user_sum() <= 11:
                         print(
-                            'You will now double down on your bets and pull only 1 more card and then you will stand for '
-                            'this round!\n')
+                            'You will now double down on your bets and pull only 1 more card and then you will stay '
+                            'for this round!\n')
                         self.user_bet *= 2
                         sleep(1)
                         self.user_draws_card()
@@ -317,6 +320,8 @@ class Blackjack:
                         print_blue("If your card total is closer to 21, don't risk it! make a stay move!\n")
                         sleep(3)
                 elif choice.lower() in ["q", "quit", "end"]:
+                    load_or_save_game(save_game=self)
+                    sleep(1)
                     print_green("Ending the game...\n")
                     sleep(1)
                     return  # return out of the function
@@ -530,12 +535,10 @@ class Blackjack:
 
         if self.user_balance <= 0 and len(self.bot_balances) == 0:
             print_red("You don't have any more money to bet... Game Over!\n")
-            sleep(2)
-        elif self.dealer_balance <= 0:
-            print_green("Congratulations! You have beat the BlackJack 21 game by defeating the dealers balance!\n")
-        elif self.dealer_balance <= self.user_balance / 5:
-            print_green("The Dealers balance is looking small enough for you to win! You're doing well...\n")
+            sleep(1)
+            load_or_save_game(save_game=self)
         elif yes_or_no_choice('Would you like to continue (yes / no): '):
+            print()
             sleep(1)
             return False
         else:  # exit / cash out / new game
@@ -569,7 +572,6 @@ def yes_or_no_choice(input_text):
 To prompt users to fix their mistakes in a yes/no question
     """
     while (text_choice := str(input(input_text)).lower()) not in ['n', 'no', 'nope', 'nah']:
-        print()
         if text_choice in ['y', 'yes', 'ya', 'yah', 'sure']:
             return True
         print_red("Invalid choice, please say either 'yes' or 'no'\n")

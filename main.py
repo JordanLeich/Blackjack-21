@@ -25,7 +25,7 @@ def load_or_save_game(save_game=None, stats=False):
         dealer_balance = user_data['deal_balance']
         bot_balances = user_data['bot_balances']
         if not stats:
-            print_green('Save file loaded!\n')
+            print_green('Save file loaded and saved successfully!\n')
     elif not save_game:
         if not stats:
             print_yellow('Save file not found, A new save file will be created shortly!\n')
@@ -130,6 +130,8 @@ Main hub UI for the user to view additional information or extra parts of this p
         elif choice == '7':
             return
         elif choice == '8':
+            load_or_save_game()
+            sleep(1)
             sys.exit()
         else:
             print_red("Please select a number from 1 - 8.\n")
@@ -237,6 +239,8 @@ Allows the end-user to be able to play the game with custom money, win counts, a
         elif game_choice == '5':
             return
         elif game_choice == '6':
+            load_or_save_game()
+            sleep(1)
             sys.exit()
         else:
             print_red("Please select a number from 1 - 6.\n")
@@ -262,7 +266,9 @@ def main():
         elif choice == '3':
             extra()
         elif choice == '4':
-            print_green("Exiting the Game")
+            load_or_save_game()
+            sleep(1)
+            print_green("Exiting the Game...\n")
             sys.exit()
         else:
             print_red("Please select a number from 1 - 4.\n")
