@@ -230,7 +230,7 @@ Allows the end-user to be able to play the game with custom money, win counts, a
         elif game_choice == '2':
             game(players=bot_player_choice())
         elif game_choice == '3':
-            game()
+            game(*custom_game_setup())
         elif game_choice == '4':
             print_green('A youtube video should now be playing... ')
             webbrowser.open("https://www.youtube.com/watch?v=eyoh-Ku9TCI", new=1)
